@@ -8,5 +8,5 @@ How to add in Git using Github Desktop
 4. Once nakagawa ng bagong branch, click repository tap and open in explorer. Pwede na kayo maglagay ng stuff diyan. 
 5. Once nalagay niyo na mga stuff na gusto niyong ilagay, lalabas lahat ng dinagdag or bawas niyo sa changes tab then meron sa lower left na 'Summary'. Sa summary niyo ilalagay yung comments kung ano dinagdag mo, ano ginawa mo. Make it short and simple lang :) After ilagay summary, click Commit then Push. 
 6. Kapag napush na siya successfully, lalabas na yung branch mo sa online github natin. 
-7. If final na yung branch niyo and gusto niyo imerge na siya with main branch, click create pull request. Note: Important na updated yung other files niyo na hindi niyo ginalaw before you create a pull request so make sure you fetch origin lagi. 
+7. If final na yung branch niyo and gusto niyo imerge na siya with main branch, click create pull request. Note: Important na updated yung other files niyo na hindi niyo ginalaw before you create a pull request so make sure you fetch origin lagi. You can accept your own pull request if ever.
 8. TADA. You done homies
