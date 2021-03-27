@@ -41,10 +41,12 @@ uint8_t temprature_sens_read();
 // https://www.uuidgenerator.net/
 BLEAdvertising *pAdvertising;
 struct timeval now;
+int txPower;
 
 #define BEACON_UUID           "7facaf2c-cbbb-49c0-98d3-f264dc4e7055"  // UUID 1 128-Bit (may use linux tool uuidgen or random numbers via https://www.uuidgenerator.net/)
 #define BEACON_BID            2021                                    //building ID set to major number
 #define BEACON_RID            1296                                  //room ID set to minor number
+//#define BEACON_txp            0                                     //signal power setting
 
 void setBeacon() {
 
@@ -53,6 +55,7 @@ void setBeacon() {
   oBeacon.setProximityUUID(BLEUUID(BEACON_UUID));
   oBeacon.setMajor(BEACON_BID);
   oBeacon.setMinor(BEACON_RID);
+  //oBeacon.setSignalPower(txPower)   //use this to calibrate signal power. txPower (in dBm i.e. -77) should be known signal strength at 1m
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
   BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
   
@@ -64,6 +67,7 @@ void setBeacon() {
   strServiceData += (char)0xFF;   // Type
   strServiceData += oBeacon.getData(); 
   oAdvertisementData.addData(strServiceData);
+  txPower = oBeacon.getSignalPower(); //signal strength
   
   pAdvertising->setAdvertisementData(oAdvertisementData);
   pAdvertising->setScanResponseData(oScanResponseData);
@@ -94,6 +98,7 @@ void setup() {
    // Start advertising
   pAdvertising->start();
   Serial.println("Advertizing started...");
+  Serial.printf("Signal Power: %d\n", txPower);
   delay(100);
   pAdvertising->stop();
   Serial.printf("enter deep sleep\n");
