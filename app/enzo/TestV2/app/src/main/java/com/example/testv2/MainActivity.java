@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 
-    private int scan_interval_ms = 10000;
+    private int scan_interval_ms = 15000;
     private boolean isScanning = false;
 
     @Override
@@ -69,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
         permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
         if (permissionCheck != 0) {
-
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
         }
 
@@ -94,6 +97,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void BTScan(View view) {
 
+        if(!isScanning) {
+            scanHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isScanning = false;
+                    bluetoothLeScanner.stopScan(leScanCallback);
+                    Log.d(TAGline2, "Went to stop scan");
+                    BTScan.setText("Scan BLE");
+
+                }
+            }, scan_interval_ms);
+
+            isScanning = true;
+            bluetoothLeScanner.startScan(leScanCallback);
+            Log.d(TAGline, "Went to start scan");
+            BTScan.setText("Scanning...");
+        } else {
+            isScanning = false;
+            bluetoothLeScanner.stopScan(leScanCallback);
+            Log.d(TAGline2, "Went to stop scan");
+            BTScan.setText("Scan BLE");
+        }
+
+        /*
         if (bluetoothLeScanner != null) {
             if (isScanning) {
                 Log.d(TAGline2, "Went to stop scan");
@@ -108,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         }
         isScanning = !isScanning;
         scanHandler.postDelayed(this::stopScan, scan_interval_ms);
+
+         */
     }
 
 
@@ -130,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
             //Check Logs to double check if may nahanap ba talaga
             Log.d(TAGline, "Uy may nahanap ako");
             Log.d(LOG_TAG, "DeviceName: " + "\"" + result.getDevice().getName() +"\"");
-            Log.d(LOG_TAG, "UUID: " + result.getDevice());
+            Log.d(LOG_TAG, "UUID: " + result.getDevice().getAddress());
+
             //Check getDevice class para malaman ano pang pwede maextract na information
         }
     };
