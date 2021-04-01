@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // function to convert data bytes from beacon to hex array //
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
@@ -162,11 +163,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-
             // To get UUID from IBeacon, we need to parse the data bytes it sends
             String hexScanRecord = bytesToHex(result.getScanRecord().getBytes());
-            String iBeaconInfoString =
-                    hexScanRecord.substring("02011A1AFF4C000215".length(), 58);
+            String iBeaconInfoString = hexScanRecord.substring(18, 58);
             String parsedUUID = iBeaconInfoString.substring(0, iBeaconInfoString.length() - 8);
             String parsedMinor = iBeaconInfoString.substring(parsedUUID.length() + 4, iBeaconInfoString.length() - 2);
             String parsedMajor = iBeaconInfoString.substring(parsedUUID.length(), parsedUUID.length() + 4);
