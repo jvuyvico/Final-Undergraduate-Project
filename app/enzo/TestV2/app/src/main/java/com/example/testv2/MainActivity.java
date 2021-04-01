@@ -147,23 +147,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
 
-            //Parsing Part na di ko magets bat ayaw gumagana. Nagccrash siya sa akin when parsing
-           //arrayList.add(result.getDevice().getName());
-            //arrayAdapter.notifyDataSetChanged();
+            // To get UUID from IBeacon, we need to parse the data bytes it sends
+            String hexScanRecord = bytesToHex(result.getScanRecord().getBytes());
+            String iBeaconInfoString =
+                    hexScanRecord.substring("02011A1AFF4C000215".length(), 58);
+            String parsedUUID = iBeaconInfoString.substring(0, iBeaconInfoString.length() - 8);
+            String parsedMinor = iBeaconInfoString.substring(parsedUUID.length() + 4, iBeaconInfoString.length() - 2);
+            String parsedMajor = iBeaconInfoString.substring(parsedUUID.length(), parsedUUID.length() + 4);
 
+            //Parsing Part na di ko magets bat ayaw gumagana. Nagccrash siya sa akin when parsing
+            arrayList.add(result.getDevice().getName());
+            arrayAdapter.notifyDataSetChanged();
             //Check Logs to double check if may nahanap ba talaga
             Log.d(TAGline, "Uy may nahanap ako");
             Log.d(LOG_TAG, "DeviceName: " + "\"" + result.getDevice().getName() +"\"");
-            Log.d(LOG_TAG, "UUID: " + result.getDevice().getAddress());
-
+            Log.d(LOG_TAG, "UUID: " + parsedUUID);
             //Check getDevice class para malaman ano pang pwede maextract na information
         }
     };
+
 /* This part is mostly for Normal Bluetooth Scanning
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
