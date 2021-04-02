@@ -1755,6 +1755,8 @@ id action_text
 id actions
 id activity_chooser_view_content
 id add
+id admin_password
+id admin_username
 id alertTitle
 id aligned
 id all
@@ -1767,6 +1769,7 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id backButton
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -1775,6 +1778,8 @@ id blocking
 id bottom
 id bounce
 id buttonPanel
+id button_adminLogin
+id button_submit
 id cache_measures
 id cancel_button
 id center
@@ -2008,6 +2013,8 @@ id search_voice_btn
 id select_dialog_listview
 id selected
 id selection_type
+id set_studentnumber
+id set_username
 id shortcut
 id showCustom
 id showHome
@@ -2094,6 +2101,8 @@ id uniform
 id unlabeled
 id up
 id useLogo
+id userCred_studentnumber
+id userCred_username
 id view_offset_helper
 id visible
 id withText
@@ -2161,7 +2170,9 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_admin_login
 layout activity_main
+layout activity_set_credentials
 layout ble_device_list_item
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -2354,6 +2365,7 @@ string path_password_strike_through
 string scan
 string scan_ble
 string search_menu_title
+string set_credentials
 string status_bar_notification_info_overflow
 string toast_message
 style AlertDialog_AppCompat

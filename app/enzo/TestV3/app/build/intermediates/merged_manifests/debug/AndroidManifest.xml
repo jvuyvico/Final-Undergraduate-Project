@@ -23,7 +23,17 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.TestV3" >
-        <activity android:name="com.feifei.testv3.MainActivity" >
+        <activity
+            android:name="com.feifei.testv3.AdminLoginActivity"
+            android:label="Admin Login" >
+        </activity>
+        <activity
+            android:name="com.feifei.testv3.SetCredentialsActivity"
+            android:label="Register Credentials" >
+        </activity>
+        <activity
+            android:name="com.feifei.testv3.MainActivity"
+            android:label="Main Screen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,7 +1,7 @@
-#Fri Apr 02 17:24:46 SGT 2021
-base.0=C\:\\Users\\Joshua Uyvico\\Documents\\6y2s\\198\\TestV3\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+#Sat Apr 03 04:25:50 SGT 2021
+base.0=C\:\\Users\\Joshua Uyvico\\Documents\\GitHub\\EEE-198\\app\\enzo\\TestV3\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 path.1=classes.dex
 renamed.1=classes2.dex
 path.0=classes.dex
 renamed.0=classes.dex
-base.1=C\:\\Users\\Joshua Uyvico\\Documents\\6y2s\\198\\TestV3\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex
+base.1=C\:\\Users\\Joshua Uyvico\\Documents\\GitHub\\EEE-198\\app\\enzo\\TestV3\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex

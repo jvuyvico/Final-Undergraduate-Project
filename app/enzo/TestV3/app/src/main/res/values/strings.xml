@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TestV3</string>
+    <string name="toast_message">Bluetooth Turned OFF</string>
+    <string name="scan">SCAN</string>
+    <string name="scan_ble">SCAN BLE</string>
+    <string name="device_name">device name</string>
+    <string name="device_mac_address">device mac address</string>
+    <string name="device_uuid">device uuid</string>
+    <string name="device_major_minor">major minor</string>
+    <string name="bt_on_off">BT ON/OFF</string>
+    <string name="set_credentials">Set Credentials</string>
+</resources>
