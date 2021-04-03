@@ -1,5 +1,9 @@
 package com.feifei.testv3;
 
+/*
+    Class for storing the info from detected BLE devices.
+ */
+
 public class BLE_Device {
     private String BLE_name;
     private String BLE_address;

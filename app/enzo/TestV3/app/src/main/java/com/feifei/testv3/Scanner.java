@@ -1,5 +1,11 @@
 package com.feifei.testv3;
 
+/*
+    BLE scanner class.
+    Data bytes received from the broadcaster is parsed here.
+    Found devices are passed towards List in MainActivity for display.
+ */
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;

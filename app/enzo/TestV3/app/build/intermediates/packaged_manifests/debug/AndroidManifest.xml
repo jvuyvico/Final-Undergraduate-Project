@@ -24,13 +24,15 @@
         android:testOnly="true"
         android:theme="@style/Theme.TestV3" >
         <activity
-            android:name="com.feifei.testv3.AdminLoginActivity"
-            android:label="Admin Login" >
+            android:name="com.feifei.testv3.menu_popup"
+            android:theme="@style/PopMe" >
         </activity>
         <activity
+            android:name="com.feifei.testv3.AdminLoginActivity"
+            android:label="Admin Login" />
+        <activity
             android:name="com.feifei.testv3.SetCredentialsActivity"
-            android:label="Register Credentials" >
-        </activity>
+            android:label="Register Credentials" />
         <activity
             android:name="com.feifei.testv3.MainActivity"
             android:label="Main Screen" >

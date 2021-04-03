@@ -12,6 +12,9 @@ com/feifei/testv3/MainActivity.java
  com.feifei.testv3.MainActivity
 com/feifei/testv3/Utils.java
  com.feifei.testv3.Utils
+com/feifei/testv3/menu_popup.java
+ com.feifei.testv3.menu_popup
+ com.feifei.testv3.menu_popup$1
 com/feifei/testv3/UserCredentials.java
  com.feifei.testv3.UserCredentials
 com/feifei/testv3/SetCredentialsActivity.java

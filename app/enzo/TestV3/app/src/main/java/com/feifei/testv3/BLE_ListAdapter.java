@@ -1,5 +1,9 @@
 package com.feifei.testv3;
 
+/*
+    List adapter for the list in MainActivity which accepts BLE_Device class as items.
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

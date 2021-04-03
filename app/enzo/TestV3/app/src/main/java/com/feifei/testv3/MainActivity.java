@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,32 +22,34 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    /* Variable Declarations */
     public static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_DISABLE_BT = 0;
 
+    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+
     private static final String TAG = "MainActivity";
     private Scanner ble_scanner;
+
+    // interface interactables
     Button BTScan;
     Button TALButton;
+    ImageView popupmenu;
 
+    //for user credentials
     SharedPreferences sharedPreferences;
     public String user_Username;
     public String user_Studentnumber;
     TextView tv_Username;
     TextView tv_Studentnumber;
 
-    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-
-    /* Device list variables declaration */
-    /*
-    ArrayList arrayList;
-    ListView mlistofDevices;
-    ArrayAdapter<String> arrayAdapter;
-     */
+    //for scanned BLE devices list
     ListView ble_listView;
     ArrayList<BLE_Device> ble_arrayList;
     BLE_ListAdapter ble_listAdapter;
+
+    /* ---------------------- */
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -67,19 +71,13 @@ public class MainActivity extends AppCompatActivity {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
         }
 
+        // Check if there is existing credentials in the CredentialsDB database
         if (!sharedPreferences.contains("username")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
         }
 
-        /* Device list variables initialization */
-        /*
-        mlistofDevices = (ListView) findViewById(R.id.DeviceList);
-        arrayList = new ArrayList();
-        arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,arrayList);
-        mlistofDevices.setAdapter(arrayAdapter);
-         */
-
+        // Device list initialization
         ble_listView = (ListView) findViewById(R.id.DeviceList);
         ble_arrayList = new ArrayList<>();
         ble_listAdapter = new BLE_ListAdapter(this, R.layout.ble_device_list_item, ble_arrayList);
@@ -113,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
         tv_Studentnumber.setText(user_Studentnumber);
     }
 
-    public void TALButtonClicked(View view) {   // configure toAdminLoginButton
-        startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-        updateCredentials();
+    public void popupmenuClicked(View view){
+        startActivity(new Intent(this, menu_popup.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
 

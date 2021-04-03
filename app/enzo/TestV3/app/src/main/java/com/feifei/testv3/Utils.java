@@ -1,5 +1,9 @@
 package com.feifei.testv3;
 
+/*
+    Put utility functions here and call them to reduce clutter in other activities
+ */
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -20,11 +24,12 @@ public class Utils {
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         activity.startActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
     }
-
+/*
     public static void toast(Context context, String string) {
 
         Toast toast = Toast.makeText(context, string, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, 0, 0);
         toast.show();
     }
+ */
 }

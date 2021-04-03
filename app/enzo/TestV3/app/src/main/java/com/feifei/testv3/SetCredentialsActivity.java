@@ -1,5 +1,9 @@
 package com.feifei.testv3;
 
+/*
+    Activity to set the credentials of a user in a single instance offline database.
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;

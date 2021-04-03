@@ -1,5 +1,11 @@
 package com.feifei.testv3;
 
+/*
+    Activity for Admin Login leading to SetCredentialsActivity.
+    Admin credentials currently hardcoded
+ */
+
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -39,9 +45,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             inputUsername.getText().clear();
             inputPassword.getText().clear();
         }
-
     }
-
 
     public void backButtonClicked(View view){
         finish();
