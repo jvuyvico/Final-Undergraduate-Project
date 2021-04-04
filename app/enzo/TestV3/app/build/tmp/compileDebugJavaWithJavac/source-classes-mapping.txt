@@ -12,6 +12,7 @@ com/feifei/testv3/AdminLoginActivity.java
  com.feifei.testv3.AdminLoginActivity
 com/feifei/testv3/MainActivity.java
  com.feifei.testv3.MainActivity
+ com.feifei.testv3.MainActivity$1
 com/feifei/testv3/Utils.java
  com.feifei.testv3.Utils
 com/feifei/testv3/ViewClassesActivity.java

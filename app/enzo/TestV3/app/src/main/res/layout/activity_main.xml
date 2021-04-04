@@ -32,14 +32,27 @@
         android:id="@+id/BT_Scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#228B22"
         android:onClick="BTScan"
         android:text="@string/scan_ble"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.346"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BT_switch" />
+
+    <Button
+        android:id="@+id/BT_Discoverable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#228B22"
+        android:text="Discover Me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/BT_Scan"
+        app:layout_constraintTop_toBottomOf="@+id/BT_switch"
+        android:onClick="BT_Discoverable"/>
 
     <ListView
         android:id="@+id/DeviceList"
