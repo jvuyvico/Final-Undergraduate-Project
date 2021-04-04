@@ -1,3 +1,5 @@
+com/feifei/testv3/DatabaseOpenHelper.java
+ com.feifei.testv3.DatabaseOpenHelper
 com/feifei/testv3/BLE_Device.java
  com.feifei.testv3.BLE_Device
 com/feifei/testv3/BLE_ListAdapter.java
@@ -12,12 +14,20 @@ com/feifei/testv3/MainActivity.java
  com.feifei.testv3.MainActivity
 com/feifei/testv3/Utils.java
  com.feifei.testv3.Utils
+com/feifei/testv3/ViewClassesActivity.java
+ com.feifei.testv3.ViewClassesActivity
+com/feifei/testv3/User_Subject.java
+ com.feifei.testv3.User_Subject
+com/feifei/testv3/SetCredentialsActivity.java
+ com.feifei.testv3.SetCredentialsActivity
+com/feifei/testv3/Classes_ListAdapter.java
+ com.feifei.testv3.Classes_ListAdapter
 com/feifei/testv3/menu_popup.java
  com.feifei.testv3.menu_popup
  com.feifei.testv3.menu_popup$1
+com/feifei/testv3/DatabaseAccess.java
+ com.feifei.testv3.DatabaseAccess
 com/feifei/testv3/UserCredentials.java
  com.feifei.testv3.UserCredentials
-com/feifei/testv3/SetCredentialsActivity.java
- com.feifei.testv3.SetCredentialsActivity
 com/feifei/testv3/BuildConfig.java
  com.feifei.testv3.BuildConfig

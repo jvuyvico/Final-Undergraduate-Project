@@ -1,5 +1,9 @@
 package com.feifei.testv3;
 
+/*
+    Activity seen when menu icon from toolbar in main menu is clicked
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -42,7 +46,8 @@ public class menu_popup extends Activity {
                         finish();
                         break;
                     case 1:
-                        Toast.makeText(menu_popup.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(menu_popup.this, ViewClassesActivity.class));
+                        finish();
                         break;
                     case 2:
                         Toast.makeText(menu_popup.this, "Feature not Available yet", Toast.LENGTH_SHORT).show();
@@ -57,12 +62,12 @@ public class menu_popup extends Activity {
         width = dm.widthPixels;
         height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.7), (int)(height*.5));
+        getWindow().setLayout((int)(width*.6), (int)(height*.5));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.END;
         params.x = 0;
-        params.y = -245;
+        params.y = (int) (-height*0.18);
 
         getWindow().setAttributes(params);
     }

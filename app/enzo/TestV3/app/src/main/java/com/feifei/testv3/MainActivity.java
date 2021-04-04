@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     // interface interactables
     Button BTScan;
-    Button TALButton;
     ImageView popupmenu;
 
     //for user credentials
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BTScan = (Button) findViewById(R.id.BT_Scan);
-        TALButton = (Button) findViewById(R.id.button_adminLogin);
         tv_Username = findViewById(R.id.userCred_username);
         tv_Studentnumber = findViewById(R.id.userCred_studentnumber);
         ble_scanner = new Scanner(this);

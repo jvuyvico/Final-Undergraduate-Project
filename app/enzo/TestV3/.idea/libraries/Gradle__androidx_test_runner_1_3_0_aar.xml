@@ -7,14 +7,19 @@
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/AndroidManifest.xml" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/jars/classes.jar!/" />
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/res" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/df3db6e295bab9852f022f14860b637c/runner-1.3.0/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/c0fd1f1e715bfa4777ae6a679444f7471205ee7c/runner-1.3.0-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/c0fd1f1e715bfa4777ae6a679444f7471205ee7c/runner-1.3.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/c0fd1f1e715bfa4777ae6a679444f7471205ee7c/runner-1.3.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/506c97f735db13fda1943c4eb95f2ccfc7b457e0/runner-1.3.0-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/506c97f735db13fda1943c4eb95f2ccfc7b457e0/runner-1.3.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.test/runner/1.3.0/506c97f735db13fda1943c4eb95f2ccfc7b457e0/runner-1.3.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

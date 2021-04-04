@@ -23,10 +23,10 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.TestV3" >
+        <activity android:name="com.feifei.testv3.ViewClassesActivity" />
         <activity
             android:name="com.feifei.testv3.menu_popup"
-            android:theme="@style/PopMe" >
-        </activity>
+            android:theme="@style/PopMe" />
         <activity
             android:name="com.feifei.testv3.AdminLoginActivity"
             android:label="Admin Login" />

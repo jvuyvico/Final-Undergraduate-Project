@@ -14,15 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TestV3">
-        <activity android:name=".menu_popup"
-            android:theme="@style/PopMe">
-        </activity>
+        <activity android:name=".ViewClassesActivity"></activity>
+        <activity
+            android:name=".menu_popup"
+            android:theme="@style/PopMe" />
         <activity
             android:name=".AdminLoginActivity"
-            android:label="Admin Login"></activity>
+            android:label="Admin Login" />
         <activity
             android:name=".SetCredentialsActivity"
-            android:label="Register Credentials"></activity>
+            android:label="Register Credentials" />
         <activity
             android:name=".MainActivity"
             android:label="Main Screen">

@@ -1903,6 +1903,7 @@ id line3
 id linear
 id listMode
 id list_item
+id lv_classes
 id masked
 id material_clock_display
 id material_clock_face
@@ -1990,6 +1991,7 @@ id progress_horizontal
 id radio
 id ratio
 id rectangles
+id refresh
 id reverseSawtooth
 id right
 id rightToLeft
@@ -2100,9 +2102,14 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tv_days
 id tv_macaddr
 id tv_majorminor
 id tv_name
+id tv_section
+id tv_subject
+id tv_timeend
+id tv_timestart
 id tv_uuid
 id unchecked
 id uniform
@@ -2182,6 +2189,7 @@ layout activity_admin_login
 layout activity_main
 layout activity_menu_popup
 layout activity_set_credentials
+layout activity_view_classes
 layout ble_device_list_item
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -2267,6 +2275,7 @@ layout text_view_with_line_height_from_style
 layout text_view_with_theme_line_height
 layout text_view_without_line_height
 layout toolbar
+layout user_subject_list_item
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals mtrl_badge_content_description

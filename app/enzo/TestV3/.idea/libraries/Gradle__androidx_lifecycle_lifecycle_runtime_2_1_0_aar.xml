@@ -7,11 +7,15 @@
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/AndroidManifest.xml" />
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/res" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/res" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/dade9b59ee5981570bbd8ef7443af33a/lifecycle-runtime-2.1.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-runtime/2.1.0/533a0cd1a095abbdfd08a49c4d34bd0713977034/lifecycle-runtime-2.1.0-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-runtime/2.1.0/533a0cd1a095abbdfd08a49c4d34bd0713977034/lifecycle-runtime-2.1.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-runtime/2.1.0/533a0cd1a095abbdfd08a49c4d34bd0713977034/lifecycle-runtime-2.1.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

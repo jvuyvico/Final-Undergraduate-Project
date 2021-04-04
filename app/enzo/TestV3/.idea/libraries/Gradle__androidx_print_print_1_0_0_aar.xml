@@ -3,6 +3,7 @@
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/annotations.zip!/" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/annotations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/jars/classes.jar!/" />
@@ -11,11 +12,15 @@
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/res" />
       <root url="file://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/AndroidManifest.xml" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/res" />
+      <root url="file://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/transforms-2/files-2.1/8fe2a3deec1ef3dd659aa5f55d73edd7/print-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.print/print/1.0.0/71fc2d9acf7cce6b96230c5af263268b1664914a/print-1.0.0-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.print/print/1.0.0/71fc2d9acf7cce6b96230c5af263268b1664914a/print-1.0.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../6y2s/198/BLE_Tutorials-master/Android/BLE_Tutorial_Final/.gradle/4.8.1/fileChanges/caches/modules-2/files-2.1/androidx.print/print/1.0.0/71fc2d9acf7cce6b96230c5af263268b1664914a/print-1.0.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
