@@ -1,7 +1,8 @@
 package com.feifei.testv3;
 
 /*
-    Activity seen when "Check my classes" from menu in main menu toolbar is clicked
+    Activity that lists down classes stored in local offline SQLite database
+    Can be accessed from the menu_popup list from MainActivity
  */
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,16 +29,18 @@ public class ViewClassesActivity extends AppCompatActivity {
         lv_classes = (ListView) findViewById(R.id.lv_classes);
         subjectArrayList = new ArrayList<>();
 
+
+        // load database info on the list on create
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
         subjectArrayList = databaseAccess.getData();
         databaseAccess.close();
-
 
         classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, subjectArrayList);
         lv_classes.setAdapter(classesListAdapter);
     }
 
     public void refreshClicked(View view){
+        // dummy button for testing
     }
 }

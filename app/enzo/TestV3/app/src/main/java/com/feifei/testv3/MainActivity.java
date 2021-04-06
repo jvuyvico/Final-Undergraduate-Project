@@ -2,11 +2,17 @@ package com.feifei.testv3;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelUuid;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    BluetoothLeAdvertiser bleadvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
     private static final String TAG = "MainActivity";
     private Scanner ble_scanner;
@@ -102,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         updateCredentials();
     }
 
+    // (temporary) update the textviews displaying user credentials on main menu
     public void updateCredentials() {
         user_Username = sharedPreferences.getString("username", "");
         user_Studentnumber = sharedPreferences.getString("studentnumber", "");
@@ -109,17 +118,17 @@ public class MainActivity extends AppCompatActivity {
         tv_Studentnumber.setText(user_Studentnumber);
     }
 
+    // onClick method for menu button at main menu on top right at toolbar
     public void popupmenuClicked(View view){
         startActivity(new Intent(this, menu_popup.class));
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-
-    public void BT_Switch(View view) { //function linked to switch on or of button.
+    // onClick method for BLE on/off switch at main menu
+    public void BT_Switch(View view) {
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-
         }
         if (bluetoothAdapter.isEnabled()) {
             bluetoothAdapter.disable();
@@ -127,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // onClick method for clicking scan button at main menu
     public void BTScan(View view) {
         Utils.checkBluetooth(bluetoothAdapter, this);
         ble_scanner.startScan();
@@ -134,5 +144,58 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopScan() {
         ble_scanner.stopScan();
+    }
+
+
+    public void BT_Discoverable(View view) {
+
+        //permission check if device can advertise ble packets
+        if( !BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
+            Toast.makeText( this, "Multiple advertisement not supported", Toast.LENGTH_SHORT ).show();
+            Log.e("BLE", "Multiple ads not supported");
+        }
+        if(BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
+            Toast.makeText(this, "Multiple advertisement supported", Toast.LENGTH_SHORT).show();
+            Log.e("BLE", "Multiple ads supported");
+
+
+            AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                    .setTimeout(5000)
+                    .build();
+
+            ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_user_uuid)));
+            //UUID set for advertising is 2e952a2b-eef3-4a80-a309-6a3f5aacb1e8
+            AdvertiseData data = new AdvertiseData.Builder()
+                    .setIncludeDeviceName(false)
+                    .addServiceUuid(self_uuid)
+                    .build();
+
+            AdvertiseData advScanResponse = new AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
+                    .build();
+
+            String user_uuid = getString(R.string.ble_user_uuid);
+
+
+            AdvertiseCallback adCallback = new AdvertiseCallback() {
+                @Override
+                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                    super.onStartSuccess(settingsInEffect);
+                    Log.e(" BLE", "On start discovery success");
+                    Toast.makeText(getApplicationContext(), "UUID is " + user_uuid + "\n Advertising set for 5 secs", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onStartFailure(int errorCode) {
+                    Log.e("BLE", "Advertising onStartFailure: " + errorCode);
+                    super.onStartFailure(errorCode);
+                }
+            };
+
+
+            bleadvertiser.startAdvertising(settings, data, advScanResponse, adCallback);
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.feifei.testv3;
 
 /*
     Activity for Admin Login leading to SetCredentialsActivity.
+    This activity is brought forward on initial run of application to set user credentials,
+        after which it can be accessed from the menu_popup list from MainActivity
     Admin credentials currently hardcoded
  */
 

@@ -1691,6 +1691,7 @@ drawable tooltip_frame_light
 id ALT
 id BOTTOM_END
 id BOTTOM_START
+id BT_Discoverable
 id BT_Scan
 id BT_switch
 id CTRL
@@ -2308,6 +2309,7 @@ string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string app_name
 string appbar_scrolling_view_behavior
+string ble_user_uuid
 string bottom_sheet_behavior
 string bottomsheet_action_expand_halfway
 string bt_on_off

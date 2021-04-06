@@ -2,6 +2,8 @@ package com.feifei.testv3;
 
 /*
     Method for selecting and opening a local database
+    Enter name of desired database in DATABASE_NAME. This database should be
+        stored in app/src/main/java/assets/database folders
  */
 
 import android.content.Context;

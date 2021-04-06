@@ -1,7 +1,8 @@
 package com.feifei.testv3;
 
 /*
-    List adapter for the list in MainActivity which accepts BLE_Device class as items.
+    List adapter for the ListView in MainActivity which accepts BLE_Device class as entries
+    Shouldn't be changed unless new elements are added to BLE_Device class
  */
 
 import android.content.Context;

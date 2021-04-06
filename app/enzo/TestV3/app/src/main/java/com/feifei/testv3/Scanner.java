@@ -1,9 +1,10 @@
 package com.feifei.testv3;
 
 /*
-    BLE scanner class.
+    BLE scanner functionalities placed here from MainActivity. Just send MainActivity
+        as an Activity parameter.
     Data bytes received from the broadcaster is parsed here.
-    Found devices are passed towards List in MainActivity for display.
+    Found devices are passed towards ListView in MainActivity for display.
  */
 
 import android.bluetooth.BluetoothAdapter;
@@ -40,8 +41,11 @@ public class Scanner {
 
     }
 
+    // start BLE scan
     public void startScan() {
-        if(!isScanning) {
+        if(!isScanning) { // if app is not yet in a scanning mode, start scan
+
+            // delay function to stop scanning after a set time
             scanHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -62,7 +66,8 @@ public class Scanner {
             Log.d(TAG, "Went to start scan");
             ma.BTScan.setText("Stop Scan");
             Toast.makeText(ma.getApplicationContext(), "Scan Starting", Toast.LENGTH_SHORT).show();
-        } else {
+
+        } else { // else if app is in a scanning mode, stop current scan
             isScanning = false;
             bluetoothLeScanner.stopScan(leScanCallback);
             Log.d(TAG, "Went to stop scan");
@@ -77,14 +82,13 @@ public class Scanner {
         scanHandler = null;
     }
 
+    // pass the parsed information in a BLE_Device class and send it to the ArrayList in MainActivity
     private void addDevice(String device_name, String mac_address, String uuid, String major, String minor) {
         if(!current_scan_hashmap.containsValue(uuid)){
             current_scan_hashmap.put(mac_address, uuid);
             BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor);
             ma.ble_arrayList.add(ble_device);
             ma.ble_listAdapter.notifyDataSetChanged();
-            //ma.arrayList.add(mac_address);
-            //ma.arrayAdapter.notifyDataSetChanged();
 
             //Check Logs to double check if may nahanap ba talaga
             Log.d(TAG, "Uy may nahanap ako");
@@ -96,7 +100,7 @@ public class Scanner {
         }
     }
 
-    // function to convert data bytes from beacon to hex array //
+    // function to convert data bytes from beacon to hex array
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
@@ -108,6 +112,7 @@ public class Scanner {
         return new String(hexChars);
     }
 
+    // receiving and parsing of information from beacon
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {

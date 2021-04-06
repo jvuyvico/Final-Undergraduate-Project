@@ -1,7 +1,8 @@
 package com.feifei.testv3;
 
 /*
-    List adapter for list view at View classes activity.
+    List adapter for the ListView in ViewClassesActivity which accepts User_Subject class as entries
+    Shouldn't be changed unless new elements are added to User_Subject class
  */
 
 import android.content.Context;

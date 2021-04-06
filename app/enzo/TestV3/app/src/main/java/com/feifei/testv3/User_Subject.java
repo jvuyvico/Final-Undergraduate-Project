@@ -1,7 +1,8 @@
 package com.feifei.testv3;
 
 /*
-    Class for storing subjects imported from local database
+    Class for storing subjects information imported from local database
+    Edit if we want to add or remove properties we need to associate the student with
  */
 
 public class User_Subject {

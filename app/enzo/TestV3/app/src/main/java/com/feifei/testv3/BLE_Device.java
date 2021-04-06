@@ -2,6 +2,7 @@ package com.feifei.testv3;
 
 /*
     Class for storing the info from detected BLE devices.
+    Edit if we want to add or remove specific data needed from the beacon
  */
 
 public class BLE_Device {

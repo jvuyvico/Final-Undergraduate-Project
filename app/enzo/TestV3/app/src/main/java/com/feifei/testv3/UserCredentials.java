@@ -1,5 +1,11 @@
 package com.feifei.testv3;
 
+/*
+    Class for storing user credentials stored in shared preferences
+    (not really used right now)
+    Edit if we want to add or remove properties we need to associate the user with
+ */
+
 public class UserCredentials {
     private String username;
     private String studentnumber;

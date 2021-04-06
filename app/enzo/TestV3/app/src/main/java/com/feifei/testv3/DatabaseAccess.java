@@ -2,6 +2,10 @@ package com.feifei.testv3;
 
 /*
     Methods for accessing local database
+    Can be tricky, (prone to errors if null entries are accessed) Watch tutorial if you
+        wanna edit. You need to know how to access the database info properly
+    Updating database info also takes a while to sync to android studio. Restart all softwares
+        nalang to make sure the change is noticed.
  */
 
 import android.content.Context;
@@ -30,16 +34,19 @@ public class DatabaseAccess {
         return instance;
     }
 
+    // open a connection to database
     public void open() {
         this.database = openHelper.getWritableDatabase();
     }
 
+    // close current connection to database
     public void close() {
         if (database != null) {
             this.database.close();
         }
     }
 
+    // grabbing and parsing of information from database
     public ArrayList<User_Subject> getData() {
         ArrayList<User_Subject> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects", null);

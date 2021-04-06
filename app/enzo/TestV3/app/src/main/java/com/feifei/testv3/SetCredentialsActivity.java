@@ -1,7 +1,8 @@
 package com.feifei.testv3;
 
 /*
-    Activity to set the credentials of a user in a single instance offline database.
+    Activity to set the credentials of a user in a single instance offline database using shared preferences
+    Activity only accessible after completing AdminLoginActivity
  */
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
+    // perform error checking to see if input from text is valid format of desired credentials information
     public void submitButtonClicked(View view){
         if(inputUsername.getText().toString().isEmpty() || inputStudentnumber.getText().length() != 9) {    //check if username is empty or invalid studentnumber
             Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
