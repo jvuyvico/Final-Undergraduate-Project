@@ -17,12 +17,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.logging.LogManager;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
     BluetoothLeAdvertiser bleadvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+    Beacon beaconble;
+    BeaconParser beaconparserble;
 
     private static final String TAG = "MainActivity";
     private Scanner ble_scanner;
@@ -166,16 +171,30 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_user_uuid)));
+            UUID selfbleuuid = UUID.fromString("2e952a2b-eef3-4a80-a309-6a3f5aacb1e8");
             //UUID set for advertising is 2e952a2b-eef3-4a80-a309-6a3f5aacb1e8
+
+            //This process is for creating payload as iBeacon
+            byte[] selfuuidbytes = Utils.asBytes(selfbleuuid);
+            byte[] payload_1 = {(byte)0x02, (byte)0x15, (byte)0x00}; // this makes it an iBeacon
+            byte[] payload_3 = {
+                    (byte)0x20, (byte)0x15,  // Set Major
+                    (byte)0x18, (byte)0x27}; // Set Minor
+
+            byte[] payload = new byte[payload_1.length + selfuuidbytes.length + payload_3.length];
+            System.arraycopy(payload_1, 0, payload, 0, payload_1.length);
+            System.arraycopy(selfuuidbytes, 0, payload, payload_1.length, selfuuidbytes.length);
+            System.arraycopy(payload_3, 0, payload, payload_1.length + selfuuidbytes.length, payload_3.length);
+
             AdvertiseData data = new AdvertiseData.Builder()
                     .setIncludeDeviceName(false)
-                    .addServiceUuid(self_uuid)
+                    .addManufacturerData(0x004C, payload)
                     .build();
-
+/*
             AdvertiseData advScanResponse = new AdvertiseData.Builder()
                     .setIncludeDeviceName(true)
                     .build();
-
+*/
             String user_uuid = getString(R.string.ble_user_uuid);
 
 
@@ -195,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             };
 
 
-            bleadvertiser.startAdvertising(settings, data, advScanResponse, adCallback);
+            bleadvertiser.startAdvertising(settings, data,  adCallback);
         }
     }
 }
