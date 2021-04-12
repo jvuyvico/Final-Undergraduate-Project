@@ -7,21 +7,30 @@
 #include <BLEUtils.h>
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
+#include <BLEBeacon.h>
+#include <string>
 
 int scanTime = 5; //In seconds
+String payload = "";
+uint16_t numIDs[10];
+int listRssi[10];
 BLEScan* pBLEScan;
-int rssi;
-const char *list[10];
-int listIndex = 0;
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
-      //Serial.printf("Advertised Device: %s RSSI: %d \n", advertisedDevice.toString().c_str(), advertisedDevice.getRSSI());
-      const char *device = advertisedDevice.toString().c_str();
-      list[listIndex] = device;
-      rssi = advertisedDevice.getRSSI();
-      //Serial.printf("%s RSSI: %d \n", device, rssi);
-      listIndex++;
+      Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
+      BLEBeacon oBeacon = BLEBeacon();
+      oBeacon.setData(advertisedDevice.getManufacturerData());
+      //Serial.println(advertisedDevice.getManufacturerData().c_str());
+      Serial.print("UUID: ");
+      Serial.println(oBeacon.getProximityUUID().toString().c_str());
+      unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*100000) + __builtin_bswap16(oBeacon.getMinor()))/10;
+      Serial.printf("ID: %d\n", SN);
+      int rssi = advertisedDevice.getRSSI();
+      Serial.printf("RSSI: %d\n", rssi);
+      payload = payload + String(SN) + ":" +  String(rssi) + ",";
+      //Serial.println(payload.c_str());
+      
     }
 };
 
@@ -39,14 +48,13 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  payload = "";
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
   Serial.print("Devices found: ");
   Serial.println(foundDevices.getCount());
   Serial.println("Scan done!");
+  Serial.print("Payload = ");
+  Serial.println(payload);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
-  for(int i = 0; i <= listIndex; i++){
-    Serial.println(list[i]);
-  }
-  listIndex = 0;
-  delay(2000);
+  delay(2000); //set interval between scans here
 }
