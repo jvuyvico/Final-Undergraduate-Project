@@ -50,15 +50,33 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
             sharedPreferencesEditor.putString("username", inputUsername.getText().toString());
             sharedPreferencesEditor.putString("studentnumber", inputStudentnumber.getText().toString());
+            if(!sharedPreferences.contains("initialized")){
+                sharedPreferencesEditor.putBoolean("initialized", true);
+            }
             sharedPreferencesEditor.apply();
 
             Toast.makeText(this, "Credentials successfully set", Toast.LENGTH_SHORT).show();
+            MainActivity.credentialsinitialized = true;
             finish();
         }
 
     }
 
     public void backButtonClicked(View view){
-        finish();
+        if(!MainActivity.credentialsinitialized){
+            Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
+        } else {
+            finish();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!MainActivity.credentialsinitialized){
+            Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -6,7 +6,9 @@ package com.feifei.testv3;
         stored in app/src/main/java/assets/database folders
  */
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 

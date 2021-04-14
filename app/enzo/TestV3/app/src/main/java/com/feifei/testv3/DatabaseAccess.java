@@ -8,6 +8,7 @@ package com.feifei.testv3;
         nalang to make sure the change is noticed.
  */
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -47,6 +48,9 @@ public class DatabaseAccess {
     }
 
     // grabbing and parsing of information from database
+
+
+
     public ArrayList<User_Subject> getData() {
         ArrayList<User_Subject> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects", null);
@@ -62,4 +66,28 @@ public class DatabaseAccess {
         cursor.close();
         return list;
     }
+
+    public boolean insertData(User_Subject userSubject){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Subject", userSubject.getSubject());
+        contentValues.put("Section", userSubject.getSection());
+        contentValues.put("Days", userSubject.getDays());
+        contentValues.put("TimeStart", userSubject.getTimestart());
+        contentValues.put("TimeEnd", userSubject.getTimeend());
+        long result = database.insert("UserSubjects", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void deleteItem(String subject) {
+        Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects where Subject = ?" , new String[]{subject});
+        if (cursor.getCount() > 0) {
+            database.delete("UserSubjects", "Subject=?", new String[]{subject});
+        }
+    }
+
+
 }

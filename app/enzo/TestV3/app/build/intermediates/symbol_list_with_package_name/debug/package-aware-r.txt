@@ -1689,12 +1689,14 @@ drawable test_custom_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 id ALT
+id AlarmSet
 id BOTTOM_END
 id BOTTOM_START
 id BT_Discoverable
 id BT_Scan
 id BT_switch
 id CTRL
+id ClassListLabel
 id DeviceList
 id FUNCTION
 id META
@@ -1904,6 +1906,7 @@ id line3
 id linear
 id listMode
 id list_item
+id lv_ClassesToday
 id lv_classes
 id masked
 id material_clock_display

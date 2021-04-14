@@ -1,6 +1,7 @@
 package com.feifei.testv3;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
@@ -25,9 +26,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.logging.LogManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,11 +56,34 @@ public class MainActivity extends AppCompatActivity {
     public String user_Studentnumber;
     TextView tv_Username;
     TextView tv_Studentnumber;
+    public static boolean credentialsinitialized = false;
 
     //for scanned BLE devices list
     ListView ble_listView;
     ArrayList<BLE_Device> ble_arrayList;
     BLE_ListAdapter ble_listAdapter;
+
+    //for classes today list
+    ListView classesToday_lv;
+    public static TextView alarm_tv;
+    public static ArrayList<User_Subject> classesToday_AL;
+    Classes_ListAdapter classesListAdapter;
+
+    /*
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1) == BluetoothAdapter.STATE_OFF) {
+                    Toast.makeText(context, "YEEET", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+     */
+
 
     /* ---------------------- */
 
@@ -72,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         tv_Username = findViewById(R.id.userCred_username);
         tv_Studentnumber = findViewById(R.id.userCred_studentnumber);
         ble_scanner = new Scanner(this);
+        //registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
 
@@ -83,9 +108,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Check if there is existing credentials in the CredentialsDB database
-        if (!sharedPreferences.contains("username")) {
+        if (!sharedPreferences.contains("initialized")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
+        } else {
+            credentialsinitialized = sharedPreferences.getBoolean("initialized", true);
         }
 
         // Device list initialization
@@ -99,10 +126,51 @@ public class MainActivity extends AppCompatActivity {
         ble_arrayList.add(dummydevice);
         ble_listAdapter.notifyDataSetChanged();
 
+        // Classes today list initialization
+        classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
+        classesToday_AL = Utils.getClassesToday(this);
+        classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
+        classesToday_lv.setAdapter(classesListAdapter);
+
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
 
+        boolean alarmUp = (PendingIntent.getBroadcast(this, 20, new Intent(this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+        if (alarmUp){
+            Log.d("Alarm: ", "Alarm is already active");
+        } else {
+            AlarmSetter alarmSetter = new AlarmSetter(this );
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+            calendar.set(Calendar.SECOND, 0);
+            alarmSetter.setAlarmManager(calendar);
+            Log.d("Alarm: ", "Alarm set");
+        }
+
+
+
+        /*
+        ComponentName componentName = new ComponentName(this, ScanJobService.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setPersisted(true)
+                .setPeriodic(15*60*1000)    // set for 15 minutes
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d("Job: ", "Job Scheduled");
+        } else {
+            Log.d("Job: ", "Job Scheduling Failed");
+        }
+
+         */
+
+        
+
     }
+
 
     @Override
     protected void onPause() {

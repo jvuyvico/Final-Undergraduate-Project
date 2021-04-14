@@ -42,5 +42,14 @@ public class ViewClassesActivity extends AppCompatActivity {
 
     public void refreshClicked(View view){
         // dummy button for testing
+
+        User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000);
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        databaseAccess.deleteItem("EEE2");
+        //boolean test = databaseAccess.insertData(userSubject);
+        databaseAccess.close();
+        //Log.d("Test", String.valueOf(test));
+
     }
 }

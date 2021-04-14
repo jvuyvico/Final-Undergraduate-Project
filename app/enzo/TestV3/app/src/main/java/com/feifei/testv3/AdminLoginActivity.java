@@ -50,7 +50,20 @@ public class AdminLoginActivity extends AppCompatActivity {
     }
 
     public void backButtonClicked(View view){
-        finish();
+        if(!MainActivity.credentialsinitialized){
+            Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
+        } else {
+            finish();
+        }
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!MainActivity.credentialsinitialized){
+            Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
