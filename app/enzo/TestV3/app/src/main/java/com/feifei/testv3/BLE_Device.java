@@ -11,13 +11,15 @@ public class BLE_Device {
     private String BLE_uuid;
     private String BLE_major;
     private String BLE_minor;
+    private String BLE_rssi;
 
-    public BLE_Device(String BLE_name, String BLE_address, String BLE_uuid, String BLE_major, String BLE_minor) {
+    public BLE_Device(String BLE_name, String BLE_address, String BLE_uuid, String BLE_major, String BLE_minor, String BLE_rssi) {
         this.BLE_name = BLE_name;
         this.BLE_address = BLE_address;
         this.BLE_uuid = BLE_uuid;
         this.BLE_major = BLE_major;
         this.BLE_minor = BLE_minor;
+        this.BLE_rssi = BLE_rssi;
     }
 
     public String getBLE_name() {
@@ -58,5 +60,13 @@ public class BLE_Device {
 
     public void setBLE_minor(String BLE_minor) {
         this.BLE_minor = BLE_minor;
+    }
+
+    public String getBLE_rssi() {
+        return BLE_rssi;
+    }
+
+    public void setBLE_rssi(String BLE_rssi) {
+        this.BLE_rssi = BLE_rssi;
     }
 }

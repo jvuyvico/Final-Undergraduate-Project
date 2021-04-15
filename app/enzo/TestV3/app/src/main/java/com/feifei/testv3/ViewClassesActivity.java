@@ -43,7 +43,7 @@ public class ViewClassesActivity extends AppCompatActivity {
     public void refreshClicked(View view){
         // dummy button for testing
 
-        User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000);
+        User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000, "602EB8EB20EC04872040B4A52740CE18");
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
         databaseAccess.deleteItem("EEE2");

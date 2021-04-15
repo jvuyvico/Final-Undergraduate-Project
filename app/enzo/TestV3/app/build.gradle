@@ -37,7 +37,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    implementation 'org.altbeacon:android-beacon-library:2.3.5'
     implementation 'org.altbeacon:android-beacon-library:2+'
 
     implementation "androidx.multidex:multidex:2.0.1"

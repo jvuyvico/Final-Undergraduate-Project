@@ -50,6 +50,7 @@
         </activity>
 
         <receiver android:name="com.feifei.testv3.AlarmReceiver" />
+        <receiver android:name="com.feifei.testv3.ClassAlarmReceiver" />
         <receiver
             android:name="com.feifei.testv3.BootReceiver"
             android:enabled="true"

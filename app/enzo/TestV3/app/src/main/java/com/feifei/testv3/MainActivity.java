@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         ble_listView.setAdapter(ble_listAdapter);
 
         // add dummy device to check if list and listadapter is working
-        BLE_Device dummydevice = new BLE_Device("DummyDevice", "46:BE:ED:BD:44:E5", "47805e3089b34efab715ae6ebd79ac9a", "0000", "00");
+        BLE_Device dummydevice = new BLE_Device("DummyDevice", "46:BE:ED:BD:44:E5", "602EB8EB20EC04872040B4A52740CE18", "20xxX", "XXXX", "-50");
         ble_arrayList.add(dummydevice);
         ble_listAdapter.notifyDataSetChanged();
 
@@ -139,13 +139,14 @@ public class MainActivity extends AppCompatActivity {
         if (alarmUp){
             Log.d("Alarm: ", "Alarm is already active");
         } else {
-            AlarmSetter alarmSetter = new AlarmSetter(this );
+            AlarmSetter alarmSetter = new AlarmSetter(this , 20);
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
             calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
             calendar.set(Calendar.SECOND, 0);
-            alarmSetter.setAlarmManager(calendar);
-            Log.d("Alarm: ", "Alarm set");
+            Intent intenttopass = new Intent(this, AlarmReceiver.class);
+            alarmSetter.setAlarmManager(calendar, intenttopass);
+            Log.d("Alarm: ", "Alarm set ");
         }
 
 

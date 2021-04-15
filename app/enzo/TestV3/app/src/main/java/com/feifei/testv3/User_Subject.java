@@ -11,13 +11,15 @@ public class User_Subject {
     String days;
     int timestart;
     int timeend;
+    String uuid;
 
-    public User_Subject(String subject, String section, String days, int timestart, int timeend) {
+    public User_Subject(String subject, String section, String days, int timestart, int timeend, String uuid) {
         this.subject = subject;
         this.section = section;
         this.days = days;
         this.timestart = timestart;
         this.timeend = timeend;
+        this.uuid = uuid;
     }
 
     public String getSubject() {
@@ -58,5 +60,13 @@ public class User_Subject {
 
     public void setTimeend(int timeend) {
         this.timeend = timeend;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

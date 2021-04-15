@@ -2108,8 +2108,10 @@ id transition_transform
 id triangle
 id tv_days
 id tv_macaddr
-id tv_majorminor
+id tv_major
+id tv_minor
 id tv_name
+id tv_rssi
 id tv_section
 id tv_subject
 id tv_timeend
@@ -2322,8 +2324,10 @@ string character_counter_pattern
 string chip_text
 string clear_text_end_icon_content_description
 string device_mac_address
-string device_major_minor
+string device_major
+string device_minor
 string device_name
+string device_rssi
 string device_uuid
 string error_icon_content_description
 string exposed_dropdown_menu_content_description

@@ -18,12 +18,13 @@ public class BootReceiver extends BroadcastReceiver {
         if (alarmUp){
             Log.d("Alarm: ", "Alarm is already active");
         } else {
-            AlarmSetter alarmSetter = new AlarmSetter(context );
+            Intent intenttopass = new Intent(context, AlarmReceiver.class);
+            AlarmSetter alarmSetter = new AlarmSetter(context, 20);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+2); // +x to account for device boot up time
+            calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+2); // +X to account for the boot time of the device
             calendar.set(Calendar.SECOND, 0);
-            alarmSetter.setAlarmManager(calendar);
+            alarmSetter.setAlarmManager(calendar, intenttopass);
             Log.d("Alarm: ", "Alarm set");
         }
     }

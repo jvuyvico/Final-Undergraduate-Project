@@ -58,7 +58,7 @@ public class DatabaseAccess {
         while (!cursor.isAfterLast()) {
             User_Subject newsubject = new User_Subject(cursor.getString(0),
                     cursor.getString(1), cursor.getString(2),
-                    cursor.getInt(3), cursor.getInt(4));
+                    cursor.getInt(3), cursor.getInt(4), cursor.getString(5));
             list.add(newsubject);
             //Log.d("Yeet", cursor.getString(0));
             cursor.moveToNext();
@@ -74,6 +74,7 @@ public class DatabaseAccess {
         contentValues.put("Days", userSubject.getDays());
         contentValues.put("TimeStart", userSubject.getTimestart());
         contentValues.put("TimeEnd", userSubject.getTimeend());
+        contentValues.put("UUID", userSubject.getUuid());
         long result = database.insert("UserSubjects", null, contentValues);
         if (result==-1){
             return false;

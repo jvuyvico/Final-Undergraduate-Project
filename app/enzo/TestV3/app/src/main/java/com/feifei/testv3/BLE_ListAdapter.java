@@ -38,8 +38,9 @@ public class BLE_ListAdapter extends ArrayAdapter<BLE_Device> {
         String uuid =  getItem(position).getBLE_uuid();
         String major = getItem(position).getBLE_major();
         String minor = getItem(position).getBLE_minor();
+        String rssi = getItem(position).getBLE_rssi();
 
-        BLE_Device device = new BLE_Device(name, address, uuid, major, minor);
+        BLE_Device device = new BLE_Device(name, address, uuid, major, minor, rssi);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -47,12 +48,16 @@ public class BLE_ListAdapter extends ArrayAdapter<BLE_Device> {
         TextView tvName = (TextView) convertView.findViewById(R.id.tv_name);
         TextView tvMacAddr = (TextView) convertView.findViewById(R.id.tv_macaddr);
         TextView tvUuid = (TextView) convertView.findViewById(R.id.tv_uuid);
-        TextView tvMajorMinor = (TextView) convertView.findViewById(R.id.tv_majorminor);
+        TextView tvMajor = (TextView) convertView.findViewById(R.id.tv_major);
+        TextView tvMinor = (TextView) convertView.findViewById(R.id.tv_minor);
+        TextView tvRssi = (TextView) convertView.findViewById(R.id.tv_rssi);
 
         tvName.setText(name);
         tvMacAddr.setText("Mac: " + address);
         tvUuid.setText("UUID: " + uuid);
-        tvMajorMinor.setText("Major: " + major + "   " + "Minor: " +minor);
+        tvMajor.setText("Major: " + major);
+        tvMinor.setText("Minor: " + minor);
+        tvRssi.setText("RSSI: " + rssi);
 
         return convertView;
     }

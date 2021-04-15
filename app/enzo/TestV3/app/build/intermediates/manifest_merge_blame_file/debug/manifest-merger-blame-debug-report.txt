@@ -36,7 +36,7 @@
 20-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:10:22-65
 21
 22    <application
-22-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:12:5-52:19
+22-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:12:5-53:19
 23        android:allowBackup="true"
 23-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:13:9-35
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -95,109 +95,112 @@
 52        <receiver android:name="com.feifei.testv3.AlarmReceiver" />
 52-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:39:9-50
 52-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:39:19-48
-53        <receiver
-53-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:9-48:20
-54            android:name="com.feifei.testv3.BootReceiver"
-54-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:19-47
-55            android:enabled="true"
-55-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:48-70
-56            android:exported="true" >
-56-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:71-94
-57            <intent-filter>
-57-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:41:13-47:29
-58                <category android:name="android.intent.category.DEFAULT" />
-58-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:42:17-75
-58-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:42:27-73
-59
-60                <action android:name="android.intent.action.BOOT_COMPLETED" />
-60-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:17-78
-60-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:25-76
-61                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-61-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:17-81
-61-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:25-79
-62                <!-- For HTC devices -->
-63                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-63-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:46:17-81
-63-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:46:25-79
-64            </intent-filter>
-65        </receiver>
-66
-67        <service
-67-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:50:9-51:72
-68            android:name="com.feifei.testv3.ScanJobService"
-68-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:50:18-48
-69            android:permission="android.permission.BIND_JOB_SERVICE" />
-69-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:51:13-69
-70
-71        <receiver android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver" >
-71-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:20:9-26:20
-71-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:20:19-87
-72            <intent-filter>
-72-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:21:13-25:29
-73                <action android:name="android.intent.action.BOOT_COMPLETED" />
-73-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:17-78
-73-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:25-76
-74                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-74-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:23:17-87
-74-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:23:25-84
-75                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-75-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:24:17-90
-75-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:24:25-87
-76            </intent-filter>
-77        </receiver>
-78
-79        <service
-79-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:28:9-33:38
-80            android:name="org.altbeacon.beacon.service.BeaconService"
-80-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:29:13-70
-81            android:enabled="true"
-81-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:30:13-35
-82            android:exported="false"
-82-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:31:13-37
-83            android:isolatedProcess="false"
-83-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:32:13-44
-84            android:label="beacon" />
-84-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:33:13-35
-85        <service
-85-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:34:9-37:40
-86            android:name="org.altbeacon.beacon.BeaconIntentProcessor"
-86-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:35:13-70
-87            android:enabled="true"
-87-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:36:13-35
-88            android:exported="false" />
-88-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:37:13-37
-89        <service
-89-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:38:9-47:19
-90            android:name="org.altbeacon.beacon.service.ScanJob"
-90-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:39:13-64
-91            android:permission="android.permission.BIND_JOB_SERVICE" >
-91-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:40:13-69
-92            <meta-data
-92-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:41:13-43:45
-93                android:name="immediateScanJobId"
-93-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:42:17-50
-94                android:value="208352939" />
-94-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:43:17-42
-95            <meta-data
-95-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:44:13-46:45
-96                android:name="periodicScanJobId"
-96-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:45:17-49
-97                android:value="208352940" />
-97-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:46:17-42
-98        </service>
-99        <service
-99-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:48:9-54:19
-100            android:name="org.altbeacon.bluetooth.BluetoothTestJob"
-100-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:49:13-68
-101            android:permission="android.permission.BIND_JOB_SERVICE" >
-101-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:50:13-69
-102            <meta-data
-102-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:51:13-53:46
-103                android:name="jobId"
-103-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:52:17-37
-104                android:value="1799803768" />
-104-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:53:17-43
-105        </service>
-106    </application>
-107
-108</manifest>
+53        <receiver android:name="com.feifei.testv3.ClassAlarmReceiver" />
+53-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:9-55
+53-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:40:19-53
+54        <receiver
+54-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:41:9-49:20
+55            android:name="com.feifei.testv3.BootReceiver"
+55-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:41:19-47
+56            android:enabled="true"
+56-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:41:48-70
+57            android:exported="true" >
+57-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:41:71-94
+58            <intent-filter>
+58-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:42:13-48:29
+59                <category android:name="android.intent.category.DEFAULT" />
+59-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:17-75
+59-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:43:27-73
+60
+61                <action android:name="android.intent.action.BOOT_COMPLETED" />
+61-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:17-78
+61-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:25-76
+62                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+62-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:45:17-81
+62-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:45:25-79
+63                <!-- For HTC devices -->
+64                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+64-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:47:17-81
+64-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:47:25-79
+65            </intent-filter>
+66        </receiver>
+67
+68        <service
+68-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:51:9-52:72
+69            android:name="com.feifei.testv3.ScanJobService"
+69-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:51:18-48
+70            android:permission="android.permission.BIND_JOB_SERVICE" />
+70-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:52:13-69
+71
+72        <receiver android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver" >
+72-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:20:9-26:20
+72-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:20:19-87
+73            <intent-filter>
+73-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:21:13-25:29
+74                <action android:name="android.intent.action.BOOT_COMPLETED" />
+74-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:17-78
+74-->C:\Users\Joshua Uyvico\Documents\6y2s\198\Thesis_test_versions\TestV3\app\src\main\AndroidManifest.xml:44:25-76
+75                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+75-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:23:17-87
+75-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:23:25-84
+76                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+76-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:24:17-90
+76-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:24:25-87
+77            </intent-filter>
+78        </receiver>
+79
+80        <service
+80-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:28:9-33:38
+81            android:name="org.altbeacon.beacon.service.BeaconService"
+81-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:29:13-70
+82            android:enabled="true"
+82-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:30:13-35
+83            android:exported="false"
+83-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:31:13-37
+84            android:isolatedProcess="false"
+84-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:32:13-44
+85            android:label="beacon" />
+85-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:33:13-35
+86        <service
+86-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:34:9-37:40
+87            android:name="org.altbeacon.beacon.BeaconIntentProcessor"
+87-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:35:13-70
+88            android:enabled="true"
+88-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:36:13-35
+89            android:exported="false" />
+89-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:37:13-37
+90        <service
+90-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:38:9-47:19
+91            android:name="org.altbeacon.beacon.service.ScanJob"
+91-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:39:13-64
+92            android:permission="android.permission.BIND_JOB_SERVICE" >
+92-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:40:13-69
+93            <meta-data
+93-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:41:13-43:45
+94                android:name="immediateScanJobId"
+94-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:42:17-50
+95                android:value="208352939" />
+95-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:43:17-42
+96            <meta-data
+96-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:44:13-46:45
+97                android:name="periodicScanJobId"
+97-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:45:17-49
+98                android:value="208352940" />
+98-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:46:17-42
+99        </service>
+100        <service
+100-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:48:9-54:19
+101            android:name="org.altbeacon.bluetooth.BluetoothTestJob"
+101-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:49:13-68
+102            android:permission="android.permission.BIND_JOB_SERVICE" >
+102-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:50:13-69
+103            <meta-data
+103-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:51:13-53:46
+104                android:name="jobId"
+104-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:52:17-37
+105                android:value="1799803768" />
+105-->[org.altbeacon:android-beacon-library:2.18-beta3] C:\Users\Joshua Uyvico\Documents\6y2s\198\BLE_Tutorials-master\Android\BLE_Tutorial_Final\.gradle\4.8.1\fileChanges\caches\transforms-2\files-2.1\d0b39810df128afeca4281a9ae330c3c\jetified-android-beacon-library-2.18-beta3\AndroidManifest.xml:53:17-43
+106        </service>
+107    </application>
+108
+109</manifest>

@@ -83,10 +83,13 @@ public class Scanner {
     }
 
     // pass the parsed information in a BLE_Device class and send it to the ArrayList in MainActivity
-    private void addDevice(String device_name, String mac_address, String uuid, String major, String minor) {
+    private void addDevice(String device_name, String mac_address, String uuid, String major, String minor, String rssi) {
         if(!current_scan_hashmap.containsValue(uuid)){
+
+            // 602EB8EB20EC04872040B4A52740CE18 - add UUID filter to added devices
+
             current_scan_hashmap.put(mac_address, uuid);
-            BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor);
+            BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
             ma.ble_arrayList.add(ble_device);
             ma.ble_listAdapter.notifyDataSetChanged();
 
@@ -97,6 +100,7 @@ public class Scanner {
             Log.d(TAG, "UUID: " + uuid);
             Log.d(TAG, "Major: " + major);
             Log.d(TAG, "Minor: " + minor);
+            Log.d(TAG, "RSSI: " + rssi);
         }
     }
 
@@ -120,14 +124,17 @@ public class Scanner {
 
             String hexScanRecord = bytesToHex(result.getScanRecord().getBytes());
             String iBeaconInfoString =
-                    hexScanRecord.substring("02011A1AFF4C000215".length(), 58);
-            String parsedUUID = iBeaconInfoString.substring(0, iBeaconInfoString.length() - 8);
-            String parsedMinor = iBeaconInfoString.substring(parsedUUID.length() + 4, iBeaconInfoString.length() - 2);
-            String parsedMajor = iBeaconInfoString.substring(parsedUUID.length(), parsedUUID.length() + 4);
+                    hexScanRecord.substring("02011A1AFF4C000215".length(), hexScanRecord.length());
+            String parsedUUID = iBeaconInfoString.substring(0, 32);
+            String parsedMajor = iBeaconInfoString.substring(32, 36);
+            String parsedMinor = iBeaconInfoString.substring(36, 40);
 
-            addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor);
+            parsedMajor = String.valueOf( Integer.parseInt(parsedMajor ,16) );
+            parsedMinor = String.valueOf( Integer.parseInt(parsedMinor ,16) );
 
-            Log.d(TAG, "Scanned a device");
+            addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
+
+            Log.d(TAG, "Scanned a device " + iBeaconInfoString.length());
         }
     };
 }

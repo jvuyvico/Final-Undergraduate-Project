@@ -10,23 +10,23 @@ import java.util.Calendar;
 public class AlarmSetter {
 
     private Context context;
+    private int requestcode;
 
-    public AlarmSetter(Context context) {
+    public AlarmSetter(Context context, int requestcode) {
         this.context = context;
+        this.requestcode = requestcode;
     }
 
-    public void setAlarmManager(Calendar calendar) {
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 20, intent, 0);
+    public void setAlarmManager(Calendar calendar, Intent intent) {
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestcode, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 
-    public void cancelAlarm() {
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 20, intent, 0);
+    public void cancelAlarm(Intent intent) {
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestcode, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);

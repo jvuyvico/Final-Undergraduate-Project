@@ -37,10 +37,11 @@ public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {
         String days =  getItem(position).getDays();
         int timestart = getItem(position).getTimestart();
         int timeend = getItem(position).getTimeend();
+        String uuid = getItem(position).getUuid();
         String s_timestart = String.valueOf(timestart);
         String s_timeend = String.valueOf(timeend);
 
-        User_Subject newclass = new User_Subject(subject, section, days, timestart, timeend);
+        User_Subject newclass = new User_Subject(subject, section, days, timestart, timeend, uuid);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -50,12 +51,14 @@ public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {
         TextView tvDays = (TextView) convertView.findViewById(R.id.tv_days);
         TextView tvTimeStart = (TextView) convertView.findViewById(R.id.tv_timestart);
         TextView tvTimeEnd = (TextView) convertView.findViewById(R.id.tv_timeend);
+        TextView tvUUID = (TextView) convertView.findViewById(R.id.tv_uuid);
 
         tvSubject.setText(subject);
         tvSection.setText(section);
         tvDays.setText(days);
         tvTimeStart.setText(s_timestart);
         tvTimeEnd.setText(s_timeend);
+        tvUUID.setText("Beacon UUID: " + uuid);
 
         return convertView;
     }

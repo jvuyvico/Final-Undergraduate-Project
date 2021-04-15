@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/tv_macaddr"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="20"
         android:text="@string/device_mac_address"
         android:textColor="@android:color/darker_gray"
@@ -27,20 +27,45 @@
     <TextView
         android:id="@+id/tv_uuid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="20"
         android:text="@string/device_uuid"
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/tv_majorminor"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="20"
         android:layout_height="wrap_content"
-        android:text="@string/device_major_minor"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:layout_weight="20"
+        android:weightSum="60">
+        <TextView
+            android:id="@+id/tv_major"
+            android:layout_width="wrap_content"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:text="@string/device_major"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tv_minor"
+            android:layout_width="wrap_content"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:text="@string/device_minor"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tv_rssi"
+            android:layout_width="wrap_content"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:text="@string/device_rssi"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
 
 
 
