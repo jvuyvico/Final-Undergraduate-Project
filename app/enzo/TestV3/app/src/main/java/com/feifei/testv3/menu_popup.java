@@ -25,7 +25,7 @@ public class menu_popup extends Activity {
     int width;
     int height;
     ListView listView;
-    String menu_list_items[] = new String[] {"Set Credentials", "Check My Classes", "Check My Attendance"};
+    String menu_list_items[] = new String[] {"Set Credentials", "Check My Classes", "Check My Attendance", "Scan Devices"};
     ArrayAdapter arrayAdapter;
 
     @Override
@@ -52,6 +52,15 @@ public class menu_popup extends Activity {
                     case 2:
                         Toast.makeText(menu_popup.this, "Feature not Available yet", Toast.LENGTH_SHORT).show();
                         break;
+                    case 3:
+                        startActivity(new Intent(menu_popup.this, ScanDevicesActivity.class));
+                        finish();
+                        break;
+                    case 4:
+                        startActivity(new Intent(menu_popup.this, ViewScanDataActivity.class));
+                        finish();
+                        break;
+
                 }
             }
         });

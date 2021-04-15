@@ -1,5 +1,7 @@
 com/feifei/testv3/AlarmSetter.java
  com.feifei.testv3.AlarmSetter
+com/feifei/testv3/ScanDevicesActivity.java
+ com.feifei.testv3.ScanDevicesActivity
 com/feifei/testv3/DatabaseOpenHelper.java
  com.feifei.testv3.DatabaseOpenHelper
 com/feifei/testv3/BLE_Device.java

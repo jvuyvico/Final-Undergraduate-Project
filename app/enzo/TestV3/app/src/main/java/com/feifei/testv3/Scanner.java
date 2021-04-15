@@ -7,6 +7,7 @@ package com.feifei.testv3;
     Found devices are passed towards ListView in MainActivity for display.
  */
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 
 public class Scanner {
 
-    private MainActivity ma;
+    private ScanDevicesActivity activity;
 
     private Handler scanHandler;
     private BluetoothAdapter bluetoothAdapter;
@@ -32,8 +33,8 @@ public class Scanner {
     private boolean isScanning = false;
 
 
-    public Scanner(MainActivity mainActivity) {
-        ma = mainActivity;
+    public Scanner(ScanDevicesActivity activity) {
+        this.activity = activity;
         this.scanHandler = new Handler();
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
@@ -52,27 +53,27 @@ public class Scanner {
                     isScanning = false;
                     bluetoothLeScanner.stopScan(leScanCallback);
                     Log.d(TAG, "Went to stop scan");
-                    ma.BTScan.setText("Scan BLE");
-                    Toast.makeText(ma.getApplicationContext(), "Scan Complete", Toast.LENGTH_SHORT).show();
+                    activity.button_scanDevices.setText("Scan BLE");
+                    Toast.makeText(activity.getApplicationContext(), "Scan Complete", Toast.LENGTH_SHORT).show();
 
                 }
             }, scan_interval_ms);
 
-            ma.ble_arrayList.clear();
-            ma.ble_listAdapter.notifyDataSetChanged();
+            activity.ble_arrayList.clear();
+            activity.ble_listAdapter.notifyDataSetChanged();
             current_scan_hashmap.clear();
             isScanning = true;
             bluetoothLeScanner.startScan(leScanCallback);
             Log.d(TAG, "Went to start scan");
-            ma.BTScan.setText("Stop Scan");
-            Toast.makeText(ma.getApplicationContext(), "Scan Starting", Toast.LENGTH_SHORT).show();
+            activity.button_scanDevices.setText("Stop Scan");
+            Toast.makeText(activity.getApplicationContext(), "Scan Starting", Toast.LENGTH_SHORT).show();
 
         } else { // else if app is in a scanning mode, stop current scan
             isScanning = false;
             bluetoothLeScanner.stopScan(leScanCallback);
             Log.d(TAG, "Went to stop scan");
-            ma.BTScan.setText("Scan BLE");
-            Toast.makeText(ma.getApplicationContext(), "Scan Stopped", Toast.LENGTH_SHORT).show();
+            activity.button_scanDevices.setText("Scan BLE");
+            Toast.makeText(activity.getApplicationContext(), "Scan Stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -90,8 +91,8 @@ public class Scanner {
 
             current_scan_hashmap.put(mac_address, uuid);
             BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
-            ma.ble_arrayList.add(ble_device);
-            ma.ble_listAdapter.notifyDataSetChanged();
+            activity.ble_arrayList.add(ble_device);
+            activity.ble_listAdapter.notifyDataSetChanged();
 
             //Check Logs to double check if may nahanap ba talaga
             Log.d(TAG, "Uy may nahanap ako");
@@ -129,12 +130,13 @@ public class Scanner {
             String parsedMajor = iBeaconInfoString.substring(32, 36);
             String parsedMinor = iBeaconInfoString.substring(36, 40);
 
+            //convert Hex to Decimal for student number viewing
             parsedMajor = String.valueOf( Integer.parseInt(parsedMajor ,16) );
             parsedMinor = String.valueOf( Integer.parseInt(parsedMinor ,16) );
 
             addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
 
-            Log.d(TAG, "Scanned a device " + iBeaconInfoString.length());
+            Log.d(TAG, "Scanned a device");
         }
     };
 }

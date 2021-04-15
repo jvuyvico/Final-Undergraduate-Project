@@ -1693,11 +1693,9 @@ id AlarmSet
 id BOTTOM_END
 id BOTTOM_START
 id BT_Discoverable
-id BT_Scan
 id BT_switch
 id CTRL
 id ClassListLabel
-id DeviceList
 id FUNCTION
 id META
 id NO_DEBUG
@@ -1831,6 +1829,7 @@ id design_menu_item_action_area
 id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
+id device_scan
 id dialog_button
 id dimensions
 id direct
@@ -1908,6 +1907,7 @@ id listMode
 id list_item
 id lv_ClassesToday
 id lv_classes
+id lv_device_scan
 id masked
 id material_clock_display
 id material_clock_face
@@ -2194,6 +2194,7 @@ layout abc_tooltip
 layout activity_admin_login
 layout activity_main
 layout activity_menu_popup
+layout activity_scan_devices
 layout activity_set_credentials
 layout activity_view_classes
 layout ble_device_list_item

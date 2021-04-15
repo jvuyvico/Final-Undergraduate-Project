@@ -3,7 +3,10 @@ package com.feifei.testv3;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         new Thread(new Runnable(){
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void run() {
                 // initialize variables
@@ -21,7 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Calendar calendar;
                 Intent intenttopass;
 
-
+                /*
                 User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000, "602EB8EB20EC04872040B4A52740CE18");
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                 databaseAccess.open();
@@ -29,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 databaseAccess.close();
                 Log.d("Test", String.valueOf(test));
                 Log.d("Alarm: ", "Job Finished");
-
+                */
 
 
                 /* ---------------- Set individual alarms for each class today ------------------ */

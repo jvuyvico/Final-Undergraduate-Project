@@ -17,17 +17,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="40"
-            android:text="Subject"
+            android:text="subject"
             android:textSize="32sp"
-            android:textColor="@color/black" />
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/tv_section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="Section"
-            android:textColor="@color/grey"
+            android:text="section"
+            android:textColor="@android:color/darker_gray"
             android:textSize="16sp" />
 
         <TextView
@@ -35,17 +35,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="Days"
+            android:text="days"
             android:textSize="16sp"
-            android:textColor="@color/grey" />
+            android:textColor="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/tv_timestart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="Time Start"
-            android:textColor="@color/grey"
+            android:text="time start"
+            android:textColor="@android:color/darker_gray"
             android:textSize="16sp" />
 
         <TextView
@@ -53,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="Time End"
-            android:textColor="@color/grey"
+            android:text="time end"
+            android:textColor="@android:color/darker_gray"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -64,13 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="50"
         android:text="UUID"
-        android:textColor="@color/grey"
+        android:textColor="@android:color/darker_gray"
         android:textSize="16sp" />
-
-
-
-
-
-
 
 </LinearLayout>

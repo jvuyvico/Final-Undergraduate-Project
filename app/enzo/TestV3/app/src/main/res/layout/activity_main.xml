@@ -18,57 +18,27 @@
 
     <Button
         android:id="@+id/BT_switch"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="70dp"
-        android:backgroundTint="@color/green"
-        android:background="@drawable/roundedbg"
-        android:ems="6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="#228B22"
         android:onClick="BT_Switch"
         android:text="@string/bt_on_off"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"/>
-
-    <Button
-        android:id="@+id/BT_Scan"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/green"
-        android:background="@drawable/roundedbg"
-        android:ems="6"
-        android:onClick="BTScan"
-        android:text="@string/scan_ble"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/BT_Discoverable"
-        app:layout_constraintTop_toBottomOf="@+id/BT_switch" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Button
         android:id="@+id/BT_Discoverable"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/green"
-        android:background="@drawable/roundedbg"
-        android:ems="7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#228B22"
         android:onClick="BT_Discoverable"
         android:text="Discover Me"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@id/BT_Scan"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BT_switch" />
-
-    <ListView
-        android:id="@+id/DeviceList"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BT_Scan" />
 
     <TextView
         android:id="@+id/userCred_username"
@@ -78,7 +48,6 @@
         android:layout_marginTop="10dp"
         android:text="Username"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <TextView
@@ -89,7 +58,6 @@
         android:layout_marginTop="5dp"
         android:text="Student Number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userCred_username" />
 
     <TextView
@@ -97,29 +65,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="List of classes for today:"
-        android:textColor="@color/maroon"
-        android:textStyle="bold"
-        android:textSize="25sp"
+        android:textColor="#800000"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DeviceList" />
+        app:layout_constraintTop_toBottomOf="@+id/BT_Discoverable" />
 
     <TextView
         android:id="@+id/AlarmSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:text="Alarm set/not set"
-        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ClassListLabel" />
 
     <ListView
         android:id="@+id/lv_ClassesToday"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AlarmSet" />
 

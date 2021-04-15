@@ -9,13 +9,11 @@
     <Button
         android:id="@+id/refresh"
         android:onClick="refreshClicked"
-        android:background="@color/green"
+        android:background="#228b22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="Refresh"
-        android:textColor="@color/white"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

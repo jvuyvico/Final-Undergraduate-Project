@@ -33,7 +33,8 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* Variable Declarations */
+    /* ----------------------------- Variable Declarations -------------------------------------- */
+
     public static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_DISABLE_BT = 0;
 
@@ -44,10 +45,8 @@ public class MainActivity extends AppCompatActivity {
     BeaconParser beaconparserble;
 
     private static final String TAG = "MainActivity";
-    private Scanner ble_scanner;
 
     // interface interactables
-    Button BTScan;
     ImageView popupmenu;
 
     //for user credentials
@@ -57,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_Username;
     TextView tv_Studentnumber;
     public static boolean credentialsinitialized = false;
-
-    //for scanned BLE devices list
-    ListView ble_listView;
-    ArrayList<BLE_Device> ble_arrayList;
-    BLE_ListAdapter ble_listAdapter;
 
     //for classes today list
     ListView classesToday_lv;
@@ -81,21 +75,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
      */
 
 
-    /* ---------------------- */
+    /* ------------------------------------------------------------------------------------------ */
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BTScan = (Button) findViewById(R.id.BT_Scan);
+
         tv_Username = findViewById(R.id.userCred_username);
         tv_Studentnumber = findViewById(R.id.userCred_studentnumber);
-        ble_scanner = new Scanner(this);
         //registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
@@ -115,17 +107,6 @@ public class MainActivity extends AppCompatActivity {
             credentialsinitialized = sharedPreferences.getBoolean("initialized", true);
         }
 
-        // Device list initialization
-        ble_listView = (ListView) findViewById(R.id.DeviceList);
-        ble_arrayList = new ArrayList<>();
-        ble_listAdapter = new BLE_ListAdapter(this, R.layout.ble_device_list_item, ble_arrayList);
-        ble_listView.setAdapter(ble_listAdapter);
-
-        // add dummy device to check if list and listadapter is working
-        BLE_Device dummydevice = new BLE_Device("DummyDevice", "46:BE:ED:BD:44:E5", "602EB8EB20EC04872040B4A52740CE18", "20xxX", "XXXX", "-50");
-        ble_arrayList.add(dummydevice);
-        ble_listAdapter.notifyDataSetChanged();
-
         // Classes today list initialization
         classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
         classesToday_AL = Utils.getClassesToday(this);
@@ -135,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
 
+        // Starting daily alarm
         boolean alarmUp = (PendingIntent.getBroadcast(this, 20, new Intent(this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmUp){
             Log.d("Alarm: ", "Alarm is already active");
@@ -168,10 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
-        
-
     }
-
 
     @Override
     protected void onPause() {
@@ -209,17 +188,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT).show();
         }
     }
-
-    // onClick method for clicking scan button at main menu
-    public void BTScan(View view) {
-        Utils.checkBluetooth(bluetoothAdapter, this);
-        ble_scanner.startScan();
-    }
-
-    private void stopScan() {
-        ble_scanner.stopScan();
-    }
-
 
     public void BT_Discoverable(View view) {
 

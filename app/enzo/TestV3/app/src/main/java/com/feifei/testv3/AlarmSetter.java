@@ -4,6 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.Calendar;
 
@@ -17,11 +20,12 @@ public class AlarmSetter {
         this.requestcode = requestcode;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void setAlarmManager(Calendar calendar, Intent intent) {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestcode, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 
