@@ -12,6 +12,9 @@
 
 int scanTime = 5; //In seconds
 String payload = "";
+String bid = "00001"; //bldg ID
+String rid = "00001"; //room ID
+//BLEUUID prxUUID = "";
 uint16_t numIDs[10];
 int listRssi[10];
 BLEScan* pBLEScan;
@@ -28,7 +31,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       Serial.printf("ID: %d\n", SN);
       int rssi = advertisedDevice.getRSSI();
       Serial.printf("RSSI: %d\n", rssi);
-      payload = payload + String(SN) + ":" +  String(rssi) + ",";
+      payload = payload + "," + String(SN) + ":" +  String(rssi);
       //Serial.println(payload.c_str());
       
     }
@@ -48,11 +51,12 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  payload = "";
+  payload = bid + rid;
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
   Serial.print("Devices found: ");
   Serial.println(foundDevices.getCount());
   Serial.println("Scan done!");
+  //insert timestamp to payload
   Serial.print("Payload = ");
   Serial.println(payload);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
