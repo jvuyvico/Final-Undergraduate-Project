@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#800000">
+    android:background="@color/maroon">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
             android:text="Main Menu"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
