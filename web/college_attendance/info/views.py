@@ -201,7 +201,7 @@ def timetable(request, class_id):
                 continue
             try:
                 a = asst.get(period=time_slots[t][0], day=d[0])
-                matrix[i][j] = a.assign.course_id
+                matrix[i][j] = a.assign.course_id#a.assign.course_id
             except AssignTime.DoesNotExist:
                 pass
             t += 1

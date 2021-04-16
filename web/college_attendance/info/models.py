@@ -4,6 +4,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
 from datetime import timedelta
+from django.core.validators import MinLengthValidator, MaxLengthValidator
+
 
 
 time_slots = (
@@ -76,9 +78,10 @@ class Class(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE, default=1)
-    USN = models.CharField(primary_key='True', max_length=100)
+    USN = models.CharField(primary_key='True', max_length=9, validators=[MinLengthValidator(9), MaxLengthValidator(9)])
     name = models.CharField(max_length=200)
     DOB = models.DateField(default='1998-01-01')
+    #student_id = models.CharField(max_length = 9, unique=True,validators=[MinLengthValidator(9), MaxLengthValidator(9)] )
 
     def __str__(self):
         return self.name
