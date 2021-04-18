@@ -1,8 +1,5 @@
-/*
-   Based on Neil Kolban example for IDF: https://github.com/nkolban/esp32-snippets/blob/master/cpp_utils/tests/BLE%20Tests/SampleScan.cpp
-   Ported to Arduino ESP32 by Evandro Copercini
-*/
-
+#include <WiFi.h>
+#include <HTTPClient.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
@@ -18,6 +15,12 @@ String rid = "00001"; //room ID
 uint16_t numIDs[10];
 int listRssi[10];
 BLEScan* pBLEScan;
+
+const char* ssid = "HyperDriveJeepney";
+const char* password = "$Bruno08Hotch13$";
+
+//Your Domain name with URL path or IP address with path
+const char* serverName = "http://192.168.1.15:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -60,5 +63,43 @@ void loop() {
   Serial.print("Payload = ");
   Serial.println(payload);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
-  delay(2000); //set interval between scans here
+
+  //connect to wifi
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+
+  if(WiFi.status()== WL_CONNECTED){
+    HTTPClient http;
+    
+    // Your Domain name with URL path or IP address with path
+    http.begin(serverName);
+
+    // Specify content-type header
+    http.addHeader("Content-Type", "text/plain"); 
+    // Data to send with HTTP POST
+    String httpRequestData = payload;
+    // Send HTTP POST request
+    int httpResponseCode = http.POST(payload);
+    
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    
+    // Free resources
+    http.end();
+    }
+   else {
+    Serial.println("WiFi Disconnected");
+    }
+
+  //disconnect from wifi
+  WiFi.disconnect();
+  
+  delay(2000); //set interval between scans here //1min
 }
