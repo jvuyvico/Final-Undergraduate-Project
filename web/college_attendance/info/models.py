@@ -41,6 +41,8 @@ class User(AbstractUser):
             return True
         return False
 
+        
+
 
 class Dept(models.Model):
     id = models.CharField(primary_key='True', max_length=100)

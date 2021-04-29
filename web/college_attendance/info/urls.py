@@ -22,4 +22,8 @@ urlpatterns = [
 
     path('teacher/<slug:teacher_id>/t_timetable/', views.t_timetable, name='t_timetable'),
     path('teacher/<int:asst_id>/Free_teachers/', views.free_teachers, name='free_teachers'),
+
+    path('superuser/superuser_attendance', views.superuser_attendance, name='superuser_attendance'),
+
+    path('test', views.attendance_list),
     ]
