@@ -8,6 +8,8 @@
 #include <string>
 
 int scanTime = 5; //In seconds
+//String numID = "";
+//String rssiVal = "";
 String payload = "";
 String bid = "00001"; //bldg ID
 String rid = "00001"; //room ID
@@ -24,17 +26,23 @@ const char* serverName = "http://192.168.1.15:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
-      Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
+      //Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
       BLEBeacon oBeacon = BLEBeacon();
       oBeacon.setData(advertisedDevice.getManufacturerData());
       //Serial.println(advertisedDevice.getManufacturerData().c_str());
-      Serial.print("UUID: ");
-      Serial.println(oBeacon.getProximityUUID().toString().c_str());
+      //Serial.print("UUID: ");
+      //Serial.println(oBeacon.getProximityUUID().toString().c_str());
       unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*100000) + __builtin_bswap16(oBeacon.getMinor()))/10;
-      Serial.printf("ID: %d\n", SN);
+      //Serial.printf("ID: %d\n", SN);
       int rssi = advertisedDevice.getRSSI();
-      Serial.printf("RSSI: %d\n", rssi);
-      payload = payload + "," + String(SN) + ":" +  String(rssi);
+      //Serial.printf("RSSI: %d\n", rssi);
+      //numID = numID + String(SN) + ",";
+      //rssiVal = rssiVal + String(rssi) + "," ;
+      if (payload != "["){
+        payload = payload + ",";
+      }
+      payload = payload + "{\"bid\":" + bid + ",\"rid\":" + rid + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
+      
       //Serial.println(payload.c_str());
       
     }
@@ -54,14 +62,19 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  payload = bid + rid;
+  payload = "[";
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
   Serial.print("Devices found: ");
   Serial.println(foundDevices.getCount());
   Serial.println("Scan done!");
+  payload = payload + "]";
   //insert timestamp to payload
   Serial.print("Payload = ");
   Serial.println(payload);
+  //Serial.print("numID = ");
+  //Serial.println(numID);
+  //Serial.print("rssiVal = ");
+  //Serial.println(rssiVal);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
 
   //connect to wifi
@@ -82,7 +95,7 @@ void loop() {
     http.begin(serverName);
 
     // Specify content-type header
-    http.addHeader("Content-Type", "text/plain"); 
+    http.addHeader("Content-Type", "application/json"); 
     // Data to send with HTTP POST
     String httpRequestData = payload;
     // Send HTTP POST request
