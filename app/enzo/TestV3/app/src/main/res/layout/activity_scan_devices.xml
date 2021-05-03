@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:backgroundTint="#228B22"
         android:onClick="scanDevices"
-        android:text="Scan Devices"
+        android:text="Scan Nearby Devices"
         app:layout_constraintBottom_toTopOf="@+id/lv_device_scan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

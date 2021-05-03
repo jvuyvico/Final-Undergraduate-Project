@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ViewClassesActivity">
 
-    <Button
-        android:id="@+id/refresh"
-        android:onClick="refreshClicked"
-        android:background="#228b22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Refresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
         android:id="@+id/lv_classes"
         android:layout_width="match_parent"
@@ -25,5 +13,5 @@
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refresh" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

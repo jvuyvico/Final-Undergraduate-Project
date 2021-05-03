@@ -21,19 +21,31 @@ public class AlarmReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 // initialize variables
+                AutoScanner autoScanner;
+
                 AlarmSetter alarmSetter;
                 Calendar calendar;
                 Intent intenttopass;
+                SimpleDateFormat simpleDateFormat;
+                String time;
 
-                /*
-                User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000, "602EB8EB20EC04872040B4A52740CE18");
+                calendar = Calendar.getInstance();
+                simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
+                time = simpleDateFormat.format(calendar.getTime());
+                Scan_Data newScanData = new Scan_Data("Alarm reset check", time , "00");
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                 databaseAccess.open();
-                boolean test = databaseAccess.insertData(userSubject);
+                boolean test = databaseAccess.insertScanData(newScanData);
                 databaseAccess.close();
-                Log.d("Test", String.valueOf(test));
-                Log.d("Alarm: ", "Job Finished");
-                */
+
+                /*
+                if( MainActivity.BT_Mode ) {
+                    autoScanner = new AutoScanner(context);
+                    autoScanner.startScan();
+                } else {
+                    Utils.mode_Discoverable(context);
+                }
+                 */
 
 
                 /* ---------------- Set individual alarms for each class today ------------------ */
@@ -41,36 +53,39 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 for(int i = 0; i < classesToday_AL.size(); i++) {
                     alarmSetter = new AlarmSetter(context, i);
-                    intenttopass = new Intent(context, AlarmReceiver.class);
+                    intenttopass = new Intent(context, ClassAlarmReceiver.class);
                     alarmSetter.cancelAlarm(intenttopass);
 
-                    calendar = Calendar.getInstance();
                     int ihour = 0;
                     int iminute = 0;
 
                     User_Subject newUserSubject = classesToday_AL.get(i);
 
                     //set alarm for this subject
-                    ihour = newUserSubject.getTimestart() / 100;
-                    iminute = newUserSubject.getTimestart() % 100;
+                    ihour = newUserSubject.getTimeend() / 100;
+                    iminute = newUserSubject.getTimeend() % 100;
 
                     Calendar icalendar = Calendar.getInstance();
                     icalendar.set(Calendar.HOUR_OF_DAY, ihour);
                     icalendar.set(Calendar.MINUTE, iminute);
                     icalendar.set(Calendar.SECOND, 0);
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
-                    String time = simpleDateFormat.format(icalendar.getTime());
+                    long timedifference = icalendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
+                    time = simpleDateFormat.format(icalendar.getTime());
 
-                    Log.d("Alarm: (Subject): ", newUserSubject.getSubject() + " " + time);
-                    //alarmSetter.setAlarmManager(icalendar, intenttopass);
+                    Log.d("Alarm: (Subject): ", classesToday_AL.get(i).getSubject()+ " " + String.valueOf(ihour) + ":" + String.valueOf(iminute));
+
+
+                    if (timedifference > 0) {
+                        Log.d("Alarm: (Subject): ", newUserSubject.getSubject() + " " + time + " : Alarm Set!");
+                        alarmSetter.setAlarmManager(icalendar, intenttopass);
+                    } else {
+                        Log.d("Alarm: (Subject): ", newUserSubject.getSubject() + " " + time + " has passed. No alarm set.");
+                    }
+
                 }
-
-
-
                 /* ------------------------------------------------------------------------------ */
-
-
 
 
                 /* ------------------- Restart the alarm for the next day ----------------------- */
@@ -79,24 +94,23 @@ public class AlarmReceiver extends BroadcastReceiver {
                 alarmSetter.cancelAlarm(intenttopass);
                 calendar = Calendar.getInstance();
 
-                /* ADD IF FINISHED DEBUGGING
-                if (calendar.getActualMaximum(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)){
-                    calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)+1);
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                } else {
-                    calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)+1);
-                }
-                 */
-
-                calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY)+1);
-                calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+                // Check if this rolls over at the end of the month
+                /*
+                calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+                calendar.set(Calendar.SECOND, 0);
+                */
+                calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)+1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
-                String time = simpleDateFormat.format(calendar.getTime());
+                simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
+                time = simpleDateFormat.format(calendar.getTime());
                 Log.d("Alarm: (Reset): ", time);
 
                 alarmSetter.setAlarmManager(calendar, intenttopass);
+
+                Log.d("Alarm: ", "Reset");
                 /* ------------------------------------------------------------------- */
             }
         }).start();

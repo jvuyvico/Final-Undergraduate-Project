@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
@@ -40,21 +41,20 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-    BluetoothLeAdvertiser bleadvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
-    Beacon beaconble;
-    BeaconParser beaconparserble;
 
     private static final String TAG = "MainActivity";
 
     // interface interactables
+    Button OnOff_button;
+    TextView DailyAlarm_tv;
     ImageView popupmenu;
 
     //for user credentials
     SharedPreferences sharedPreferences;
     public String user_Username;
     public String user_Studentnumber;
-    TextView tv_Username;
-    TextView tv_Studentnumber;
+    TextView Username_tv;
+    TextView Studentnumber_tv;
     public static boolean credentialsinitialized = false;
 
     //for classes today list
@@ -63,43 +63,85 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<User_Subject> classesToday_AL;
     Classes_ListAdapter classesListAdapter;
 
-    /*
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-                if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1) == BluetoothAdapter.STATE_OFF) {
-                    Toast.makeText(context, "YEEET", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    };
-     */
+    //for BT Modes
+    public static boolean BT_Mode = true; // true: listener, false: broadcaster
+    Button BTMode_button;
 
 
     /* ------------------------------------------------------------------------------------------ */
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv_Username = findViewById(R.id.userCred_username);
-        tv_Studentnumber = findViewById(R.id.userCred_studentnumber);
-        //registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+        //run alarm set-up function in a background to ensure it doesnt get cancelled if app is closed
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+                if (alarmUp){
+                    Log.d("Alarm: ", "Alarm is already active");
+                } else {
+                    AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30);
+                    Intent intenttopass = new Intent(MainActivity.this, AlarmReceiver.class);
+                    alarmSetter.setAlarmManager(calendar, intenttopass);
+                    Log.d("Main Alarm: ", "Alarm set");
+                }
+            }
+        }).start();
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
+        Username_tv = findViewById(R.id.tv_CredUsername);
+        Studentnumber_tv = findViewById(R.id.tv_CredStudno);
+        alarm_tv = findViewById(R.id.tv_AlarmSet);
+        DailyAlarm_tv = findViewById(R.id.tv_DailyAlarm);
+        BTMode_button = findViewById(R.id.but_BTMode);
+        OnOff_button = findViewById(R.id.but_BTonoff);
+
+        //Reset UI displays
+        if (bluetoothAdapter.isEnabled()) {
+            OnOff_button.setText("Turn BT off");
+        }else {
+            OnOff_button.setText("Turn BT on");
+        }
+        /**/
+        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+        if (alarmUp){
+            DailyAlarm_tv.setText("Daily alarm is active!");
+        } else {
+            DailyAlarm_tv.setText("Daily alarm is not active!");
+        }
+        /**/
+        classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
+        classesToday_AL = Utils.getClassesToday(this);
+        classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
+        classesToday_lv.setAdapter(classesListAdapter);
+        /**/
+        int alarmcounter = 0;
+        for (int i = 0; i<classesToday_AL.size(); i++) {
+            boolean classAlarmUp = (PendingIntent.getBroadcast(this, i, new Intent(this, ClassAlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+            if(classAlarmUp){
+                alarmcounter++;
+            }
+        }
+        alarm_tv.setText("Class Alarms set for today: " + String.valueOf(alarmcounter));
 
         //Permission checks lang. Important though na i-approve mo yung permission request for location, so double check mo doon sa settings itself.
+        //for cleaning up
+        /*
         int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
         permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
         if (permissionCheck != 0) {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
         }
+         */
+        this.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1001);    // only works once forever, needs a workaround
 
         // Check if there is existing credentials in the CredentialsDB database
+        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
         if (!sharedPreferences.contains("initialized")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
@@ -107,49 +149,8 @@ public class MainActivity extends AppCompatActivity {
             credentialsinitialized = sharedPreferences.getBoolean("initialized", true);
         }
 
-        // Classes today list initialization
-        classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
-        classesToday_AL = Utils.getClassesToday(this);
-        classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
-        classesToday_lv.setAdapter(classesListAdapter);
-
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
-
-        // Starting daily alarm
-        boolean alarmUp = (PendingIntent.getBroadcast(this, 20, new Intent(this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
-        if (alarmUp){
-            Log.d("Alarm: ", "Alarm is already active");
-        } else {
-            AlarmSetter alarmSetter = new AlarmSetter(this , 20);
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
-            calendar.set(Calendar.SECOND, 0);
-            Intent intenttopass = new Intent(this, AlarmReceiver.class);
-            alarmSetter.setAlarmManager(calendar, intenttopass);
-            Log.d("Alarm: ", "Alarm set ");
-        }
-
-
-
-        /*
-        ComponentName componentName = new ComponentName(this, ScanJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setPersisted(true)
-                .setPeriodic(15*60*1000)    // set for 15 minutes
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d("Job: ", "Job Scheduled");
-        } else {
-            Log.d("Job: ", "Job Scheduling Failed");
-        }
-
-         */
-
     }
 
     @Override
@@ -167,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
     public void updateCredentials() {
         user_Username = sharedPreferences.getString("username", "");
         user_Studentnumber = sharedPreferences.getString("studentnumber", "");
-        tv_Username.setText(user_Username);
-        tv_Studentnumber.setText(user_Studentnumber);
+        Username_tv.setText(user_Username);
+        Studentnumber_tv.setText(user_Studentnumber);
     }
 
     // onClick method for menu button at main menu on top right at toolbar
@@ -177,81 +178,41 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    // onClick method for BLE on/off switch at main menu
-    public void BT_Switch(View view) {
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-        if (bluetoothAdapter.isEnabled()) {
-            bluetoothAdapter.disable();
-            Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT).show();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void Alarm_Reset(View view) {
+        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+        if (alarmUp){
+            Log.d("Alarm: ", "Alarm is already active");
+            Toast.makeText(this,"Alarm is already active!", Toast.LENGTH_SHORT).show();
+        } else {
+            AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30);
+            Intent intenttopass = new Intent(MainActivity.this, AlarmReceiver.class);
+            alarmSetter.setAlarmManager(calendar, intenttopass);
+            Log.d("Main Alarm: ", "Alarm set");
         }
     }
 
-    public void BT_Discoverable(View view) {
-
-        //permission check if device can advertise ble packets
-        if( !BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
-            Toast.makeText( this, "Multiple advertisement not supported", Toast.LENGTH_SHORT ).show();
-            Log.e("BLE", "Multiple ads not supported");
+    // onClick method for BLE on/off switch at main menu
+    public void BT_OnOff(View view) {
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            OnOff_button.setText("Turn BT off");
         }
-        if(BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
-            Toast.makeText(this, "Multiple advertisement supported", Toast.LENGTH_SHORT).show();
-            Log.e("BLE", "Multiple ads supported");
+        if (bluetoothAdapter.isEnabled()) {
+            bluetoothAdapter.disable();
+            OnOff_button.setText("Turn BT on");
+        }
+    }
 
-
-            AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                    .setTimeout(5000)
-                    .build();
-
-            ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(getString(R.string.ble_user_uuid)));
-            UUID selfbleuuid = UUID.fromString("2e952a2b-eef3-4a80-a309-6a3f5aacb1e8");
-            //UUID set for advertising is 2e952a2b-eef3-4a80-a309-6a3f5aacb1e8
-
-            //This process is for creating payload as iBeacon
-            byte[] selfuuidbytes = Utils.asBytes(selfbleuuid);
-            byte[] payload_1 = {(byte)0x02, (byte)0x15, (byte)0x00}; // this makes it an iBeacon
-            byte[] payload_3 = {
-                    (byte)0x20, (byte)0x15,  // Set Major
-                    (byte)0x18, (byte)0x27}; // Set Minor
-
-            byte[] payload = new byte[payload_1.length + selfuuidbytes.length + payload_3.length];
-            System.arraycopy(payload_1, 0, payload, 0, payload_1.length);
-            System.arraycopy(selfuuidbytes, 0, payload, payload_1.length, selfuuidbytes.length);
-            System.arraycopy(payload_3, 0, payload, payload_1.length + selfuuidbytes.length, payload_3.length);
-
-            AdvertiseData data = new AdvertiseData.Builder()
-                    .setIncludeDeviceName(false)
-                    .addManufacturerData(0x004C, payload)
-                    .build();
-/*
-            AdvertiseData advScanResponse = new AdvertiseData.Builder()
-                    .setIncludeDeviceName(true)
-                    .build();
-*/
-            String user_uuid = getString(R.string.ble_user_uuid);
-
-
-            AdvertiseCallback adCallback = new AdvertiseCallback() {
-                @Override
-                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                    super.onStartSuccess(settingsInEffect);
-                    Log.e(" BLE", "On start discovery success");
-                    Toast.makeText(getApplicationContext(), "UUID is " + user_uuid + "\n Advertising set for 5 secs", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onStartFailure(int errorCode) {
-                    Log.e("BLE", "Advertising onStartFailure: " + errorCode);
-                    super.onStartFailure(errorCode);
-                }
-            };
-
-
-            bleadvertiser.startAdvertising(settings, data,  adCallback);
+    public void BT_ModeSwitch(View view) {
+        BT_Mode = !BT_Mode;
+        if ( BT_Mode ) {
+            BTMode_button.setText("Current Mode: Listener");
+        } else {
+            BTMode_button.setText("Current Mode: Broadcaster");
         }
     }
 }

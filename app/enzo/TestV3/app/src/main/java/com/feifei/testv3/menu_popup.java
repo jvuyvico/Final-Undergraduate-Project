@@ -25,7 +25,7 @@ public class menu_popup extends Activity {
     int width;
     int height;
     ListView listView;
-    String menu_list_items[] = new String[] {"Set Credentials", "Check My Classes", "Check My Attendance", "Scan Devices"};
+    String menu_list_items[] = new String[] {"Set Credentials", "Check My Classes", "Check My Attendance", "Scan Devices", "View Scan Data"};
     ArrayAdapter arrayAdapter;
 
     @Override

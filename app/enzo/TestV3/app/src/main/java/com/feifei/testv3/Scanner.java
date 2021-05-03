@@ -17,11 +17,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Scanner {
 
     private ScanDevicesActivity activity;
 
+    private Timer scanTimer;
     private Handler scanHandler;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
@@ -29,11 +32,12 @@ public class Scanner {
 
     private static final String TAG = "Scanner";
 
-    private int scan_interval_ms = 20000;
+    private int scan_interval_ms = 60000;
     private boolean isScanning = false;
 
 
     public Scanner(ScanDevicesActivity activity) {
+        this.scanTimer = new Timer();
         this.activity = activity;
         this.scanHandler = new Handler();
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -47,6 +51,7 @@ public class Scanner {
         if(!isScanning) { // if app is not yet in a scanning mode, start scan
 
             // delay function to stop scanning after a set time
+            /*
             scanHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -58,6 +63,17 @@ public class Scanner {
 
                 }
             }, scan_interval_ms);
+             */
+
+            scanTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isScanning = false;
+                    stopScan();
+                    Log.d(TAG, "Went to stop scan");
+                }
+            }, scan_interval_ms);
+
 
             activity.ble_arrayList.clear();
             activity.ble_listAdapter.notifyDataSetChanged();
@@ -65,22 +81,22 @@ public class Scanner {
             isScanning = true;
             bluetoothLeScanner.startScan(leScanCallback);
             Log.d(TAG, "Went to start scan");
-            activity.button_scanDevices.setText("Stop Scan");
+            //activity.button_scanDevices.setText("Stop Scan");
             Toast.makeText(activity.getApplicationContext(), "Scan Starting", Toast.LENGTH_SHORT).show();
 
         } else { // else if app is in a scanning mode, stop current scan
             isScanning = false;
             bluetoothLeScanner.stopScan(leScanCallback);
             Log.d(TAG, "Went to stop scan");
-            activity.button_scanDevices.setText("Scan BLE");
+            //activity.button_scanDevices.setText("Scan BLE");
             Toast.makeText(activity.getApplicationContext(), "Scan Stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void stopScan() {
         bluetoothLeScanner.stopScan(leScanCallback);
-        leScanCallback = null;
-        scanHandler = null;
+        //leScanCallback = null;
+        //scanHandler = null;
     }
 
     // pass the parsed information in a BLE_Device class and send it to the ArrayList in MainActivity
@@ -106,16 +122,6 @@ public class Scanner {
     }
 
     // function to convert data bytes from beacon to hex array
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
 
     // receiving and parsing of information from beacon
     private ScanCallback leScanCallback = new ScanCallback() {
@@ -123,7 +129,7 @@ public class Scanner {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
 
-            String hexScanRecord = bytesToHex(result.getScanRecord().getBytes());
+            String hexScanRecord = Utils.bytesToHex(result.getScanRecord().getBytes());
             String iBeaconInfoString =
                     hexScanRecord.substring("02011A1AFF4C000215".length(), hexScanRecord.length());
             String parsedUUID = iBeaconInfoString.substring(0, 32);

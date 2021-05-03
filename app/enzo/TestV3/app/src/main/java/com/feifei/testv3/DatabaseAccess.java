@@ -67,7 +67,34 @@ public class DatabaseAccess {
         return list;
     }
 
-    public boolean insertData(User_Subject userSubject){
+    public ArrayList<Scan_Data> getScanData() {
+        ArrayList<Scan_Data> list = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM ScanData", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Scan_Data newScanData = new Scan_Data(cursor.getString(0),
+                    cursor.getString(1), cursor.getString(2));
+            list.add(newScanData);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+    public boolean insertScanData(Scan_Data scanData) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UUID", scanData.getUuid());
+        contentValues.put("Time", scanData.getTime());
+        contentValues.put("RSSI", scanData.getRssi());
+        long result = database.insert("ScanData", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean insertData(User_Subject userSubject) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("Subject", userSubject.getSubject());
         contentValues.put("Section", userSubject.getSection());

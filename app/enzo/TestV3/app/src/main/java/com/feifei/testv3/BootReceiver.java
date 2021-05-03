@@ -4,12 +4,16 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.Calendar;
 
 public class BootReceiver extends BroadcastReceiver {
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Boot completed", Toast.LENGTH_LONG).show();
@@ -21,9 +25,7 @@ public class BootReceiver extends BroadcastReceiver {
             Intent intenttopass = new Intent(context, AlarmReceiver.class);
             AlarmSetter alarmSetter = new AlarmSetter(context, 20);
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+2); // +X to account for the boot time of the device
-            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30); // +X to account for the boot time of the device
             alarmSetter.setAlarmManager(calendar, intenttopass);
             Log.d("Alarm: ", "Alarm set");
         }

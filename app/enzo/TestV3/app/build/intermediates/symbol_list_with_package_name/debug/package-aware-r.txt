@@ -1689,13 +1689,9 @@ drawable test_custom_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 id ALT
-id AlarmSet
 id BOTTOM_END
 id BOTTOM_START
-id BT_Discoverable
-id BT_switch
 id CTRL
-id ClassListLabel
 id FUNCTION
 id META
 id NO_DEBUG
@@ -1782,6 +1778,9 @@ id beginning
 id blocking
 id bottom
 id bounce
+id but_BTMode
+id but_BTonoff
+id but_ResetDaily
 id buttonPanel
 id button_adminLogin
 id button_submit
@@ -1908,6 +1907,7 @@ id list_item
 id lv_ClassesToday
 id lv_classes
 id lv_device_scan
+id lv_scan_data
 id masked
 id material_clock_display
 id material_clock_face
@@ -1995,7 +1995,6 @@ id progress_horizontal
 id radio
 id ratio
 id rectangles
-id refresh
 id reverseSawtooth
 id right
 id rightToLeft
@@ -2106,12 +2105,20 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tv_AlarmSet
+id tv_ClassListLabel
+id tv_CredStudno
+id tv_CredUsername
+id tv_DailyAlarm
 id tv_days
 id tv_macaddr
 id tv_major
 id tv_minor
 id tv_name
 id tv_rssi
+id tv_sd_rssi
+id tv_sd_time
+id tv_sd_uuid
 id tv_section
 id tv_subject
 id tv_timeend
@@ -2122,8 +2129,6 @@ id uniform
 id unlabeled
 id up
 id useLogo
-id userCred_studentnumber
-id userCred_username
 id view_offset_helper
 id visible
 id withText
@@ -2197,6 +2202,7 @@ layout activity_menu_popup
 layout activity_scan_devices
 layout activity_set_credentials
 layout activity_view_classes
+layout activity_view_scan_data
 layout ble_device_list_item
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -2263,6 +2269,7 @@ layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
 layout popup_menu_list_item
+layout scan_data_list_item
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
@@ -2397,7 +2404,6 @@ string scan_ble
 string search_menu_title
 string set_credentials
 string status_bar_notification_info_overflow
-string toast_message
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style AndroidThemeColorAccentYellow

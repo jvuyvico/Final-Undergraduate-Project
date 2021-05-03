@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TestV3</string>
-    <string name="toast_message">Bluetooth Turned OFF</string>
     <string name="scan">SCAN</string>
     <string name="scan_ble">SCAN BLE</string>
     <string name="device_name">device name</string>

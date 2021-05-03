@@ -5,8 +5,11 @@ package com.feifei.testv3;
     Can be accessed from the menu_popup list from MainActivity
  */
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,18 +41,5 @@ public class ViewClassesActivity extends AppCompatActivity {
 
         classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, subjectArrayList);
         lv_classes.setAdapter(classesListAdapter);
-    }
-
-    public void refreshClicked(View view){
-        // dummy button for testing
-
-        User_Subject userSubject = new User_Subject("EEE2", "MX", "M", 900, 1000, "602EB8EB20EC04872040B4A52740CE18");
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        databaseAccess.deleteItem("EEE2");
-        //boolean test = databaseAccess.insertData(userSubject);
-        databaseAccess.close();
-        //Log.d("Test", String.valueOf(test));
-
     }
 }

@@ -22,6 +22,7 @@ com/feifei/testv3/MainActivity.java
  com.feifei.testv3.MainActivity$1
 com/feifei/testv3/Utils.java
  com.feifei.testv3.Utils
+ com.feifei.testv3.Utils$1
 com/feifei/testv3/ViewClassesActivity.java
  com.feifei.testv3.ViewClassesActivity
 com/feifei/testv3/User_Subject.java
@@ -39,11 +40,19 @@ com/feifei/testv3/AlarmReceiver.java
 com/feifei/testv3/menu_popup.java
  com.feifei.testv3.menu_popup
  com.feifei.testv3.menu_popup$1
+com/feifei/testv3/AutoScanner.java
+ com.feifei.testv3.AutoScanner
+ com.feifei.testv3.AutoScanner$1
+ com.feifei.testv3.AutoScanner$2
 com/feifei/testv3/DatabaseAccess.java
  com.feifei.testv3.DatabaseAccess
+com/feifei/testv3/ViewScanDataActivity.java
+ com.feifei.testv3.ViewScanDataActivity
 com/feifei/testv3/BootReceiver.java
  com.feifei.testv3.BootReceiver
-com/feifei/testv3/UserCredentials.java
- com.feifei.testv3.UserCredentials
+com/feifei/testv3/ScanData_ListAdapter.java
+ com.feifei.testv3.ScanData_ListAdapter
+com/feifei/testv3/Scan_Data.java
+ com.feifei.testv3.Scan_Data
 com/feifei/testv3/BuildConfig.java
  com.feifei.testv3.BuildConfig
