@@ -1,0 +1,39 @@
+admin:
+
+admin
+password
+
+Students:
+
+ex.) Phonso Balagtas
+
+phonsobalagtas@gmail.com
+phBalagtas
+passwordabc123
+
+USN - 201506921
+
+Classes:
+Id - Class01
+Section - Section01
+Dept - Institute
+Sem - 1 or 2
+
+Dept: 
+Id - IEEE
+Name - Institute of EEE
+
+
+Courses:
+Id - CoE198MAB1
+Name - Thesis
+Shortname - CoE 198
+
+
+Teachers:
+ex.) Nestor Tiglao
+nestortiglao@gmail.com	
+neTiglao
+passwordabc123
+
+Id - TeacherTiglao01

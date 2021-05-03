@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">TestV2</string>
-    <string name="toast_message">Bluetooth Turned OFF</string>
-    <string name="scan">SCAN</string>
-    <string name="scan_ble">SCAN BLE</string>
-</resources>
