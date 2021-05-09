@@ -6,13 +6,15 @@
 #include <BLEAdvertisedDevice.h>
 #include <BLEBeacon.h>
 #include <string>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 
 int scanTime = 5; //In seconds
 //String numID = "";
 //String rssiVal = "";
 String payload = "";
-String bid = "00001"; //bldg ID
-String rid = "00001"; //room ID
+int bid = 1; //bldg ID
+int rid = 1; //room ID
 //BLEUUID prxUUID = "";
 uint16_t numIDs[10];
 int listRssi[10];
@@ -21,8 +23,18 @@ BLEScan* pBLEScan;
 const char* ssid = "HyperDriveJeepney";
 const char* password = "$Bruno08Hotch13$";
 
+//NTP config
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP);
+
+// Variables to save date and time
+String formattedDate;
+String timeDateString;
+String dayStamp;
+String timeStamp;
+
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.15:8000/esp/";
+const char* serverName = "http://192.168.1.33:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -41,7 +53,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       if (payload != "["){
         payload = payload + ",";
       }
-      payload = payload + "{\"bid\":" + bid + ",\"rid\":" + rid + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
+      payload = payload + "{\"datetime\":\"" + timeDateString + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
       
       //Serial.println(payload.c_str());
       
@@ -62,6 +74,20 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  //get datetime
+  connect2Wifi();
+  timeClient.begin();
+  timeClient.setTimeOffset(28800);
+  while(!timeClient.update()) {
+    timeClient.forceUpdate();
+  }
+  formattedDate = timeClient.getFormattedDate();
+  int splitT = formattedDate.indexOf("T");
+  timeDateString = formattedDate.substring(0, splitT)+ " " + formattedDate.substring(splitT+1, formattedDate.length()-1);
+  //Serial.print("Datatime: ");
+  //Serial.println(timeDateString);
+  WiFi.disconnect();
+  
   payload = "[";
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
   Serial.print("Devices found: ");
@@ -78,15 +104,7 @@ void loop() {
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
 
   //connect to wifi
-  WiFi.begin(ssid, password);
-  Serial.println("Connecting");
-  while(WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
-  Serial.println(WiFi.localIP());
+  connect2Wifi();
 
   if(WiFi.status()== WL_CONNECTED){
     HTTPClient http;
@@ -114,5 +132,17 @@ void loop() {
   //disconnect from wifi
   WiFi.disconnect();
   
-  delay(2000); //set interval between scans here //1min
+  delay(60000); //set interval between scans here //1min
+}
+
+void connect2Wifi() {
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
 }
