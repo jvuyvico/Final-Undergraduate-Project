@@ -1,6 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+#from .views import AttendanceAPI
 
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('attendance', views.AttendanceViewSet, basename='attendance')
+
+router1 = DefaultRouter()
+router1.register('attendance1', views.ESP32ViewSet, basename='attendance1')
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -25,5 +33,8 @@ urlpatterns = [
 
     path('superuser/superuser_attendance', views.superuser_attendance, name='superuser_attendance'),
 
-    path('test', views.attendance_list),
+    #path('test', views.attendance_list),
+    #path('attendance', views.AttendanceAPIView.as_view()),
+    path('test', include(router.urls)), # So link becomes testattendance
+    path('esp32', include(router1.urls))
     ]

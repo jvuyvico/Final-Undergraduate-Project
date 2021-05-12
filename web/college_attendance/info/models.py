@@ -6,6 +6,8 @@ from django.db.models.signals import post_save, post_delete
 from datetime import timedelta
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
+from django.utils.timezone import now
+import datetime
 
 
 time_slots = (
@@ -135,7 +137,7 @@ class Attendance(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     attendanceclass = models.ForeignKey(AttendanceClass, on_delete=models.CASCADE, default=1)
-    date = models.DateField(default='2018-10-23')
+    date = models.DateField(default=datetime.date.today)
     status = models.BooleanField(default='True')
 
     def __str__(self):
