@@ -34,7 +34,7 @@ String dayStamp;
 String timeStamp;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.10:8000/esp/";
+const char* serverName = "http://192.168.1.17:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -132,7 +132,7 @@ void loop() {
   //disconnect from wifi
   WiFi.disconnect();
   
-  delay(60000); //set interval between scans here //1min
+  delay(300000); //set interval between scans here //5min
 }
 
 void connect2Wifi() {
