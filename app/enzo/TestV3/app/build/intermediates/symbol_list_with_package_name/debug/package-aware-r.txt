@@ -1780,6 +1780,7 @@ id bottom
 id bounce
 id but_BTMode
 id but_BTonoff
+id but_CA_refresh
 id but_ResetDaily
 id buttonPanel
 id button_adminLogin
@@ -1905,6 +1906,7 @@ id linear
 id listMode
 id list_item
 id lv_ClassesToday
+id lv_attendance_data
 id lv_classes
 id lv_device_scan
 id lv_scan_data
@@ -2110,6 +2112,13 @@ id tv_ClassListLabel
 id tv_CredStudno
 id tv_CredUsername
 id tv_DailyAlarm
+id tv_ad_date
+id tv_ad_major
+id tv_ad_minor
+id tv_ad_status
+id tv_ad_subject
+id tv_ad_time
+id tv_ad_uuid
 id tv_days
 id tv_macaddr
 id tv_major
@@ -2197,12 +2206,14 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_admin_login
+layout activity_check_attendance
 layout activity_main
 layout activity_menu_popup
 layout activity_scan_devices
 layout activity_set_credentials
 layout activity_view_classes
 layout activity_view_scan_data
+layout attendance_data_list_item
 layout ble_device_list_item
 layout custom_dialog
 layout design_bottom_navigation_item

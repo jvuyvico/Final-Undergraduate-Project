@@ -15,103 +15,99 @@ import java.util.Calendar;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-
         new Thread(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void run() {
-                // initialize variables
-                AutoScanner autoScanner;
-
-                AlarmSetter alarmSetter;
-                Calendar calendar;
-                Intent intenttopass;
+                // dont care variables (overridable)
                 SimpleDateFormat simpleDateFormat;
+                Scan_Data scanData;
+                Intent intenttopass;
+                AlarmSetter alarmSetter;
                 String time;
+                Boolean dummyBool;
 
-                calendar = Calendar.getInstance();
-                simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
-                time = simpleDateFormat.format(calendar.getTime());
-                Scan_Data newScanData = new Scan_Data("Alarm reset check", time , "00");
+                // one-time instantiate variables
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
-                databaseAccess.open();
-                boolean test = databaseAccess.insertScanData(newScanData);
-                databaseAccess.close();
-
-                /*
-                if( MainActivity.BT_Mode ) {
-                    autoScanner = new AutoScanner(context);
-                    autoScanner.startScan();
-                } else {
-                    Utils.mode_Discoverable(context);
-                }
-                 */
-
-
-                /* ---------------- Set individual alarms for each class today ------------------ */
                 ArrayList<User_Subject> classesToday_AL = Utils.getClassesToday(context);
 
+                // other variables;
+                int hour_start;
+                int minute_start;
+                int hour_end;
+                int minute_end;
+
+                // open resources
+                databaseAccess.open();
+
+                // ! START MAIN CODE ! //
+
+                /* For debugging purposes */
+                Calendar calendar_now = Calendar.getInstance();
+                simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
+                time = simpleDateFormat.format(calendar_now.getTime());
+                scanData = new Scan_Data("Alarm reset check", time , "00");
+                dummyBool = databaseAccess.insertScanData(scanData);
+                /**/
+
+                /* ---------------- Set individual alarms for each class today ------------------ */
                 for(int i = 0; i < classesToday_AL.size(); i++) {
                     alarmSetter = new AlarmSetter(context, i);
                     intenttopass = new Intent(context, ClassAlarmReceiver.class);
                     alarmSetter.cancelAlarm(intenttopass);
 
-                    int ihour = 0;
-                    int iminute = 0;
-
                     User_Subject newUserSubject = classesToday_AL.get(i);
 
                     //set alarm for this subject
-                    ihour = newUserSubject.getTimeend() / 100;
-                    iminute = newUserSubject.getTimeend() % 100;
+                    hour_start = newUserSubject.getTimestart() / 100;                               // calendar for first ping check time
+                    minute_start = newUserSubject.getTimestart() % 100;
+                    Calendar calendar_start = Calendar.getInstance();
+                    calendar_start.set(Calendar.HOUR_OF_DAY, hour_start);
+                    calendar_start.set(Calendar.MINUTE, minute_start);                              // first ping check after 15 mins of start of class
+                    calendar_start.set(Calendar.SECOND, 0);
 
-                    Calendar icalendar = Calendar.getInstance();
-                    icalendar.set(Calendar.HOUR_OF_DAY, ihour);
-                    icalendar.set(Calendar.MINUTE, iminute);
-                    icalendar.set(Calendar.SECOND, 0);
+                    hour_end = newUserSubject.getTimeend() / 100;                                   // calendar for end time
+                    minute_end = newUserSubject.getTimeend() % 100;
+                    Calendar calendar_end = Calendar.getInstance();
+                    calendar_end.set(Calendar.HOUR_OF_DAY, hour_end);
+                    calendar_end.set(Calendar.MINUTE, minute_end);
+                    calendar_end.set(Calendar.SECOND, 0);
 
-                    long timedifference = icalendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    long timedifference = calendar_end.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                     simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
-                    time = simpleDateFormat.format(icalendar.getTime());
-
-                    Log.d("Alarm: (Subject): ", classesToday_AL.get(i).getSubject()+ " " + String.valueOf(ihour) + ":" + String.valueOf(iminute));
-
+                    time = simpleDateFormat.format(calendar_start.getTime());
 
                     if (timedifference > 0) {
-                        Log.d("Alarm: (Subject): ", newUserSubject.getSubject() + " " + time + " : Alarm Set!");
-                        alarmSetter.setAlarmManager(icalendar, intenttopass);
+                        Log.d("Alarm: (Subject)", newUserSubject.getSubject() + " " + time + " : Alarm Set!");
+                        alarmSetter.setAlarmManager(calendar_start, intenttopass);
                     } else {
-                        Log.d("Alarm: (Subject): ", newUserSubject.getSubject() + " " + time + " has passed. No alarm set.");
+                        Log.d("Alarm: (Subject)", newUserSubject.getSubject() + " " + time + " has passed. No alarm set.");
                     }
 
                 }
                 /* ------------------------------------------------------------------------------ */
 
-
                 /* ------------------- Restart the alarm for the next day ----------------------- */
                 alarmSetter = new AlarmSetter(context, 20);
                 intenttopass = new Intent(context, AlarmReceiver.class);
                 alarmSetter.cancelAlarm(intenttopass);
-                calendar = Calendar.getInstance();
+                calendar_now = Calendar.getInstance();
 
-                // Check if this rolls over at the end of the month
-                /*
-                calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
-                calendar.set(Calendar.SECOND, 0);
-                */
-                calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)+1);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
+                calendar_now.set(Calendar.DAY_OF_MONTH, calendar_now.get(Calendar.DAY_OF_MONTH)+1);
+                calendar_now.set(Calendar.HOUR_OF_DAY, 0);
+                calendar_now.set(Calendar.MINUTE, 0);
+                calendar_now.set(Calendar.SECOND, 0);
 
                 simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
-                time = simpleDateFormat.format(calendar.getTime());
-                Log.d("Alarm: (Reset): ", time);
+                time = simpleDateFormat.format(calendar_now.getTime());
+                Log.d("Alarm:", "Reset for " + time);
 
-                alarmSetter.setAlarmManager(calendar, intenttopass);
-
-                Log.d("Alarm: ", "Reset");
+                alarmSetter.setAlarmManager(calendar_now, intenttopass);
                 /* ------------------------------------------------------------------- */
+
+                // terminate any resources accessed
+                databaseAccess.close();
+
             }
         }).start();
     }

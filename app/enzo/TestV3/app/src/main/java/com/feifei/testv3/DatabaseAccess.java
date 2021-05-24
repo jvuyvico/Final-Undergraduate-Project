@@ -48,9 +48,6 @@ public class DatabaseAccess {
     }
 
     // grabbing and parsing of information from database
-
-
-
     public ArrayList<User_Subject> getData() {
         ArrayList<User_Subject> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects", null);
@@ -81,6 +78,34 @@ public class DatabaseAccess {
         return list;
     }
 
+    public ArrayList<Attendance_Data> getAttendanceData() {
+        ArrayList<Attendance_Data> list = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM AttendanceData", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Attendance_Data newAttendanceData = new Attendance_Data(cursor.getString(0),
+                    cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getString(6) );
+            list.add(newAttendanceData);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+    public ArrayList<Integer> getPings() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM Pings", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int status = cursor.getInt(1);
+            list.add(status);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
     public boolean insertScanData(Scan_Data scanData) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("UUID", scanData.getUuid());
@@ -93,6 +118,38 @@ public class DatabaseAccess {
             return true;
         }
     }
+
+    public boolean insertAttendanceData(Attendance_Data attendanceData) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Subject", attendanceData.getSubject());
+        contentValues.put("Status", attendanceData.getStatus());
+        contentValues.put("UUID", attendanceData.getUuid());
+        contentValues.put("Major", attendanceData.getMajor());
+        contentValues.put("Minor", attendanceData.getMinor());
+        contentValues.put("Date", attendanceData.getDate());
+        contentValues.put("Time", attendanceData.getTime());
+
+        long result = database.insert("AttendanceData", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean insertPing(int number, int status) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Number", number);
+        contentValues.put("Status", status);
+
+        long result = database.insert("Pings", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     public boolean insertData(User_Subject userSubject) {
         ContentValues contentValues = new ContentValues();
@@ -108,6 +165,17 @@ public class DatabaseAccess {
         } else {
             return true;
         }
+    }
+
+    public void clearPings() {
+        database.execSQL("DROP TABLE IF EXISTS Pings");
+
+
+        database.execSQL("CREATE TABLE \"Pings\" (\n" +
+                "\t\"Number\"\tTEXT NOT NULL,\n" +
+                "\t\"Status\"\tINTEGER NOT NULL DEFAULT 0\n" +
+                ")");
+
     }
 
     public void deleteItem(String subject) {

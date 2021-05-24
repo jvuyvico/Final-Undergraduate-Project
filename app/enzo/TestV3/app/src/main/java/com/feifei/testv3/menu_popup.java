@@ -50,7 +50,8 @@ public class menu_popup extends Activity {
                         finish();
                         break;
                     case 2:
-                        Toast.makeText(menu_popup.this, "Feature not Available yet", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(menu_popup.this, CheckAttendanceActivity.class));
+                        finish();
                         break;
                     case 3:
                         startActivity(new Intent(menu_popup.this, ScanDevicesActivity.class));

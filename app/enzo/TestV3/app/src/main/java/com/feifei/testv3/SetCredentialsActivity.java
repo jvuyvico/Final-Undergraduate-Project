@@ -35,7 +35,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.set_username);
         inputStudentnumber = findViewById(R.id.set_studentnumber);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE); //change MODE_PRIVATE later
+        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_MULTI_PROCESS); //change MODE_PRIVATE later
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 

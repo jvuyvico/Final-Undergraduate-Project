@@ -7,20 +7,18 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.os.Handler;
-import android.os.ParcelUuid;
+import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 public class AutoScanner {
 
@@ -29,10 +27,15 @@ public class AutoScanner {
     private BluetoothLeScanner bluetoothLeScanner;
     private HashMap autoScan_Hashmap;
     private Context context;
+    private int class_index;
+    private ArrayList<User_Subject> userSubjects_AL;
+    private int ping_number;
+    private boolean beacon_found;
+    private DatabaseAccess databaseAccess;
 
     private static final String TAG = "AutoScanner";
 
-    private int scan_interval_ms = 60*1000;
+    private int scan_interval_ms = 45*1000;
     private boolean isScanning = false;
 
     public AutoScanner(Context context) {
@@ -41,6 +44,14 @@ public class AutoScanner {
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         this.autoScan_Hashmap = new HashMap<>();
+        this.class_index = Utils.getCurrentSubjectIndex(context);
+        this.userSubjects_AL = Utils.getClassesToday(context);
+
+        this.beacon_found = false;
+
+
+        this.databaseAccess = DatabaseAccess.getInstance(context);
+        databaseAccess.open();
     }
 
     // start BLE scan
@@ -48,14 +59,30 @@ public class AutoScanner {
         if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {                             // don't scan if bluetooth is off. App will crash
             if(!isScanning) {                                                                       // * if app is not yet in a scanning mode, start scan
                 scanTimer.schedule(new TimerTask() {                                                // delay function to stop scanning after a set time
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void run() {
                         isScanning = false;
                         bluetoothLeScanner.stopScan(leScanCallback);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
+
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E h:m a");
+                        String date = simpleDateFormat.format(Calendar.getInstance().getTime());
+                        simpleDateFormat = new SimpleDateFormat("h:m a");
                         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
+                        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
+                        databaseAccess.open();
+                        ArrayList<Integer> pings_AL = databaseAccess.getPings();
+
+                        databaseAccess.insertPing(pings_AL.size(), beacon_found ? 1 : 0);
                         Log.d(TAG, "Went to stop scan : " + time);
+
+                        Scan_Data newScanData = new Scan_Data("Ping Alarm Check", date , String.valueOf(pings_AL.size()) );
+                        boolean dummyBool = databaseAccess.insertScanData(newScanData);
+                        databaseAccess.close();
+
+
+                        MainActivity.killthread = true;
                     }
                 }, scan_interval_ms);
 
@@ -71,8 +98,10 @@ public class AutoScanner {
                 autoScan_Hashmap.clear();
                 isScanning = true;
 
+
                 bluetoothLeScanner.startScan(scanFilterList, settings, leScanCallback);
-                Log.d(TAG, "Scan started");
+                Log.d(TAG, "Scan started for class " + userSubjects_AL.get(class_index).getSubject() +
+                        ". Scanning for beacon with UUID: " + userSubjects_AL.get(class_index).getUuid());
             } else {                                                                                // * else if app is in a scanning mode, stop current scan
                 isScanning = false;
                 bluetoothLeScanner.stopScan(leScanCallback);
@@ -88,17 +117,16 @@ public class AutoScanner {
         if(!autoScan_Hashmap.containsValue(mac_address)){
             autoScan_Hashmap.put(uuid, mac_address);
             //BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
+            beacon_found = true;
 
-            Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
-            String time = simpleDateFormat.format(calendar.getTime());
-            Scan_Data newScanData = new Scan_Data(uuid, time , rssi);
+            String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
+            Scan_Data newScanData = new Scan_Data(uuid, time , rssi);
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
-            databaseAccess.open();
             boolean test = databaseAccess.insertScanData(newScanData);
-            databaseAccess.close();
-            Log.d(TAG, "Insert data successful - " + String.valueOf(test));
+
+            Log.d(TAG, "Beacon found");
         }
     }
 
@@ -120,26 +148,12 @@ public class AutoScanner {
             parsedMajor = String.valueOf( Integer.parseInt(parsedMajor ,16) );
             parsedMinor = String.valueOf( Integer.parseInt(parsedMinor ,16) );
 
-
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
-            databaseAccess.open();
-            ArrayList<User_Subject> userSubjects_AL = databaseAccess.getData();
-            databaseAccess.close();
-            ArrayList<String> uuid_AL = new ArrayList<>();
-
-            //for efficiency purposes, make an array that removes redundant UUIDs for the cross check process
-            for ( int i = 0; i < userSubjects_AL.size(); i++) {
-                if ( !uuid_AL.contains(userSubjects_AL.get(i).getUuid()) ){
-                    uuid_AL.add(userSubjects_AL.get(i).getUuid());
-                }
-            }
-
             // add scan data if detected UUID is crosschecked from database
-            if( uuid_AL.contains(parsedUUID) ){
+            if( userSubjects_AL.get(class_index).getUuid().contains(parsedUUID) ){
                 addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
+            } else {
+                Log.d(TAG, "Detected a random device");
             }
-
-            Log.d(TAG, "Scanned a device");
         }
     };
 

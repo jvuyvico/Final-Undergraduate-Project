@@ -61,6 +61,31 @@ public class Utils {
         return bb.array();
     }
 
+    public static int getCurrentSubjectIndex (Context context) {                                    // index from list of classes for the day only
+        int subject_index = -1;
+
+        Calendar calendar_now = Calendar.getInstance();
+        int now_ms = calendar_now.get(Calendar.HOUR_OF_DAY)*60 +calendar_now.get(Calendar.MINUTE);
+        ArrayList<User_Subject> classesToday_AL = getClassesToday(context);
+
+        for(int i = 0; i < classesToday_AL.size(); i++) {
+            User_Subject newUserSubject = classesToday_AL.get(i);
+
+            int hour_start = newUserSubject.getTimestart() / 100;
+            int minute_start = newUserSubject.getTimestart() % 100;
+            int start_ms = hour_start*60 + minute_start;
+
+            int hour_end = newUserSubject.getTimeend() / 100;
+            int minute_end = newUserSubject.getTimeend() % 100;
+            int end_ms = hour_end*60 + minute_end;
+
+            if( (end_ms > now_ms) && (now_ms >= start_ms) ) {
+                subject_index = i;
+            }
+        }
+        return subject_index;
+    }
+
     public static ArrayList<User_Subject> getClassesToday(Context context){
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
         databaseAccess.open();
@@ -125,7 +150,7 @@ public class Utils {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                     .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                    .setTimeout(60*1000)
+                    .setTimeout(45*1000)
                     .build();
 
             ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(context.getString(R.string.ble_user_uuid)));
