@@ -19,6 +19,10 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 
+from datetime import datetime
+import pytz
+# class AttendanceSerializer(seri
+
 class AttendanceViewSet(viewsets.ViewSet):
     def list(self, request):
         attendance = Attendance.objects.all()
@@ -58,13 +62,55 @@ class ESP32ViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     def create(self, request):
         #data = request.data
-        temp = Course.objects.get(id='EEE100HYZ')
+        temp = None
         #if data['course'] == Course.objects.get(id='CoE198MAB1'):
         #    data['course'] = Course.objects.get(id='EEE100HYZ')
+        #day_name= ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday']
+        now = datetime.now(pytz.timezone('Asia/Manila'))
+        #day = now.strptime
+        day = now.strftime("%A")
+        current_time = now.strftime("%H:%M:%S")
         serializer = ESP32Serializer(data = request.data)
-        if serializer.is_valid():
-            serializer.validated_data['course'] = temp
+        student_id = serializer.initial_data['student']
+        student_object = Student.objects.get(USN=student_id)
+        class_id_object = getattr(student_object, 'class_id')
+        assign_object = Assign.objects.filter(class_id= class_id_object)
+
+        for item in assign_object:
+            for time_period in AssignTime.objects.filter(assign = item):
+                if ( (time_period.day == day)  ): # Need to add to filter by time also
+                    time_start_new = datetime.strptime(time_period.period[0:5].strip(), "%H:%M")
+                    time_start_final = time_start_new.strftime("%H:%M")
+
+                    if ( (int(time_start_final[1]) < 6 ) and (int(time_start_final[0]) != 1) ):
+                        startdatetime = now.replace(hour=int(time_start_final[0:2]) + 12, minute=int(time_start_final[3:]), second=0)
+                    else:
+                        startdatetime = now.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)        
+                    #startdatetime = now.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)
+                    time_end_new = datetime.strptime(time_period.period[7:].strip(), "%H:%M")
+                    time_end_final = time_end_new.strftime("%H:%M")
+
+                    if ( (int(time_end_final[1]) < 6 )  and (int(time_end_final[0]) != 1) ):
+                        enddatetime = now.replace(hour=int(time_end_final[0:2]) + 12, minute=int(time_end_final[3:]), second=0)
+                    else: 
+                        enddatetime = now.replace(hour=int(time_end_final[0:2]), minute=int(time_end_final[3:]), second=0)
+                    
+                    if ( (now >= startdatetime) and (now <= enddatetime) ):
+
+                        course_attr = getattr(item, 'course')
+                        temp = Course.objects.get(name=course_attr)
+
+                        # Test this on Tuesday around lunch time
+                        # Testing ground -> https://colab.research.google.com/drive/1FWGHQCXvzwSGzVKLpjkbR3gTHTDfPqVR#scrollTo=_w3WbpzChjVI&uniqifier=1
+
+                    #temp = Course.objects.get(id="EEE100HYZ")
+            #assigntime = AssignTime.objects.get(assign=item)
+           
+        if (serializer.is_valid() and temp != None):
+            #if serializer.validated_data['student'] == Student.objects.get(USN='201504617'):
+            serializer.validated_data['course'] = temp # Works already
             serializer.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
