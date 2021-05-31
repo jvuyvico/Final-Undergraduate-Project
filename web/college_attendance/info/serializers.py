@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Attendance, Course, Student
+from .models import Attendance, Course, Student, espData
 from django.db import models
 from datetime import datetime
 import pytz
@@ -59,3 +59,8 @@ class ESP32Serializer(serializers.ModelSerializer):
 # https://stackoverflow.com/questions/38388233/drf-allow-all-fields-in-get-request-but-restrict-post-to-just-one-field/38448743#38448743
 # https://stackoverflow.com/questions/38316321/change-a-field-in-a-django-rest-framework-modelserializer-based-on-the-request-t
 # https://stackoverflow.com/questions/33945148/return-nested-serializer-in-serializer-method-field
+
+class EspDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = espData
+        fields = ('dayStamp', 'timeStamp', 'bid', 'rid', 'numID', 'rssi', 'course')

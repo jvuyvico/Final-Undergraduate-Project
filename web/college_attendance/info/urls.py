@@ -36,5 +36,6 @@ urlpatterns = [
     #path('test', views.attendance_list),
     #path('attendance', views.AttendanceAPIView.as_view()),
     path('test', include(router.urls)), # So link becomes testattendance
-    path('esp32', include(router1.urls))
+    path('esp32', include(router1.urls)),
+    path('espTest', views.fromESPview)
     ]
