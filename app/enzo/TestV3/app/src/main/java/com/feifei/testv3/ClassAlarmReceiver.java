@@ -1,5 +1,7 @@
 package com.feifei.testv3;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,8 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -66,6 +70,25 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
 
                 Log.d("Class Alarm", "This alarm is for " + classesToday_AL.get(subject_index).getSubject() +
                         ". Pinging at an interval of " + String.valueOf(ping_interval) + "s");
+                long is_pingsOver = calendar_now.getTimeInMillis() - ( hour_end*60 + minute_end -10)*60;
+                Log.d("meh", "run: " + String.valueOf( is_pingsOver));
+
+                if ( is_pingsOver < 0 ) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        NotificationChannel channel = new NotificationChannel("Class Notification", "Class_Notif", NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager manager = context.getSystemService(NotificationManager.class);
+                        manager.createNotificationChannel(channel);
+                    }
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Class Notification")
+                            .setSmallIcon(R.drawable.ic_notification)
+                            .setContentTitle("Your class has started")
+                            .setContentText(current_subject.getSubject() + " has started. Go and stay in the classroom.")
+                            .setAutoCancel(true);
+
+                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+                    managerCompat.notify(1, builder.build());
+                }
 
                 for(int i = 0; i < 10; i++) {                                                       // set alarm for each ping
                     AlarmSetter alarmSetter = new AlarmSetter(context, i+50);           // requestcode values 50-59 are for pings
@@ -83,7 +106,7 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
 
                     time_difference = calendar_ping.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
 
-                    if (time_difference >= 0) {
+                    if (time_difference >= -30*1000) {
                         Log.d("Class Alarm", "Set Ping Alarm for " + time);
                         alarmSetter.setAlarmManager(calendar_ping, intenttopass);
                     } else {

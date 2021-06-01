@@ -1,5 +1,7 @@
 package com.feifei.testv3;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,8 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +54,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 dummyBool = databaseAccess.insertScanData(scanData);
                 /**/
 
+                String str_classesToday = "";
+
                 /* ---------------- Set individual alarms for each class today ------------------ */
                 for(int i = 0; i < classesToday_AL.size(); i++) {
                     alarmSetter = new AlarmSetter(context, i);
@@ -84,8 +90,25 @@ public class AlarmReceiver extends BroadcastReceiver {
                         Log.d("Alarm: (Subject)", newUserSubject.getSubject() + " " + time + " has passed. No alarm set.");
                     }
 
+                    str_classesToday = str_classesToday + ", " + newUserSubject.getSubject();
                 }
                 /* ------------------------------------------------------------------------------ */
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel("Daily Alarm Notification", "Daily_Notif", NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager manager = context.getSystemService(NotificationManager.class);
+                    manager.createNotificationChannel(channel);
+                }
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Daily Alarm Notification")
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle("Hello!")
+                        .setContentText("Your classes for today are: " + str_classesToday)
+                        .setAutoCancel(true);
+
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+                managerCompat.cancelAll();
+                managerCompat.notify(0, builder.build());
 
                 /* ------------------- Restart the alarm for the next day ----------------------- */
                 alarmSetter = new AlarmSetter(context, 20);

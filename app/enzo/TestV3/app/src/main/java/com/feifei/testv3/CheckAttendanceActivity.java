@@ -27,10 +27,10 @@ public class CheckAttendanceActivity extends AppCompatActivity {
         attendanceData_AL = new ArrayList<>();
 
         // load database info on the list on create
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        attendanceData_AL = databaseAccess.getAttendanceData();
-        databaseAccess.close();
+        DatabaseAccess ca_DA = DatabaseAccess.getInstance(this);
+        ca_DA.open();
+        attendanceData_AL = ca_DA.getAttendanceData();
+        ca_DA.close();
 
         attendanceDataListAdapter = new AttendanceData_ListAdapter(this, R.layout.attendance_data_list_item, attendanceData_AL);
         lv_attendanceData.setAdapter(attendanceDataListAdapter);

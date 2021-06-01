@@ -150,7 +150,7 @@ public class Utils {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                     .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                    .setTimeout(45*1000)
+                    .setTimeout(60*1000)
                     .build();
 
             ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(context.getString(R.string.ble_user_uuid)));

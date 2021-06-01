@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,23 +41,45 @@ public class PingAlarmService extends Service {
                     SimpleDateFormat simpleDateFormat;
                     int class_index = Utils.getCurrentSubjectIndex(context);
                     ArrayList<User_Subject> userSubjects_AL = Utils.getClassesToday(context);
+                    User_Subject current_subject = userSubjects_AL.get(class_index);
+
+                    int hour_start = current_subject.getTimestart() / 100;
+                    int minute_start = current_subject.getTimestart() % 100;
+                    int hour_end = current_subject.getTimeend() / 100;
+                    int minute_end = current_subject.getTimeend() % 100;
+                    int ping_interval = (((hour_end-hour_start)*60) + minute_end - minute_start - 10) * 60/9;   // ping interval in s
+
+                    Calendar calendar_ping = Calendar.getInstance();
+                    calendar_ping.set(Calendar.HOUR_OF_DAY, hour_start);
+                    calendar_ping.set(Calendar.MINUTE, minute_start + 9*(ping_interval/60));
+                    calendar_ping.set(Calendar.SECOND, 9*(ping_interval%60));
+
+                    long time_difference = calendar_ping.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
 
                     AutoScanner autoScanner = new AutoScanner(context);
                     autoScanner.startScan();
 
                     //wait for process to finish
-                    while(!MainActivity.killthread){
+                    //while(!MainActivity.killthread){
                         Log.d(TAG, "run: Autoscanner still running");
-                        SystemClock.sleep(10*1000);
-                    }
-
+                        SystemClock.sleep(60*1000);
+                    //}
 
                     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                     databaseAccess.open();
                     ArrayList<Integer> pings_AL = databaseAccess.getPings();
                     databaseAccess.close();
 
-                    if(pings_AL.size() == 10){
+                    if(time_difference < 30*1000 && time_difference > -30*1000){
+                        while (pings_AL.size() < 10) {
+                            databaseAccess.open();
+                            databaseAccess.insertPing(pings_AL.size(), 0);
+                            pings_AL.clear();
+                            pings_AL.addAll(databaseAccess.getPings());
+                            databaseAccess.close();
+                            Log.d(TAG, "run: There was a ping that was not recorded. Adding extra entry.");
+                        }
+
                         //log attendance
                         String status = "";
                         if ( pings_AL.stream().mapToInt(Integer::intValue).sum() > 6 ) {
@@ -69,21 +92,25 @@ public class PingAlarmService extends Service {
                         simpleDateFormat = new SimpleDateFormat("h:m a");
                         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
-                        User_Subject dd = userSubjects_AL.get(class_index);
-                        Attendance_Data dummydata = new Attendance_Data(dd.getSubject(), status, dd.getUuid(), "20150", "4617", date, time);
+                        Scan_Data temp = new Scan_Data("Ping Alarm Check", time, String.valueOf(pings_AL.size()));
+                        Attendance_Data dummydata = new Attendance_Data(current_subject.getSubject(), status, current_subject.getUuid(), "20150", "4617", date, time);
                         databaseAccess.open();
+                        databaseAccess.insertScanData(temp);
                         databaseAccess.insertAttendanceData(dummydata);
                         databaseAccess.clearPings();
                         databaseAccess.close();
-                    }
 
+                        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+                        managerCompat.cancel(1);
+                    }
                 } else {
-                    Utils.mode_Discoverable(context);;
+                    Utils.mode_Discoverable(context);
+                    Log.d(TAG, "run: Start of Discoverability");
                 }
             }
         }).start();
 
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Override

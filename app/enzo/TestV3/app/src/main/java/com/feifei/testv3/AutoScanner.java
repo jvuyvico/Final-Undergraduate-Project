@@ -65,22 +65,16 @@ public class AutoScanner {
                         isScanning = false;
                         bluetoothLeScanner.stopScan(leScanCallback);
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E h:m a");
-                        String date = simpleDateFormat.format(Calendar.getInstance().getTime());
-                        simpleDateFormat = new SimpleDateFormat("h:m a");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:m a");
                         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
                         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                         databaseAccess.open();
                         ArrayList<Integer> pings_AL = databaseAccess.getPings();
-
                         databaseAccess.insertPing(pings_AL.size(), beacon_found ? 1 : 0);
-                        Log.d(TAG, "Went to stop scan : " + time);
-
-                        Scan_Data newScanData = new Scan_Data("Ping Alarm Check", date , String.valueOf(pings_AL.size()) );
-                        boolean dummyBool = databaseAccess.insertScanData(newScanData);
                         databaseAccess.close();
 
+                        Log.d(TAG, "Went to stop scan : " + time);
 
                         MainActivity.killthread = true;
                     }
