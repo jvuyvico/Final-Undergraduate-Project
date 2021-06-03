@@ -69,3 +69,33 @@ def update_attendance_daily():
     # }
 
     # https://docs.djangoproject.com/en/dev/topics/db/aggregation/
+
+# def daily_attendance_false():
+# 	students = Student.objects.all()
+# 	day=datetime.now(pytz.timezone('Asia/Manila')).strftime("%A")
+#     for student in students:
+#        	class_id_object = getattr(student, 'class_id')
+#        	assign_object = Assign.objects.filter(class_id= class_id_object)
+#        	for item in assign_object:
+#            	for time_period in AssignTime.objects.filter(assign = item):
+#                	if ( (time_period.day == day)  ):
+#                		if Attendance.objects.filter(student=student, course = item.course, date=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d")).exists():
+#                			print("attendance already there")
+#                		else:
+#                			temp = Attendance(student=student, course=item.course, date=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"), status='False' )
+#                			temp.save()
+
+def daily_attendance_false():
+	students = Student.objects.all()
+	day = datetime.now(pytz.timezone("Asia/Manila")).strftime("%A")
+	for student in students:
+		class_id_object = getattr(student, "class_id")
+		assign_object = Assign.objects.filter(class_id= class_id_object)
+		for item in assign_object:
+			for time_period in AssignTime.objects.filter(assign=item):
+				if ( (time_period.day == day) ):
+					if Attendance.objects.filter(student=student, course=item.course, date=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d")).exists():
+						print("attendance already there")
+					else:
+						temp = Attendance(student=student, course=item.course, date=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"), status='False')
+						temp.save()

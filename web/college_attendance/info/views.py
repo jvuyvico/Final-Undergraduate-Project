@@ -25,54 +25,60 @@ import pytz
 @api_view(['POST'])
 @csrf_exempt
 def fromESPview(request):
-    serializer = EspDataSerializer(data=request.data) #request.data is seen as list
+    serializers = request.data #request.data is seen as list
     #serializer = AttendanceSerializer(data = request.data)
-    timestamp_temp = serializer.initial_data['timeStamp']
-    
-    date_time_str = serializer.initial_data['dayStamp']
+    for obj in serializers:
+        serializer = EspDataSerializer(data = obj)
+        timestamp_temp = serializer.initial_data['timeStamp']
+        
+        date_time_str = serializer.initial_data['dayStamp']
 
-    day = datetime.strptime(date_time_str, '%Y-%m-%d').strftime("%A")
-    temp = None
-    student_id = serializer.initial_data['numID']
-    timestamp = datetime.strptime(timestamp_temp, '%H:%M:%S').replace(tzinfo=pytz.timezone('Asia/Manila'))
-    student_object = Student.objects.get(USN=student_id)
-    class_id_object = getattr(student_object, 'class_id')
-    assign_object = Assign.objects.filter(class_id= class_id_object)
-    for item in assign_object:
-        for time_period in AssignTime.objects.filter(assign = item):
-            if ( (time_period.day == day)  ): # Need to add to filter by time also
-                time_start_new = datetime.strptime(time_period.period[0:5].strip(), "%H:%M")
-                time_start_final = time_start_new.strftime("%H:%M")
+        day = datetime.strptime(date_time_str, '%Y-%m-%d').strftime("%A")
+        temp = None
+        student_id = serializer.initial_data['numID']
+        timestamp = datetime.strptime(timestamp_temp, '%H:%M:%S').replace(tzinfo=pytz.timezone('Asia/Manila'))
+        try:
+            student_object = Student.objects.get(USN=student_id)
+        except Student.DoesNotExist:
+            continue
+        class_id_object = getattr(student_object, 'class_id')
+        assign_object = Assign.objects.filter(class_id= class_id_object)
+        for item in assign_object:
+            for time_period in AssignTime.objects.filter(assign = item):
+                if ( (time_period.day == day)  ): # Need to add to filter by time also
+                    time_start_new = datetime.strptime(time_period.period[0:5].strip(), "%H:%M")
+                    time_start_final = time_start_new.strftime("%H:%M")
 
-                if ( (int(time_start_final[1]) < 6 ) and (int(time_start_final[0]) != 1) ):
-                    startdatetime = timestamp.replace(hour=int(time_start_final[0:2]) + 12, minute=int(time_start_final[3:]), second=0)
-                else:
-                    startdatetime = timestamp.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)        
-                    #startdatetime = now.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)
-                time_end_new = datetime.strptime(time_period.period[7:].strip(), "%H:%M")
-                time_end_final = time_end_new.strftime("%H:%M")
+                    if ( (int(time_start_final[1]) < 6 ) and (int(time_start_final[0]) != 1) ):
+                        startdatetime = timestamp.replace(hour=int(time_start_final[0:2]) + 12, minute=int(time_start_final[3:]), second=0)
+                    else:
+                        startdatetime = timestamp.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)        
+                        #startdatetime = now.replace(hour=int(time_start_final[0:2]), minute=int(time_start_final[3:]), second=0)
+                    time_end_new = datetime.strptime(time_period.period[7:].strip(), "%H:%M")
+                    time_end_final = time_end_new.strftime("%H:%M")
 
-                if ( (int(time_end_final[1]) < 6 )  and (int(time_end_final[0]) != 1) ):
-                    enddatetime = timestamp.replace(hour=int(time_end_final[0:2]) + 12, minute=int(time_end_final[3:]), second=0)
-                else: 
-                    enddatetime = timestamp.replace(hour=int(time_end_final[0:2]), minute=int(time_end_final[3:]), second=0)
-                    
-                if ( (timestamp >= startdatetime) and (timestamp <= enddatetime) ):
+                    if ( (int(time_end_final[1]) < 6 )  and (int(time_end_final[0]) != 1) ):
+                        enddatetime = timestamp.replace(hour=int(time_end_final[0:2]) + 12, minute=int(time_end_final[3:]), second=0)
+                    else: 
+                        enddatetime = timestamp.replace(hour=int(time_end_final[0:2]), minute=int(time_end_final[3:]), second=0)
+                        
+                    if ( (timestamp >= startdatetime) and (timestamp <= enddatetime) ):
 
-                    course_attr = getattr(item, 'course')
-                    temp = Course.objects.get(name=course_attr)
-    if (serializer.is_valid()):
-            #if serializer.validated_data['student'] == Student.objects.get(USN='201504617'):
-        if temp != None:
-            
-            serializer.validated_data['course'] = temp.id # Works already
+                        course_attr = getattr(item, 'course')
+                        temp = Course.objects.get(name=course_attr)
+        if (serializer.is_valid()):
+                #if serializer.validated_data['student'] == Student.objects.get(USN='201504617'):
+            if temp != None:
+                
+                serializer.validated_data['course'] = temp.id # Works already
 
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+            serializer.save()
+            continue
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
 
-    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+    return Response() #Not ideal, but works for now
 # class AttendanceSerializer(seri
 
 class AttendanceViewSet(viewsets.ViewSet):
@@ -234,8 +240,8 @@ def index(request):
         return render(request, 'info/t_homepage.html')
     if request.user.is_student:
         return render(request, 'info/homepage.html')
-    if request.user.is_superuser:
-        return render(request, 'info/superuser_homepage.html')
+    # if request.user.is_superuser:
+    #     return render(request, 'info/superuser_homepage.html')
     return render(request, 'info/logout.html')
 
 
