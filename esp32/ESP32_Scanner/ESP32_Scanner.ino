@@ -34,7 +34,7 @@ String dayStamp;
 String timeStamp;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.17:8000/esp/";
+const char* serverName = "http://192.168.1.33:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -53,7 +53,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       if (payload != "["){
         payload = payload + ",";
       }
-      payload = payload + "{\"datetime\":\"" + timeDateString + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
+      payload = payload + "{\"dayStamp\":\"" + dayStamp + "\",\"timeStamp\":\"" + timeStamp + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
       
       //Serial.println(payload.c_str());
       
@@ -83,7 +83,8 @@ void loop() {
   }
   formattedDate = timeClient.getFormattedDate();
   int splitT = formattedDate.indexOf("T");
-  timeDateString = formattedDate.substring(0, splitT)+ " " + formattedDate.substring(splitT+1, formattedDate.length()-1);
+  timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
+  dayStamp = formattedDate.substring(0, splitT);
   //Serial.print("Datatime: ");
   //Serial.println(timeDateString);
   WiFi.disconnect();
@@ -132,7 +133,7 @@ void loop() {
   //disconnect from wifi
   WiFi.disconnect();
   
-  delay(300000); //set interval between scans here //5min
+  delay(900000); //set interval between scans here //5min
 }
 
 void connect2Wifi() {
