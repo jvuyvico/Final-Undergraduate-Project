@@ -36,8 +36,6 @@ public class PingAlarmService extends Service {
             public void run() {
                 //start process
                 if( MainActivity.BT_Mode ) {
-                    MainActivity.killthread = false;
-
                     SimpleDateFormat simpleDateFormat;
                     int class_index = Utils.getCurrentSubjectIndex(context);
                     ArrayList<User_Subject> userSubjects_AL = Utils.getClassesToday(context);
@@ -60,10 +58,8 @@ public class PingAlarmService extends Service {
                     autoScanner.startScan();
 
                     //wait for process to finish
-                    //while(!MainActivity.killthread){
-                        Log.d(TAG, "run: Autoscanner still running");
-                        SystemClock.sleep(60*1000);
-                    //}
+                    Log.d(TAG, "run: Autoscanner still running");
+                    SystemClock.sleep(60*1000);
 
                     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                     databaseAccess.open();

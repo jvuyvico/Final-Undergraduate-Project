@@ -92,6 +92,7 @@
             android:exported="false" />
         <service
             android:name="org.altbeacon.beacon.service.ScanJob"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" >
             <meta-data
                 android:name="immediateScanJobId"
@@ -102,6 +103,7 @@
         </service>
         <service
             android:name="org.altbeacon.bluetooth.BluetoothTestJob"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" >
             <meta-data
                 android:name="jobId"

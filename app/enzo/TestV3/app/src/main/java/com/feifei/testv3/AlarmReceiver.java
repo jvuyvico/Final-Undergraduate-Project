@@ -90,7 +90,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                         Log.d("Alarm: (Subject)", newUserSubject.getSubject() + " " + time + " has passed. No alarm set.");
                     }
 
-                    str_classesToday = str_classesToday + ", " + newUserSubject.getSubject();
+                    if (str_classesToday.length() == 0) {
+                        str_classesToday = newUserSubject.getSubject();
+                    } else {
+                        str_classesToday = str_classesToday + ", " + newUserSubject.getSubject();
+                    }
                 }
                 /* ------------------------------------------------------------------------------ */
 
@@ -108,7 +112,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
                 managerCompat.cancelAll();
-                managerCompat.notify(0, builder.build());
+                managerCompat.notify(1, builder.build());
 
                 /* ------------------- Restart the alarm for the next day ----------------------- */
                 alarmSetter = new AlarmSetter(context, 20);

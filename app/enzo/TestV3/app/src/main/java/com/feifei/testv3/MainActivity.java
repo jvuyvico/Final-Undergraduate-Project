@@ -63,12 +63,10 @@ public class MainActivity extends AppCompatActivity {
     /**/
 
     //for user credentials
-    SharedPreferences sharedPreferences;
     public String user_Username;
     public String user_Studentnumber;
     TextView Username_tv;
     TextView Studentnumber_tv;
-    public static boolean credentialsinitialized = false;
 
     //for classes today list
     ListView classesToday_lv;
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     Button BTMode_button;
 
     //global variables
-    public static boolean killthread = false;
 
 
     /* ------------------------------------------------------------------------------------------ */
@@ -139,12 +136,14 @@ public class MainActivity extends AppCompatActivity {
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1001);    // only works once forever, needs a workaround
 
         // Check if there is existing credentials in the CredentialsDB database
-        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
-        if (!sharedPreferences.contains("initialized")) {
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        user_Username = databaseAccess.getStudentUsername();
+        user_Studentnumber = databaseAccess.getStudentNumber();
+        databaseAccess.close();
+        if (user_Username.contains("none")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
-            //startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-        } else {
-            credentialsinitialized = sharedPreferences.getBoolean("initialized", true);
+            //startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));         /** !!!DISABLE FOR EASIER DEBUGGING, ENABLE ASAP!!! **/
         }
 
         // Check if bluetooth is turned on. If not, request.
@@ -165,8 +164,11 @@ public class MainActivity extends AppCompatActivity {
 
     // (temporary) update the textviews displaying user credentials on main menu
     public void updateCredentials() {
-        user_Username = sharedPreferences.getString("username", "");
-        user_Studentnumber = sharedPreferences.getString("studentnumber", "");
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        user_Username = databaseAccess.getStudentUsername();
+        user_Studentnumber = databaseAccess.getStudentNumber();
+        databaseAccess.close();
         Username_tv.setText(user_Username);
         Studentnumber_tv.setText(user_Studentnumber);
     }

@@ -68,10 +68,15 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                 minute_end = current_subject.getTimeend() % 100;
                 ping_interval = (((hour_end-hour_start)*60) + minute_end - minute_start - 10) * 60/9;   // ping interval in s
 
+                Calendar endofclass = Calendar.getInstance();
+                endofclass.set(Calendar.HOUR_OF_DAY, hour_end);
+                endofclass.set(Calendar.MINUTE, minute_end-10);
+                endofclass.set(Calendar.SECOND, 0);
+
                 Log.d("Class Alarm", "This alarm is for " + classesToday_AL.get(subject_index).getSubject() +
                         ". Pinging at an interval of " + String.valueOf(ping_interval) + "s");
-                long is_pingsOver = calendar_now.getTimeInMillis() - ( hour_end*60 + minute_end -10)*60;
-                Log.d("meh", "run: " + String.valueOf( is_pingsOver));
+                long is_pingsOver = calendar_now.getTimeInMillis() - endofclass.getTimeInMillis();
+                Log.d("TAG", "run: " + String.valueOf(is_pingsOver));
 
                 if ( is_pingsOver < 0 ) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -87,7 +92,7 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                             .setAutoCancel(true);
 
                     NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
-                    managerCompat.notify(1, builder.build());
+                    managerCompat.notify(10, builder.build());
                 }
 
                 for(int i = 0; i < 10; i++) {                                                       // set alarm for each ping

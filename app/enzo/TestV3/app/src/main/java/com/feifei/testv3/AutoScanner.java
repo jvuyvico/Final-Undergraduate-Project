@@ -75,8 +75,6 @@ public class AutoScanner {
                         databaseAccess.close();
 
                         Log.d(TAG, "Went to stop scan : " + time);
-
-                        MainActivity.killthread = true;
                     }
                 }, scan_interval_ms);
 
