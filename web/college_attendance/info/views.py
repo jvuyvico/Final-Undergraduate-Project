@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, \
-    DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse
+    DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Course_Mapping
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -32,7 +32,9 @@ def fromESPview(request):
         timestamp_temp = serializer.initial_data['timeStamp']
         
         date_time_str = serializer.initial_data['dayStamp']
-
+        room_id = serializer.initial_data['rid']
+        building_id = serializer.initial_data['bid']
+        #print(room_id)
         day = datetime.strptime(date_time_str, '%Y-%m-%d').strftime("%A")
         temp = None
         student_id = serializer.initial_data['numID']
@@ -66,6 +68,13 @@ def fromESPview(request):
 
                         course_attr = getattr(item, 'course')
                         temp = Course.objects.get(name=course_attr)
+                        temp_mapped = Course_Mapping.objects.get(course = temp)
+
+                        if ( (temp_mapped.room_id == room_id) and (temp_mapped.building_id == building_id) ):
+                            temp = temp
+                            #print("working")
+                        else:
+                            temp = None
         if (serializer.is_valid()):
                 #if serializer.validated_data['student'] == Student.objects.get(USN='201504617'):
             if temp != None:

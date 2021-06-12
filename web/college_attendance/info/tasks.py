@@ -51,7 +51,7 @@ def update_attendance_daily():
 	#attendance = Attendance(student=Student.objects.get(USN='201506921'), course=Course.objects.get(id='CoE198MAB1'))
 	espAttendance = espDataDaily.objects.all().filter(dayStamp=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"))
 	for item in espAttendance:
-		if item.pings >= 2:
+		if item.pings >= 5:
 
 			attendance = Attendance(student = Student.objects.get(USN=item.numID), course=Course.objects.get(id=item.course), date= item.dayStamp)
 			attendance.save()

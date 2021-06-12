@@ -63,6 +63,10 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+class Course_Mapping(models.Model):
+    course = models.OneToOneField(Course, on_delete=models.CASCADE)
+    room_id = models.PositiveSmallIntegerField()
+    building_id = models.PositiveSmallIntegerField()
 
 class Class(models.Model):
     # courses = models.ManyToManyField(Course, default=1)
