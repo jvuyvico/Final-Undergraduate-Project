@@ -10,38 +10,36 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TestV3"
+        tools:replace="android:allowBackup"
         android:networkSecurityConfig="@xml/network_security_config"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.feifei.testv4.ViewScanDataActivity"></activity>
+
+        <activity android:name="com.feifei.testv4.ActivityPages.CheckAttendanceActivity" />
+        <activity android:name="com.feifei.testv4.ActivityPages.ViewScanDataActivity" />
         <activity android:name="com.feifei.testv4.ScanDevicesActivity" />
+        <activity android:name="com.feifei.testv4.ActivityPages.ViewClassesActivity" />
         <activity
-            android:name="com.feifei.testv4.menu_popup"
+            android:name="com.feifei.testv4.ActivityPages.menu_popup"
             android:theme="@style/PopMe" />
         <activity
-            android:name="com.feifei.testv4.AdminLoginActivity"
+            android:name="com.feifei.testv4.ActivityPages.AdminLoginActivity"
             android:label="Admin Login" />
         <activity
-            android:name="com.feifei.testv4.ViewClassesActivity"
-            android:label="View My Classes"/>
-        <activity
-            android:name="com.feifei.testv4.CheckAttendanceActivity"
-            android:label="Check My Attendance"/>
-        <activity
-            android:name="com.feifei.testv4.SetCredentialsActivity"
+            android:name="com.feifei.testv4.ActivityPages.SetCredentialsActivity"
             android:label="Register Credentials" />
         <activity
-            android:name="com.feifei.testv4.MainActivity"
-            android:label="Main Screen">
+            android:name="com.feifei.testv4.ActivityPages.MainActivity"
+            android:label="198 BLE">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,6 +49,7 @@
 
         <receiver android:name="com.feifei.testv4.AlarmReceiver" />
         <receiver android:name="com.feifei.testv4.ClassAlarmReceiver" />
+        <receiver android:name="com.feifei.testv4.PingAlarmReceiver" />
         <receiver
             android:name="com.feifei.testv4.BootReceiver"
             android:enabled="true"
@@ -65,9 +64,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.feifei.testv4.ScanJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name= "com.feifei.testv4.PingAlarmService" />
+
     </application>
 
 </manifest>

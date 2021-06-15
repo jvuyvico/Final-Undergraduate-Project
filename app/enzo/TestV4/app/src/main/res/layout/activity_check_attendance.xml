@@ -1,75 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    tools:context=".ActivityPages.CheckAttendanceActivity">
 
     <Button
-        android:id="@+id/GETButton"
+        android:id="@+id/but_CA_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="40dp"
-        android:onClick="GETButton"
-        android:text="UPDATE FROM SERVER"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#228B22"
+        android:onClick="CA_refreshClicked"
+        android:text="Refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/GETDB"
+        android:id="@+id/sendtoserver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="136dp"
-        android:onClick="GETfromDB"
-        android:text="GET FROM LOCAL DB"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#228B22"
+        android:text="Update My Attendance"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/but_CA_refresh"
+        android:onClick="SendToServer"/>
 
-    <Button
-        android:id="@+id/POSTDB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="88dp"
-        android:onClick="UpdateEntriesDB"
-        android:text="POST TO SERVER"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ScrollView
+    <ListView
+        android:id="@+id/lv_attendance_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="364dp">
+        android:layout_height="500dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/but_CA_refresh" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_view_result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="1dp"
-                android:text="TextView" />
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/CrossCheckUpdateAttendance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="88dp"
-        android:text="Check"
-        app:layout_constraintStart_toEndOf="@+id/POSTDB"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="CrossCheckUpdateAttendance"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

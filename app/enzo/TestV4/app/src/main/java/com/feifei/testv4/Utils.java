@@ -15,6 +15,10 @@ import android.content.Intent;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import com.feifei.testv4.ActivityPages.MainActivity;
+import com.feifei.testv4.Classes.User_Subject;
+import com.feifei.testv4.SQLite.DatabaseAccess;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,8 +64,33 @@ public class Utils {
         return bb.array();
     }
 
+    public static int getCurrentSubjectIndex (Context context) {                                    // index from list of classes for the day only
+        int subject_index = -1;
+
+        Calendar calendar_now = Calendar.getInstance();
+        int now_ms = calendar_now.get(Calendar.HOUR_OF_DAY)*60 +calendar_now.get(Calendar.MINUTE);
+        ArrayList<User_Subject> classesToday_AL = getClassesToday(context);
+
+        for(int i = 0; i < classesToday_AL.size(); i++) {
+            User_Subject newUserSubject = classesToday_AL.get(i);
+
+            int hour_start = newUserSubject.getTimestart() / 100;
+            int minute_start = newUserSubject.getTimestart() % 100;
+            int start_ms = hour_start*60 + minute_start;
+
+            int hour_end = newUserSubject.getTimeend() / 100;
+            int minute_end = newUserSubject.getTimeend() % 100;
+            int end_ms = hour_end*60 + minute_end;
+
+            if( (end_ms > now_ms) && (now_ms >= start_ms) ) {
+                subject_index = i;
+            }
+        }
+        return subject_index;
+    }
+
     public static ArrayList<User_Subject> getClassesToday(Context context){
-        com.feifei.testv4.DatabaseAccess databaseAccess = com.feifei.testv4.DatabaseAccess.getInstance(context);
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
         databaseAccess.open();
         ArrayList<User_Subject> userSubjectArrayList = databaseAccess.getData();
         databaseAccess.close();
@@ -132,7 +161,7 @@ public class Utils {
             //UUID set for advertising is 2e952a2b-eef3-4a80-a309-6a3f5aacb1e8
 
             //This process is for creating payload as iBeacon
-            byte[] selfuuidbytes = com.feifei.testv4.Utils.asBytes(selfbleuuid);
+            byte[] selfuuidbytes = Utils.asBytes(selfbleuuid);
             byte[] payload_1 = {(byte)0x02, (byte)0x15, (byte)0x00}; // this makes it an iBeacon
             byte[] payload_3 = {
                     (byte)0x20, (byte)0x15,  // Set Major

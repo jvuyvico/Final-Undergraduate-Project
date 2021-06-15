@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.feifei.testv4.Classes.Scan_Data;
+
 import java.util.ArrayList;
 
 public class ScanData_ListAdapter extends ArrayAdapter<Scan_Data> {

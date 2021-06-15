@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.feifei.testv4.Classes.User_Subject;
+
 import java.util.ArrayList;
 
 public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {

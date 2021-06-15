@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.Calendar;
 
-public class AlarmSetter {
+public class  AlarmSetter {
 
     private Context context;
     private int requestcode;

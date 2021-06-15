@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ActivityPages.MainActivity">
 
     <include
         android:id="@+id/include"
@@ -16,13 +16,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_constraintTop_toBottomOf="@id/include"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
+    <Button
+        android:id="@+id/but_BTonoff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="#228B22"
+        android:onClick="BT_OnOff"
+        android:text="@string/bt_on_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <Button
+        android:id="@+id/but_BTMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#228B22"
+        android:onClick="BT_ModeSwitch"
+        android:text="Current mode: Listener"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/but_BTonoff" />
 
     <TextView
         android:id="@+id/tv_CredUsername"
@@ -44,30 +60,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_CredUsername" />
 
-    <Button
-        android:id="@+id/but_BTonoff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/roundbg"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        android:onClick="BT_OnOff"
-        android:text="@string/bt_on_off"
-        android:layout_gravity="center" />
-
-    <Button
-        android:id="@+id/but_BTMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/roundbg"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        android:layout_marginTop="5dp"
-        android:onClick="BT_ModeSwitch"
-        android:text="Current mode: Listener"
-        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/tv_DailyAlarm"
@@ -75,21 +67,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
-        android:text="Daily Alarm is on/off"/>
+        android:text="Daily Alarm is on/off"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/but_BTMode" />
 
     <Button
         android:id="@+id/but_ResetDaily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/roundbg"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
+        android:backgroundTint="#228B22"
         android:onClick="Alarm_Reset"
         android:text="Manually Reset Daily Alarm"
-        android:layout_gravity="center" />
-</LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_DailyAlarm" />
 
 
     <TextView
@@ -99,8 +91,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginBottom="30dp"
         android:text="List of classes for today:"
-        android:textColor="@color/maroon"
-        android:textStyle="bold"
+        android:textColor="#800000"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/lv_ClassesToday"
         app:layout_constraintStart_toStartOf="parent" />

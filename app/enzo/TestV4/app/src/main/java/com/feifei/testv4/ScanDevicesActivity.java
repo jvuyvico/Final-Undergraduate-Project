@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.feifei.testv4.Classes.BLE_Device;
+
 import java.util.ArrayList;
 
 public class ScanDevicesActivity extends AppCompatActivity {

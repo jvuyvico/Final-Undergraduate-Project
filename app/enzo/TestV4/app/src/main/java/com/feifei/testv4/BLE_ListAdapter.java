@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.feifei.testv4.Classes.BLE_Device;
+
 import java.util.ArrayList;
 
 public class BLE_ListAdapter extends ArrayAdapter<BLE_Device> {

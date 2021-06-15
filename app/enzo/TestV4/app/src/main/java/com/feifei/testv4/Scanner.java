@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.feifei.testv4.Classes.BLE_Device;
+
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
