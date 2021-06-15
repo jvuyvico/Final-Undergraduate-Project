@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +24,8 @@ public class AdminLoginActivity extends AppCompatActivity {
     EditText inputPassword;
     Button backButton;
     Button loginButton;
-    private final String validUsername = "qwe"; //hardcoded for now
-    private final String validPassword = "123"; //hardcoded for now
+    String validUsername;
+    String validPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,14 @@ public class AdminLoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.button_adminLogin);
         inputUsername = findViewById(R.id.admin_username);
         inputPassword = findViewById(R.id.admin_password);
+
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        validUsername = databaseAccess.getAdminUsername();
+        validPassword = databaseAccess.getAdminPassword();
+        databaseAccess.close();
+
+        Log.d("lol", validPassword + validUsername);
 
     }
 
@@ -50,7 +59,11 @@ public class AdminLoginActivity extends AppCompatActivity {
     }
 
     public void backButtonClicked(View view){
-        if(!MainActivity.credentialsinitialized){
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        String username = databaseAccess.getStudentUsername();
+        databaseAccess.close();
+        if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
             finish();
@@ -60,7 +73,11 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!MainActivity.credentialsinitialized){
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        String username = databaseAccess.getStudentUsername();
+        databaseAccess.close();
+        if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();

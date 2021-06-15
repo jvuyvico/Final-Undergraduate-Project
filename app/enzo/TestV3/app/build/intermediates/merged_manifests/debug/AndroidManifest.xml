@@ -30,6 +30,7 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.TestV3" >
+        <activity android:name="com.feifei.testv3.CheckAttendanceActivity" />
         <activity android:name="com.feifei.testv3.ViewScanDataActivity" />
         <activity android:name="com.feifei.testv3.ScanDevicesActivity" />
         <activity android:name="com.feifei.testv3.ViewClassesActivity" />
@@ -54,6 +55,7 @@
 
         <receiver android:name="com.feifei.testv3.AlarmReceiver" />
         <receiver android:name="com.feifei.testv3.ClassAlarmReceiver" />
+        <receiver android:name="com.feifei.testv3.PingAlarmReceiver" />
         <receiver
             android:name="com.feifei.testv3.BootReceiver"
             android:enabled="true"
@@ -68,9 +70,7 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.feifei.testv3.ScanJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name="com.feifei.testv3.PingAlarmService" />
 
         <receiver android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver" >
             <intent-filter>
@@ -92,6 +92,7 @@
             android:exported="false" />
         <service
             android:name="org.altbeacon.beacon.service.ScanJob"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" >
             <meta-data
                 android:name="immediateScanJobId"
@@ -102,6 +103,7 @@
         </service>
         <service
             android:name="org.altbeacon.bluetooth.BluetoothTestJob"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" >
             <meta-data
                 android:name="jobId"

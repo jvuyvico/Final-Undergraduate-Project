@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,11 +22,6 @@ public class SetCredentialsActivity extends AppCompatActivity {
     Button backButton;
     Button submitButton;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor sharedPreferencesEditor;
-
-    //public static UserCredentials userCredentials;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +31,6 @@ public class SetCredentialsActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.set_username);
         inputStudentnumber = findViewById(R.id.set_studentnumber);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE); //change MODE_PRIVATE later
-        sharedPreferencesEditor = sharedPreferences.edit();
     }
 
     // perform error checking to see if input from text is valid format of desired credentials information
@@ -46,24 +40,29 @@ public class SetCredentialsActivity extends AppCompatActivity {
             inputUsername.getText().clear();
             inputStudentnumber.getText().clear();
         } else {
-            //userCredentials = new UserCredentials(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
-
-            sharedPreferencesEditor.putString("username", inputUsername.getText().toString());
-            sharedPreferencesEditor.putString("studentnumber", inputStudentnumber.getText().toString());
-            if(!sharedPreferences.contains("initialized")){
-                sharedPreferencesEditor.putBoolean("initialized", true);
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+            databaseAccess.open();
+            String username = databaseAccess.getStudentUsername();
+            if(username.contains("none")) {
+                databaseAccess.insertStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
+            } else {
+                Log.d("TAG", "submitButtonClicked: updating");
+                databaseAccess.updateStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
             }
-            sharedPreferencesEditor.apply();
+            databaseAccess.close();
 
             Toast.makeText(this, "Credentials successfully set", Toast.LENGTH_SHORT).show();
-            MainActivity.credentialsinitialized = true;
             finish();
         }
 
     }
 
     public void backButtonClicked(View view){
-        if(!MainActivity.credentialsinitialized){
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        String username = databaseAccess.getStudentUsername();
+        databaseAccess.close();
+        if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
             finish();
@@ -73,7 +72,11 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!MainActivity.credentialsinitialized){
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        String username = databaseAccess.getStudentUsername();
+        databaseAccess.close();
+        if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();

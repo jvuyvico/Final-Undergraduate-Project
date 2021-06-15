@@ -25,7 +25,6 @@ public class BootReceiver extends BroadcastReceiver {
             Intent intenttopass = new Intent(context, AlarmReceiver.class);
             AlarmSetter alarmSetter = new AlarmSetter(context, 20);
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30); // +X to account for the boot time of the device
             alarmSetter.setAlarmManager(calendar, intenttopass);
             Log.d("Alarm: ", "Alarm set");
         }

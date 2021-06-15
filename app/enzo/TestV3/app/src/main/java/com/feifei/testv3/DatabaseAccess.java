@@ -48,9 +48,7 @@ public class DatabaseAccess {
     }
 
     // grabbing and parsing of information from database
-
-
-
+    /*** Subjects ***/
     public ArrayList<User_Subject> getData() {
         ArrayList<User_Subject> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects", null);
@@ -60,13 +58,95 @@ public class DatabaseAccess {
                     cursor.getString(1), cursor.getString(2),
                     cursor.getInt(3), cursor.getInt(4), cursor.getString(5));
             list.add(newsubject);
-            //Log.d("Yeet", cursor.getString(0));
             cursor.moveToNext();
         }
         cursor.close();
         return list;
     }
 
+    public boolean insertData(User_Subject userSubject) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Subject", userSubject.getSubject());
+        contentValues.put("Section", userSubject.getSection());
+        contentValues.put("Days", userSubject.getDays());
+        contentValues.put("TimeStart", userSubject.getTimestart());
+        contentValues.put("TimeEnd", userSubject.getTimeend());
+        contentValues.put("UUID", userSubject.getUuid());
+        long result = database.insert("UserSubjects", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void deleteData(String subject) {
+        Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects where Subject = ?" , new String[]{subject});
+        if (cursor.getCount() > 0) {
+            database.delete("UserSubjects", "Subject=?", new String[]{subject});
+        }
+    }
+    /*** Subjects ***/
+
+    /*** Credentials***/
+    String temp="";
+    public String getAdminUsername() {
+        Cursor cursor = database.rawQuery("SELECT * FROM Credentials", null);
+        cursor.moveToFirst();
+        temp = cursor.getString(1);
+        cursor.close();
+        return temp;
+    }
+    public String getAdminPassword() {
+        Cursor cursor = database.rawQuery("SELECT * FROM Credentials", null);
+        cursor.moveToFirst();
+        temp = cursor.getString(2);
+        cursor.close();
+        return temp;
+    }
+    public String getStudentUsername() {
+        Cursor cursor = database.rawQuery("SELECT * FROM Credentials", null);
+        cursor.moveToFirst();
+        cursor.moveToNext();
+        if(cursor.isAfterLast()){
+            temp = "none ";
+        } else {
+            temp = cursor.getString(1);
+        }
+        cursor.close();
+        return temp;
+    }
+    public String getStudentNumber() {
+        Cursor cursor = database.rawQuery("SELECT * FROM Credentials", null);
+        cursor.moveToFirst();
+        cursor.moveToNext();
+        if(cursor.isAfterLast()){
+            temp = "none";
+        } else {
+            temp = cursor.getString(2);
+        }
+        cursor.close();
+        return temp;
+    }
+
+    public void insertStudentData(String username, String studentnumber) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Identifier", "Student");
+        contentValues.put("Username", username);
+        contentValues.put("Field2", studentnumber);
+        database.insert("Credentials", null, contentValues);
+    }
+
+    public void updateStudentData(String username, String studentnumber) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Identifier", "Student");
+        contentValues.put("Username", username);
+        contentValues.put("Field2", studentnumber);
+        database.update("Credentials", contentValues, "Identifier = ?", new String[]{"Student"});
+    }
+    /*** Credentials***/
+
+    /*** Scan Data ***/
     public ArrayList<Scan_Data> getScanData() {
         ArrayList<Scan_Data> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM ScanData", null);
@@ -93,16 +173,63 @@ public class DatabaseAccess {
             return true;
         }
     }
+    /*** Scan Data ***/
 
-    public boolean insertData(User_Subject userSubject) {
+    /*** Attendance Data ***/
+    public ArrayList<Attendance_Data> getAttendanceData() {
+        ArrayList<Attendance_Data> list = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM AttendanceData", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Attendance_Data newAttendanceData = new Attendance_Data(cursor.getString(0),
+                    cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getString(6) );
+            list.add(newAttendanceData);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+    public boolean insertAttendanceData(Attendance_Data attendanceData) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("Subject", userSubject.getSubject());
-        contentValues.put("Section", userSubject.getSection());
-        contentValues.put("Days", userSubject.getDays());
-        contentValues.put("TimeStart", userSubject.getTimestart());
-        contentValues.put("TimeEnd", userSubject.getTimeend());
-        contentValues.put("UUID", userSubject.getUuid());
-        long result = database.insert("UserSubjects", null, contentValues);
+        contentValues.put("Subject", attendanceData.getSubject());
+        contentValues.put("Status", attendanceData.getStatus());
+        contentValues.put("UUID", attendanceData.getUuid());
+        contentValues.put("Major", attendanceData.getMajor());
+        contentValues.put("Minor", attendanceData.getMinor());
+        contentValues.put("Date", attendanceData.getDate());
+        contentValues.put("Time", attendanceData.getTime());
+
+        long result = database.insert("AttendanceData", null, contentValues);
+        if (result==-1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    /*** Attendance Data ***/
+
+    /*** Ping Data ***/
+    public ArrayList<Integer> getPings() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM Pings", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int status = cursor.getInt(1);
+            list.add(status);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+    public boolean insertPing(int number, int status) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Number", number);
+        contentValues.put("Status", status);
+
+        long result = database.insert("Pings", null, contentValues);
         if (result==-1){
             return false;
         } else {
@@ -110,12 +237,15 @@ public class DatabaseAccess {
         }
     }
 
-    public void deleteItem(String subject) {
-        Cursor cursor = database.rawQuery("SELECT * FROM UserSubjects where Subject = ?" , new String[]{subject});
-        if (cursor.getCount() > 0) {
-            database.delete("UserSubjects", "Subject=?", new String[]{subject});
-        }
+    public void clearPings() {
+        database.execSQL("DROP TABLE IF EXISTS Pings");
+
+
+        database.execSQL("CREATE TABLE \"Pings\" (\n" +
+                "\t\"Number\"\tTEXT NOT NULL,\n" +
+                "\t\"Status\"\tINTEGER NOT NULL DEFAULT 0\n" +
+                ")");
+
     }
-
-
+    /*** Ping Data ***/
 }

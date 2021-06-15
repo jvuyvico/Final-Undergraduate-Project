@@ -1,6 +1,9 @@
 package com.feifei.testv3;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
@@ -13,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +27,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
@@ -30,7 +36,12 @@ import org.altbeacon.beacon.BeaconParser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
     Button OnOff_button;
     TextView DailyAlarm_tv;
     ImageView popupmenu;
+    Timer timer;
+    /**/
 
     //for user credentials
-    SharedPreferences sharedPreferences;
     public String user_Username;
     public String user_Studentnumber;
     TextView Username_tv;
     TextView Studentnumber_tv;
-    public static boolean credentialsinitialized = false;
 
     //for classes today list
     ListView classesToday_lv;
@@ -67,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     public static boolean BT_Mode = true; // true: listener, false: broadcaster
     Button BTMode_button;
 
+    //global variables
+
 
     /* ------------------------------------------------------------------------------------------ */
 
@@ -76,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //run alarm set-up function in a background to ensure it doesnt get cancelled if app is closed
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -85,10 +97,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Alarm: ", "Alarm is already active");
                 } else {
                     AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30);
                     Intent intenttopass = new Intent(MainActivity.this, AlarmReceiver.class);
-                    alarmSetter.setAlarmManager(calendar, intenttopass);
+                    alarmSetter.setAlarmManager(Calendar.getInstance(), intenttopass);
                     Log.d("Main Alarm: ", "Alarm set");
                 }
             }
@@ -108,26 +118,11 @@ public class MainActivity extends AppCompatActivity {
             OnOff_button.setText("Turn BT on");
         }
         /**/
-        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
-        if (alarmUp){
-            DailyAlarm_tv.setText("Daily alarm is active!");
-        } else {
-            DailyAlarm_tv.setText("Daily alarm is not active!");
-        }
-        /**/
         classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
         classesToday_AL = Utils.getClassesToday(this);
         classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
         classesToday_lv.setAdapter(classesListAdapter);
-        /**/
-        int alarmcounter = 0;
-        for (int i = 0; i<classesToday_AL.size(); i++) {
-            boolean classAlarmUp = (PendingIntent.getBroadcast(this, i, new Intent(this, ClassAlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
-            if(classAlarmUp){
-                alarmcounter++;
-            }
-        }
-        alarm_tv.setText("Class Alarms set for today: " + String.valueOf(alarmcounter));
+        refreshUIdisplay();
 
         //Permission checks lang. Important though na i-approve mo yung permission request for location, so double check mo doon sa settings itself.
         //for cleaning up
@@ -141,12 +136,14 @@ public class MainActivity extends AppCompatActivity {
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1001);    // only works once forever, needs a workaround
 
         // Check if there is existing credentials in the CredentialsDB database
-        sharedPreferences = getApplicationContext().getSharedPreferences("CredentialsDB", MODE_PRIVATE);
-        if (!sharedPreferences.contains("initialized")) {
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        user_Username = databaseAccess.getStudentUsername();
+        user_Studentnumber = databaseAccess.getStudentNumber();
+        databaseAccess.close();
+        if (user_Username.contains("none")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-        } else {
-            credentialsinitialized = sharedPreferences.getBoolean("initialized", true);
+            //startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));         /** !!!DISABLE FOR EASIER DEBUGGING, ENABLE ASAP!!! **/
         }
 
         // Check if bluetooth is turned on. If not, request.
@@ -162,12 +159,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateCredentials();
+        refreshUIdisplay();
     }
 
     // (temporary) update the textviews displaying user credentials on main menu
     public void updateCredentials() {
-        user_Username = sharedPreferences.getString("username", "");
-        user_Studentnumber = sharedPreferences.getString("studentnumber", "");
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        user_Username = databaseAccess.getStudentUsername();
+        user_Studentnumber = databaseAccess.getStudentNumber();
+        databaseAccess.close();
         Username_tv.setText(user_Username);
         Studentnumber_tv.setText(user_Studentnumber);
     }
@@ -180,19 +181,37 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void Alarm_Reset(View view) {
+        AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
+        Intent intenttopass = new Intent(MainActivity.this, AlarmReceiver.class);
+
         boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmUp){
-            Log.d("Alarm: ", "Alarm is already active");
-            Toast.makeText(this,"Alarm is already active!", Toast.LENGTH_SHORT).show();
-        } else {
-            AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND)+30);
-            Intent intenttopass = new Intent(MainActivity.this, AlarmReceiver.class);
-            alarmSetter.setAlarmManager(calendar, intenttopass);
-            Log.d("Main Alarm: ", "Alarm set");
+            alarmSetter.cancelAlarm(intenttopass);
         }
+        alarmSetter.setAlarmManager(Calendar.getInstance(), intenttopass);
+        Log.d("Main Alarm: ", "Alarm set");
+
+        refreshUIdisplay();
     }
+
+    public void refreshUIdisplay () {
+        boolean alarmUp_check = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+        if (alarmUp_check) {
+            DailyAlarm_tv.setText("Daily alarm is active!");
+        } else {
+            DailyAlarm_tv.setText("Daily alarm is not active!");
+        }
+        /**/
+        int alarmcounter = 0;
+        for (int i = 0; i < classesToday_AL.size(); i++) {
+            boolean classAlarmUp = (PendingIntent.getBroadcast(MainActivity.this, i, new Intent(MainActivity.this, ClassAlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
+            if (classAlarmUp) {
+                alarmcounter++;
+            }
+        }
+        alarm_tv.setText("Class Alarms set for today: " + String.valueOf(alarmcounter));
+    }
+
 
     // onClick method for BLE on/off switch at main menu
     public void BT_OnOff(View view) {
