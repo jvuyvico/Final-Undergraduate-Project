@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '+g7k1gs@a^g(*3mze70w*-z(!_k9!%%lgc@)*2pm@6@4&vgqfg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
+#might need to change to heroku
 AUTH_USER_MODEL = 'info.User'
 
 # Application definition
