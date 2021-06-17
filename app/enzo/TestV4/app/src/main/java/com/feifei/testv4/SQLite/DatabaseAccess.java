@@ -58,7 +58,9 @@ public class DatabaseAccess {
         while (!cursor.isAfterLast()) {
             User_Subject newsubject = new User_Subject(cursor.getString(0),
                     cursor.getString(1), cursor.getString(2),
-                    cursor.getInt(3), cursor.getInt(4), cursor.getString(5));
+                    cursor.getInt(3), cursor.getInt(4),
+                    cursor.getString(5), cursor.getString(6),
+                    cursor.getString(7) );
             list.add(newsubject);
             cursor.moveToNext();
         }

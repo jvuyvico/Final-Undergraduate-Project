@@ -5,8 +5,10 @@ package com.feifei.testv4.ActivityPages;
     Activity only accessible after completing AdminLoginActivity
  */
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -105,7 +107,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
         //base of the REST API. Dito mo idedefine kung saang base site ka kukuha
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.3:8000/")
+                .baseUrl("https://smart-attendance-198.herokuapp.com/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -138,23 +140,24 @@ public class SetCredentialsActivity extends AppCompatActivity {
     }
 
     // perform error checking to see if input from text is valid format of desired credentials information
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void submitButtonClicked(View view){
         if(inputUsername.getText().toString().isEmpty() || inputStudentnumber.getText().length() != 9) {    //check if username is empty or invalid studentnumber
             Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
             inputUsername.getText().clear();
             inputStudentnumber.getText().clear();
         } else {
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-            databaseAccess.open();
-            String username = databaseAccess.getStudentUsername();
+            DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
+            dbAccessSCA.open();
+            String username = dbAccessSCA.getStudentUsername();
             if(username.contains("none")) {
-                databaseAccess.insertStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
+                dbAccessSCA.insertStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
             } else {
                 Log.d("TAG", "submitButtonClicked: updating");
-                databaseAccess.updateStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
+                dbAccessSCA.updateStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
             }
-            String studentnumber = databaseAccess.getStudentNumber();
-            databaseAccess.close();
+            String studentnumber = dbAccessSCA.getStudentNumber();
+            dbAccessSCA.close();
 
 
             //=========== Algorithm to get classes and parse within local database. Medyo complicated siya
@@ -238,12 +241,12 @@ public class SetCredentialsActivity extends AppCompatActivity {
                 }
             }
 
-            databaseAccess.open();
-            databaseAccess.deleteAllData();
+            dbAccessSCA.open();
+            dbAccessSCA.deleteAllData();
             for(User_SubjectExtended finalusersub : subjectArrayList) {
-                databaseAccess.insertExtendedData(finalusersub);
+                dbAccessSCA.insertExtendedData(finalusersub);
             }
-            databaseAccess.close();
+            dbAccessSCA.close();
 
             Toast.makeText(this, "Credentials successfully set", Toast.LENGTH_SHORT).show();
             finish();
@@ -252,10 +255,10 @@ public class SetCredentialsActivity extends AppCompatActivity {
     }
 
     public void backButtonClicked(View view){
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        String username = databaseAccess.getStudentUsername();
-        databaseAccess.close();
+        DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
+        dbAccessSCA.open();
+        String username = dbAccessSCA.getStudentUsername();
+        dbAccessSCA.close();
         if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
@@ -266,10 +269,10 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        String username = databaseAccess.getStudentUsername();
-        databaseAccess.close();
+        DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
+        dbAccessSCA.open();
+        String username = dbAccessSCA.getStudentUsername();
+        dbAccessSCA.close();
         if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {

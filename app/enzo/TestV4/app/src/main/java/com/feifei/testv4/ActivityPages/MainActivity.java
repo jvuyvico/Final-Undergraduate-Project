@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_DISABLE_BT = 0;
 
-    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    BluetoothAdapter bluetoothAdapter;
 
     private static final String TAG = "MainActivity";
 
@@ -76,7 +75,49 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        Username_tv = findViewById(R.id.tv_CredUsername);
+        Studentnumber_tv = findViewById(R.id.tv_CredStudno);
+        alarm_tv = findViewById(R.id.tv_AlarmSet);
+        DailyAlarm_tv = findViewById(R.id.tv_DailyAlarm);
+        BTMode_button = findViewById(R.id.but_BTMode);
+        OnOff_button = findViewById(R.id.but_BTonoff);
+        classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
 
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // Check if there is existing credentials in the CredentialsDB database
+        DatabaseAccess dbAccessMain = DatabaseAccess.getInstance(this);
+        dbAccessMain.open();
+        user_Username = dbAccessMain.getStudentUsername();
+        user_Studentnumber = dbAccessMain.getStudentNumber();
+        dbAccessMain.close();
+        if (user_Username.contains("none")) {
+            Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));         //** !!!DISABLE FOR EASIER DEBUGGING, ENABLE ASAP!!! **/
+        } else {
+            runMainUItasks();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: I am paused");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: I am resumed");
+        refreshUIdisplay();
+        Utils.checkBluetooth(bluetoothAdapter, this);
+        Log.d(TAG, "onCreate: end of main");
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void runMainUItasks () {
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -92,22 +133,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        Username_tv = findViewById(R.id.tv_CredUsername);
-        Studentnumber_tv = findViewById(R.id.tv_CredStudno);
-        alarm_tv = findViewById(R.id.tv_AlarmSet);
-        DailyAlarm_tv = findViewById(R.id.tv_DailyAlarm);
-        BTMode_button = findViewById(R.id.but_BTMode);
-        OnOff_button = findViewById(R.id.but_BTonoff);
-
-        //Reset UI displays
-        if (bluetoothAdapter.isEnabled()) {
-            OnOff_button.setText("Turn BT off");
-        }else {
-            OnOff_button.setText("Turn BT on");
-        }
-        /**/
-
-
         //Permission checks lang. Important though na i-approve mo yung permission request for location, so double check mo doon sa settings itself.
         //for cleaning up
         /*
@@ -119,46 +144,11 @@ public class MainActivity extends AppCompatActivity {
          */
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1001);    // only works once forever, needs a workaround
 
-        // Check if there is existing credentials in the CredentialsDB database
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        user_Username = databaseAccess.getStudentUsername();
-        user_Studentnumber = databaseAccess.getStudentNumber();
-        databaseAccess.close();
-        if (user_Username.contains("none")) {
-            Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));         //** !!!DISABLE FOR EASIER DEBUGGING, ENABLE ASAP!!! **/
-        }
-        classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
-        classesToday_AL = Utils.getClassesToday(this);
-        classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
-        classesToday_lv.setAdapter(classesListAdapter);
         refreshUIdisplay();
+
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateCredentials();
-        refreshUIdisplay();
-    }
-
-    // (temporary) update the textviews displaying user credentials on main menu
-    public void updateCredentials() {
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        user_Username = databaseAccess.getStudentUsername();
-        user_Studentnumber = databaseAccess.getStudentNumber();
-        databaseAccess.close();
-        Username_tv.setText(user_Username);
-        Studentnumber_tv.setText(user_Studentnumber);
+        Log.d(TAG, "onCreate: end of main");
     }
 
     // onClick method for menu button at main menu on top right at toolbar
@@ -183,6 +173,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refreshUIdisplay () {
+        classesToday_AL = Utils.getClassesToday(this);
+        classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, classesToday_AL);
+        classesToday_lv.setAdapter(classesListAdapter);
+
         boolean alarmUp_check = (PendingIntent.getBroadcast(MainActivity.this, 20, new Intent(MainActivity.this, AlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmUp_check) {
             DailyAlarm_tv.setText("Daily alarm is active!");
@@ -198,6 +192,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         alarm_tv.setText("Class Alarms set for today: " + String.valueOf(alarmcounter));
+
+        if (bluetoothAdapter.isEnabled()) {
+            OnOff_button.setText("Turn BT off");
+        }else {
+            OnOff_button.setText("Turn BT on");
+        }
+
+        DatabaseAccess dbAccessMain = DatabaseAccess.getInstance(this);
+        dbAccessMain.open();
+        user_Username = dbAccessMain.getStudentUsername();
+        user_Studentnumber = dbAccessMain.getStudentNumber();
+        dbAccessMain.close();
+        Username_tv.setText(user_Username);
+        Studentnumber_tv.setText(user_Studentnumber);
     }
 
 

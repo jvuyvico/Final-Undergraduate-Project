@@ -52,9 +52,6 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                 int minute_end;
                 long time_difference;
 
-                // open resources
-                databaseAccess.open();
-
                 // ! START MAIN CODE ! //
 
                 /* For debugging purposes */
@@ -62,7 +59,9 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                 simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
                 time = simpleDateFormat.format(calendar_now.getTime());
                 scanData = new Scan_Data("Class Alarm Check", time , "-45");
+                databaseAccess.open();
                 dummyBool = databaseAccess.insertScanData(scanData);
+                databaseAccess.close();
                 Log.d("Class Alarm", "Triggered");
                 /**/
 
@@ -121,21 +120,22 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                     } else {
                         Log.d("Class Alarm", "Late for ping at " + time);
                         ArrayList<Integer> pings = new ArrayList<>();
+                        databaseAccess.open();
                         pings.addAll(databaseAccess.getPings());
+                        databaseAccess.close();
 
+                        databaseAccess.open();
                         if (i == pings.size()){
                             databaseAccess.insertPing(i, 0);
                         }
                         if (i == 9) {
                             User_Subject dd = classesToday_AL.get(subject_index);
-                            Attendance_Data newData = new Attendance_Data(dd.getSubject(), "Absent", dd.getUuid(), "20150", "4617", date, time);
+                            Attendance_Data newData = new Attendance_Data(dd.getSubject()+dd.getSection(), "Absent", dd.getUuid(), "20150", "4617", date, time);
                             dummyBool = databaseAccess.insertAttendanceData(newData);
                         }
+                        databaseAccess.close();
                     }
                 }
-
-                // terminate any resources accessed
-                databaseAccess.close();
 
             }
         }).start();
