@@ -1,2 +1,2 @@
-web: gunicorn -- chdir web/college_attendance college_attendance.wsgi --log-file - 
+web: cd web/college_attendance && gunicorn college_attendance.wsgi --log-file - 
 python manage.py qcluster
