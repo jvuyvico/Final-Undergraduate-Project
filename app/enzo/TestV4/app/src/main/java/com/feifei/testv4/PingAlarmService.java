@@ -94,7 +94,7 @@ public class PingAlarmService extends Service {
                         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
                         Scan_Data temp = new Scan_Data("Ping Alarm Check", time, String.valueOf(pings_AL.size()));
-                        Attendance_Data dummydata = new Attendance_Data(current_subject.getSubject(), status, current_subject.getUuid(), "20150", "4617", date, time);
+                        Attendance_Data dummydata = new Attendance_Data(current_subject.getSubject()+current_subject.getSection(), status, current_subject.getUuid(), "20150", "4617", date, time);
                         databaseAccess.open();
                         databaseAccess.insertScanData(temp);
                         databaseAccess.insertAttendanceData(dummydata);

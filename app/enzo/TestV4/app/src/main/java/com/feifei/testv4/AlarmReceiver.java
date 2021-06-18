@@ -45,9 +45,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 int hour_end;
                 int minute_end;
 
-                // open resources
-                databaseAccess.open();
-
                 // ! START MAIN CODE ! //
 
                 /* For debugging purposes */
@@ -55,7 +52,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
                 time = simpleDateFormat.format(calendar_now.getTime());
                 scanData = new Scan_Data("Alarm reset check", time , "00");
+                databaseAccess.open();
                 dummyBool = databaseAccess.insertScanData(scanData);
+                databaseAccess.close();
                 /**/
 
                 String str_classesToday = "";
@@ -137,8 +136,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 /* ------------------------------------------------------------------- */
 
                 // terminate any resources accessed
-                databaseAccess.close();
-
             }
         }).start();
     }

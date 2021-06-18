@@ -39,14 +39,11 @@ public class AdminLoginActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.admin_username);
         inputPassword = findViewById(R.id.admin_password);
 
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        validUsername = databaseAccess.getAdminUsername();
-        validPassword = databaseAccess.getAdminPassword();
-        databaseAccess.close();
-
-        Log.d("lol", validPassword + validUsername);
-
+        DatabaseAccess dbAccessALA = DatabaseAccess.getInstance(this);
+        dbAccessALA.open();
+        validUsername = dbAccessALA.getAdminUsername();
+        validPassword = dbAccessALA.getAdminPassword();
+        dbAccessALA.close();
     }
 
     public void loginButtonClicked(View view){
@@ -62,10 +59,10 @@ public class AdminLoginActivity extends AppCompatActivity {
     }
 
     public void backButtonClicked(View view){
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        String username = databaseAccess.getStudentUsername();
-        databaseAccess.close();
+        DatabaseAccess dbAccessALA = DatabaseAccess.getInstance(this);
+        dbAccessALA.open();
+        String username = dbAccessALA.getStudentUsername();
+        dbAccessALA.close();
         if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {
@@ -76,10 +73,10 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-        String username = databaseAccess.getStudentUsername();
-        databaseAccess.close();
+        DatabaseAccess dbAccessALA = DatabaseAccess.getInstance(this);
+        dbAccessALA.open();
+        String username = dbAccessALA.getStudentUsername();
+        dbAccessALA.close();
         if(username.contains("none")) {
             Toast.makeText(this, "Please set-up credentials", Toast.LENGTH_SHORT).show();
         } else {

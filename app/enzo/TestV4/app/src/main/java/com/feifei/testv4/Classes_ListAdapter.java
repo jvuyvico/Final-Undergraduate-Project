@@ -40,10 +40,12 @@ public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {
         int timestart = getItem(position).getTimestart();
         int timeend = getItem(position).getTimeend();
         String uuid = getItem(position).getUuid();
+        String major = getItem(position).getMajor();
+        String minor = getItem(position).getMinor();
         String s_timestart = String.valueOf(timestart);
         String s_timeend = String.valueOf(timeend);
 
-        User_Subject newclass = new User_Subject(subject, section, days, timestart, timeend, uuid);
+        User_Subject newclass = new User_Subject(subject, section, days, timestart, timeend, uuid, major, minor);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);

@@ -12,14 +12,19 @@ public class User_Subject {
     int timestart;
     int timeend;
     String uuid;
+    String major;
+    String minor;
 
-    public User_Subject(String subject, String section, String days, int timestart, int timeend, String uuid) {
+
+    public User_Subject(String subject, String section, String days, int timestart, int timeend, String uuid, String major, String minor) {
         this.subject = subject;
         this.section = section;
         this.days = days;
         this.timestart = timestart;
         this.timeend = timeend;
         this.uuid = uuid;
+        this.major = major;
+        this.minor = minor;
     }
 
     public String getSubject() {
@@ -68,5 +73,21 @@ public class User_Subject {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getMinor() {
+        return minor;
+    }
+
+    public void setMinor(String minor) {
+        this.minor = minor;
     }
 }

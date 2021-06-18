@@ -144,8 +144,12 @@ public class AutoScanner {
             parsedMajor = String.valueOf( Integer.parseInt(parsedMajor ,16) );
             parsedMinor = String.valueOf( Integer.parseInt(parsedMinor ,16) );
 
+            User_Subject currentSubject = userSubjects_AL.get(class_index);
             // add scan data if detected UUID is crosschecked from database
-            if( userSubjects_AL.get(class_index).getUuid().contains(parsedUUID) ){
+            if( currentSubject.getUuid().contains(parsedUUID) ){
+                if ( currentSubject.getMajor().contains(parsedMajor) && currentSubject.getMinor().contains(parsedMinor) ) {
+
+                }
                 addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
             } else {
                 Log.d(TAG, "Detected a random device");
