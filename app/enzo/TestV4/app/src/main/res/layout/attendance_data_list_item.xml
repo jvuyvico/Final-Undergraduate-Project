@@ -83,6 +83,6 @@
             android:textColor="@color/gray"
             android:fontFamily="@font/montserrat"/>
     </LinearLayout>
-    
+
 </LinearLayout>
 
