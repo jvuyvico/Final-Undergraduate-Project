@@ -142,4 +142,5 @@ admin.site.register(Attendance)
 admin.site.register(espData)
 admin.site.register(espDataDaily)
 admin.site.register(Course_Mapping)
+admin.site.register(AssignTime)
 
