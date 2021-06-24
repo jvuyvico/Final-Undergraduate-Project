@@ -40,3 +40,11 @@ class timeSlot(models.Model):
     deltaG = models.PositiveSmallIntegerField()
     deltaH = models.PositiveSmallIntegerField()
     deltaI = models.PositiveSmallIntegerField()
+
+class testData(models.Model):
+    dateTime = models.DateTimeField(auto_now=False, auto_now_add=True)
+    timeScan = models.FloatField()
+    bid = models.PositiveSmallIntegerField()
+    rid = models.PositiveSmallIntegerField()
+    numID = models.PositiveIntegerField()
+    rssi = models.SmallIntegerField()

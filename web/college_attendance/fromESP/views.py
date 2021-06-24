@@ -119,3 +119,22 @@ def espAttendanceView():
 
     #change this return to something informative (not an http response)
     return HttpResponse()
+
+@api_view(['POST'])
+@csrf_exempt
+def espTestView(request):
+    dataList = request.data
+    #for loop on request.data then pass each instance to serializer
+    for obj in dataList:
+        serializer = TestDataSerializer(data=obj)
+        if serializer.is_valid():   #if you keep requet.data as is, an error will pop up saying: expected dictionary, got list instead
+            serializer.save()
+            #return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
+
+    return Response(serializer.data)
+
+def testResultView(request):
+    context = {};
+    return render(request, 'testResults.html', context)

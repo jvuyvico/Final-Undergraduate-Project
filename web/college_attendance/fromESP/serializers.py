@@ -11,3 +11,7 @@ class EspAttendanceSerializer(serializers.ModelSerializer):
 		model = espAttendance
 		fields = ('numID', 'bid', 'rid', 'weekDay', 'timeSlot', 'ping')
         
+class TestDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = testData
+        fields = ('timeScan', 'bid', 'rid', 'numID', 'rssi')

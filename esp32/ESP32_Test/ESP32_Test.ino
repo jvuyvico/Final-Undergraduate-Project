@@ -30,14 +30,14 @@ unsigned long tSendDone;
 
 //test variables
 int sendOKcount = 0;
-int n = 1000; //n times send
+int n = 1; //n times send
 unsigned long sendTimes[1000];
 unsigned long tSendSum = 0;
 unsigned long tSendAve;
 unsigned long tSendSD;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.33:8000/espTest/";
+const char* serverName = "http://192.168.1.4:8000/espTest/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -54,7 +54,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       if (payload != "["){
         payload = payload + ",";
       }
-      payload = payload + "{\"timeScan\":\"" + String(tScan) + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + "200000000" + ",\"rssi\":" + String(rssi) + "}";
+      payload = payload + "{\"timeScan\":\"" + String(tScan) + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(200000000 + timeStart) + ",\"rssi\":" + String(rssi) + "}";
       //Serial.println(payload.c_str());
     }
 };
@@ -92,7 +92,7 @@ void loop() {
     HTTPClient http;
 
     //server send test
-    for (int i = 0; i <= n; i++) {
+    for (int i = 0; i < n; i++) {
       
       delay(10);
         // Your Domain name with URL path or IP address with path
@@ -119,6 +119,8 @@ void loop() {
           sendOKcount = sendOKcount + 1;
           tSendSum = tSendSum + sTime;
         }
+
+        delay(100);
       }
     
     }
@@ -133,26 +135,31 @@ void loop() {
   
   timeDone = millis();
 
-  //calculate send response time ave and SD
-  tSendAve = tSendSum / (sendOKcount * 1.0);
-  int var = 0;
-  for (int j = 0; j < sendOKcount; j++) {
-    var = var + pow((sendTimes[j] + tSendAve),2.0);
+  if (sendOKcount == 0) {
+    Serial.println("No succesful sends!");
   }
-  tSendSD = sqrt(var / sendOKcount);
+  else {
+    //calculate send response time ave and SD
+    tSendAve = tSendSum / (sendOKcount * 1.0);
+    int var = 0;
+    for (int j = 0; j < sendOKcount; j++) {
+      var = var + pow((sendTimes[j] + tSendAve),2.0);
+    }
+    tSendSD = sqrt(var / sendOKcount);
   
-  //get overall time
-  timeTotal = (timeDone - timeStart) * 0.001 * 0.0166667;  //in minutes
+    //get overall time
+    timeTotal = (timeDone - timeStart) * 0.001 * 0.0166667;  //in minutes
   
-  //get PRR
-  double PRR = (sendOKcount * 100.0) / n;
+    //get PRR
+    double PRR = (sendOKcount * 100.0) / n;
 
-  Serial.print("Average HTTP response time: ");
-  Serial.println(tSendAve);
-  Serial.print("HTTP response time standard deviation: ");
-  Serial.println(tSendSD);
-  Serial.print("Packet Reception Rate: ");
-  Serial.println(PRR);
+    Serial.print("Average HTTP response time: ");
+    Serial.println(tSendAve);
+    Serial.print("HTTP response time standard deviation: ");
+    Serial.println(tSendSD);
+    Serial.print("Packet Reception Rate: ");
+    Serial.println(PRR);
+  }
   
   delay(900000); //set interval between scans here //15min
 }
