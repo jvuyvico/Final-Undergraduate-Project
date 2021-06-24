@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#800000">
+    android:background="@color/maroon">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -17,6 +17,7 @@
             android:layout_marginStart="8dp"
             android:text="Main Menu"
             android:textColor="@color/white"
+            android:fontFamily="@font/montserrat"
             android:textSize="20sp" />
 
         <ImageView
@@ -26,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:contentDescription="TODO"
-            android:src="@drawable/ic_baseline_menu_24" />
+            android:src="@drawable/ic_baseline_menu_24"/>
 
     </RelativeLayout>
 

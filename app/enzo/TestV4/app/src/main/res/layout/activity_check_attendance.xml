@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".ActivityPages.CheckAttendanceActivity">
 
     <Button
         android:id="@+id/but_CA_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:backgroundTint="#228B22"
+        android:background="@drawable/roundbg"
+        android:backgroundTint="@color/green"
+        android:padding="10dp"
         android:onClick="CA_refreshClicked"
         android:text="Refresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"/>
 
     <Button
         android:id="@+id/sendtoserver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#228B22"
-        android:onClick="SendToServer"
+        android:layout_margin="10dp"
+        android:background="@drawable/roundbg"
+        android:backgroundTint="@color/green"
+        android:padding="10dp"
         android:text="Update My Attendance"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/but_CA_refresh" />
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"
+        android:onClick="SendToServer"/>
 
     <ListView
         android:id="@+id/lv_attendance_data"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/but_CA_refresh" />
+        android:layout_marginTop="50dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

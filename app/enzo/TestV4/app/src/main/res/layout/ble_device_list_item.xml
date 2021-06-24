@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/tv_name"
@@ -13,7 +14,9 @@
         android:layout_weight="40"
         android:text="@string/device_name"
         android:textSize="32sp"
-        android:textColor="@android:color/black" />
+        android:fontFamily="@font/montserrat"
+        android:textStyle="bold"
+        android:textColor="@color/maroon" />
 
     <TextView
         android:id="@+id/tv_macaddr"
@@ -21,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="20"
         android:text="@string/device_mac_address"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/gray"
+        android:fontFamily="@font/montserrat"
         android:textSize="16sp" />
 
     <TextView
@@ -31,7 +35,8 @@
         android:layout_weight="20"
         android:text="@string/device_uuid"
         android:textSize="16sp"
-        android:textColor="@android:color/darker_gray" />
+        android:textColor="@color/gray"
+        android:fontFamily="@font/montserrat" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +50,8 @@
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:text="@string/device_major"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat"
             android:textSize="16sp" />
         <TextView
             android:id="@+id/tv_minor"
@@ -53,7 +59,8 @@
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:text="@string/device_minor"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat"
             android:textSize="16sp" />
         <TextView
             android:id="@+id/tv_rssi"
@@ -61,13 +68,9 @@
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:text="@string/device_rssi"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat"
             android:textSize="16sp" />
     </LinearLayout>
-
-
-
-
-
 
 </LinearLayout>
