@@ -6,12 +6,9 @@
 #include <BLEAdvertisedDevice.h>
 #include <BLEBeacon.h>
 #include <string>
-#include <NTPClient.h>
 #include <WiFiUdp.h>
 
 int scanTime = 5; //In seconds
-//String numID = "";
-//String rssiVal = "";
 String payload = "";
 int bid = 1; //bldg ID
 int rid = 1; //room ID
@@ -23,40 +20,42 @@ BLEScan* pBLEScan;
 const char* ssid = "HyperDriveJeepney";
 const char* password = "$Bruno08Hotch13$";
 
-//NTP config
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
+//timing variables
+unsigned long timeStart;
+unsigned long timeDone;
+unsigned long timeTotal;
+unsigned long timeResp;
+unsigned long tSendStart;
+unsigned long tSendDone;
 
-// Variables to save date and time
-String formattedDate;
-String timeDateString;
-String dayStamp;
-String timeStamp;
+//test variables
+int sendOKcount = 0;
+int n = 1000; //n times send
+unsigned long sendTimes[1000];
+unsigned long tSendSum = 0;
+unsigned long tSendAve;
+unsigned long tSendSD;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.33:8000/esp/";
+const char* serverName = "http://192.168.1.33:8000/espTest/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
       //Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
       BLEBeacon oBeacon = BLEBeacon();
       oBeacon.setData(advertisedDevice.getManufacturerData());
-      //Serial.println(advertisedDevice.getManufacturerData().c_str());
-      //Serial.print("UUID: ");
-      //Serial.println(oBeacon.getProximityUUID().toString().c_str());
-      unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*100000) + __builtin_bswap16(oBeacon.getMinor()))/10;
-      //Serial.printf("ID: %d\n", SN);
       int rssi = advertisedDevice.getRSSI();
+      unsigned long tScan = millis() - timeStart;
+      
       //Serial.printf("RSSI: %d\n", rssi);
       //numID = numID + String(SN) + ",";
       //rssiVal = rssiVal + String(rssi) + "," ;
+      
       if (payload != "["){
         payload = payload + ",";
       }
-      payload = payload + "{\"dayStamp\":\"" + dayStamp + "\",\"timeStamp\":\"" + timeStamp + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
-      
+      payload = payload + "{\"timeScan\":\"" + String(tScan) + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + "200000000" + ",\"rssi\":" + String(rssi) + "}";
       //Serial.println(payload.c_str());
-      
     }
 };
 
@@ -68,40 +67,22 @@ void setup() {
   pBLEScan = BLEDevice::getScan(); //create new scan
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
-  pBLEScan->setInterval(100);
+  pBLEScan->setInterval(100); //ms
   pBLEScan->setWindow(99);  // less or equal setInterval value
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //get datetime
-  connect2Wifi();
-  timeClient.begin();
-  timeClient.setTimeOffset(28800);
-  while(!timeClient.update()) {
-    timeClient.forceUpdate();
-  }
-  formattedDate = timeClient.getFormattedDate();
-  int splitT = formattedDate.indexOf("T");
-  timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
-  dayStamp = formattedDate.substring(0, splitT);
-  //Serial.print("Datatime: ");
-  //Serial.println(timeDateString);
-  WiFi.disconnect();
-  
   payload = "[";
+  timeStart = millis();
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
-  Serial.print("Devices found: ");
-  Serial.println(foundDevices.getCount());
   Serial.println("Scan done!");
+  Serial.print("Devices found: ");
+  int devCount = foundDevices.getCount();
+  Serial.println(devCount);
   payload = payload + "]";
-  //insert timestamp to payload
-  Serial.print("Payload = ");
-  Serial.println(payload);
-  //Serial.print("numID = ");
-  //Serial.println(numID);
-  //Serial.print("rssiVal = ");
-  //Serial.println(rssiVal);
+  //Serial.print("Payload = ");
+  //Serial.println(payload);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
 
   //connect to wifi
@@ -109,31 +90,71 @@ void loop() {
 
   if(WiFi.status()== WL_CONNECTED){
     HTTPClient http;
-    
-    // Your Domain name with URL path or IP address with path
-    http.begin(serverName);
 
-    // Specify content-type header
-    http.addHeader("Content-Type", "application/json"); 
-    // Data to send with HTTP POST
-    String httpRequestData = payload;
-    // Send HTTP POST request
-    int httpResponseCode = http.POST(payload);
+    //server send test
+    for (int i = 0; i <= n; i++) {
+      
+      delay(10);
+        // Your Domain name with URL path or IP address with path
+        tSendStart = millis();
+        http.begin(serverName);
+
+        // Specify content-type header
+        http.addHeader("Content-Type", "application/json"); 
+        // Data to send with HTTP POST
+        String httpRequestData = payload;
+        // Send HTTP POST request
+        int httpResponseCode = http.POST(payload);
     
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpResponseCode);
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
     
-    // Free resources
-    http.end();
+        // Free resources
+        http.end();
+        tSendDone = millis();
+
+        if (httpResponseCode >= 200 && httpResponseCode <= 299) {
+          int sTime = tSendDone - tSendStart;
+          sendTimes[sendOKcount] = sTime;
+          sendOKcount = sendOKcount + 1;
+          tSendSum = tSendSum + sTime;
+        }
+      }
+    
     }
    else {
     Serial.println("WiFi Disconnected");
     }
 
+  timeDone = timeStart - millis();
+
   //disconnect from wifi
   WiFi.disconnect();
   
-  delay(900000); //set interval between scans here //5min
+  timeDone = millis();
+
+  //calculate send response time ave and SD
+  tSendAve = tSendSum / (sendOKcount * 1.0);
+  int var = 0;
+  for (int j = 0; j < sendOKcount; j++) {
+    var = var + pow((sendTimes[j] + tSendAve),2.0);
+  }
+  tSendSD = sqrt(var / sendOKcount);
+  
+  //get overall time
+  timeTotal = (timeDone - timeStart) * 0.001 * 0.0166667;  //in minutes
+  
+  //get PRR
+  double PRR = (sendOKcount * 100.0) / n;
+
+  Serial.print("Average HTTP response time: ");
+  Serial.println(tSendAve);
+  Serial.print("HTTP response time standard deviation: ");
+  Serial.println(tSendSD);
+  Serial.print("Packet Reception Rate: ");
+  Serial.println(PRR);
+  
+  delay(900000); //set interval between scans here //15min
 }
 
 void connect2Wifi() {
