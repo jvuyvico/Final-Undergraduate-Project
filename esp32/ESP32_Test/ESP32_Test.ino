@@ -153,12 +153,14 @@ void loop() {
     //get PRR
     double PRR = (sendOKcount * 100.0) / n;
 
-    Serial.print("Average HTTP response time: ");
+    Serial.print("Average HTTP response time (ms): ");
     Serial.println(tSendAve);
-    Serial.print("HTTP response time standard deviation: ");
+    Serial.print("HTTP response time standard deviation(ms): ");
     Serial.println(tSendSD);
-    Serial.print("Packet Reception Rate: ");
+    Serial.print("Packet Reception Rate (%): ");
     Serial.println(PRR);
+    Serial.print("Total time (minutes): ");
+    Serial.println(timeTotal);
   }
   
   delay(900000); //set interval between scans here //15min
