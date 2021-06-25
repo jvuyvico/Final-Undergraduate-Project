@@ -93,6 +93,18 @@
             android:fontFamily="@font/montserrat"
             android:textColor="@color/white"/>
 
+        <Button
+            android:id="@+id/but_broadcast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:backgroundTint="@color/green"
+            android:background="@drawable/roundbg"
+            android:onClick="broadcast"
+            android:text="Click to broadcast"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 

@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     TextView DailyAlarm_tv;
     ImageView popupmenu;
     Timer timer;
+    boolean broadcast_status = false;
+    Button broadcast_button;
     /**/
 
     //for user credentials
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         BTMode_button = findViewById(R.id.but_BTMode);
         OnOff_button = findViewById(R.id.but_BTonoff);
         classesToday_lv = (ListView) findViewById(R.id.lv_ClassesToday);
+
+        broadcast_button = findViewById(R.id.but_broadcast);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -155,6 +159,16 @@ public class MainActivity extends AppCompatActivity {
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
         Log.d(TAG, "onCreate: end of main");
+    }
+
+    public void broadcast ( View view ) {
+        new Thread(new Runnable(){
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void run() {
+                Utils.mode_Discoverable(MainActivity.this );
+            }
+        }).start();
     }
 
     // onClick method for menu button at main menu on top right at toolbar
