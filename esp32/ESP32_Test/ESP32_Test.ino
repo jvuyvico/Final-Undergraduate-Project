@@ -30,7 +30,7 @@ unsigned long tSendDone;
 
 //test variables
 int sendOKcount = 0;
-int n = 1; //n times send
+int n = 5; //n times send
 unsigned long sendTimes[1000];
 unsigned long tSendSum = 0;
 unsigned long tSendAve;
