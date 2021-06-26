@@ -30,7 +30,7 @@ unsigned long tSendDone;
 
 //test variables
 int sendOKcount = 0;
-int n = 5; //n times send
+int n = 10; //n times send
 unsigned long sendTimes[1000];
 unsigned long tSendSum = 0;
 unsigned long tSendAve;
@@ -148,7 +148,7 @@ void loop() {
     tSendSD = sqrt(var / sendOKcount);
   
     //get overall time
-    timeTotal = (timeDone - timeStart) * 0.001 * 0.0166667;  //in minutes
+    timeTotal = (timeDone - timeStart) * 0.001;  //in seconds
   
     //get PRR
     double PRR = (sendOKcount * 100.0) / n;
@@ -159,7 +159,7 @@ void loop() {
     Serial.println(tSendSD);
     Serial.print("Packet Reception Rate (%): ");
     Serial.println(PRR);
-    Serial.print("Total time (minutes): ");
+    Serial.print("Total time (seconds): ");
     Serial.println(timeTotal);
   }
   

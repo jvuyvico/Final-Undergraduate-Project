@@ -34,7 +34,7 @@ String dayStamp;
 String timeStamp;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "https://smart-attendance-198.herokuapp.com/esp/";
+const char* serverName = "http://192.168.1.4:8000/esp/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
