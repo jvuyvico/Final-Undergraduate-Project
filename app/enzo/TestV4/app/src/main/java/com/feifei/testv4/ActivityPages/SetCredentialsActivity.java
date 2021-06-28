@@ -107,7 +107,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
         //base of the REST API. Dito mo idedefine kung saang base site ka kukuha
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://smart-attendance-198.herokuapp.com/")
+                .baseUrl("http://192.168.1.3:8000/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -142,11 +142,25 @@ public class SetCredentialsActivity extends AppCompatActivity {
     // perform error checking to see if input from text is valid format of desired credentials information
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void submitButtonClicked(View view){
+
+        int studentinlog = 0;
+        for(REST_Student studentuserlog : studentArrayList){
+            if(studentuserlog.getUSN().equals(inputStudentnumber.getText().toString())){
+                studentinlog = 1;
+            }
+        }
+
         if(inputUsername.getText().toString().isEmpty() || inputStudentnumber.getText().length() != 9) {    //check if username is empty or invalid studentnumber
             Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
             inputUsername.getText().clear();
             inputStudentnumber.getText().clear();
-        } else {
+        }
+        if(studentinlog == 1){
+            Toast.makeText(this, "Student Number Not Registered", Toast.LENGTH_SHORT).show();
+            inputUsername.getText().clear();
+            inputStudentnumber.getText().clear();
+        }
+        else {
             DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
             dbAccessSCA.open();
             String username = dbAccessSCA.getStudentUsername();
@@ -158,6 +172,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
             }
             String studentnumber = dbAccessSCA.getStudentNumber();
             dbAccessSCA.close();
+
 
 
             //=========== Algorithm to get classes and parse within local database. Medyo complicated siya
@@ -231,7 +246,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
                             if(assign.getId().equals(assignTime.getAssign_id()) && assign.getId().equals(coursesection.getId()) && assign.getCourse().equals(courseMapping.getCourse())){
                                 String content = "";
                                 subjectArrayList.add(new User_SubjectExtended(coursesection.getCourse(), coursesection.getSection(), assignTime.getDay(), Integer.parseInt(assignTime.getStarttime()),
-                                        Integer.parseInt(assignTime.getEndtime()), "602EB8EB20EC04872040B4A52740CE18", courseMapping.getBuilding_id(), courseMapping.getRoom_id()));
+                                        Integer.parseInt(assignTime.getEndtime()), "18CE4027A5B440208704EC20EBB82E60", courseMapping.getBuilding_id(), courseMapping.getRoom_id()));
                                 content = "Subject: " + coursesection.getCourse() + " Section " + coursesection.getSection() + " Days " + assignTime.getDay() +
                                         " Start time: " + assignTime.getStarttime() + " End time: "  + assignTime.getEndtime() + "\n";
 

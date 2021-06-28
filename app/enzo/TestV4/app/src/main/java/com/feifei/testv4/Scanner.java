@@ -102,11 +102,11 @@ public class Scanner {
 
     // pass the parsed information in a BLE_Device class and send it to the ArrayList in MainActivity
     private void addDevice(String device_name, String mac_address, String uuid, String major, String minor, String rssi) {
-        if(!current_scan_hashmap.containsValue(uuid)){
+        if(!current_scan_hashmap.containsValue(mac_address)){
 
             // 602EB8EB20EC04872040B4A52740CE18 - add UUID filter to added devices
 
-            current_scan_hashmap.put(mac_address, uuid);
+            current_scan_hashmap.put(uuid, mac_address);
             BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
             activity.ble_arrayList.add(ble_device);
             activity.ble_listAdapter.notifyDataSetChanged();

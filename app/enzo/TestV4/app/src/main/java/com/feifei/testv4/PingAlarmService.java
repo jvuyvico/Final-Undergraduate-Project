@@ -30,6 +30,7 @@ public class PingAlarmService extends Service {
     }
 
     private static final String TAG = "PingAlarmService";
+    public static boolean found;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -62,10 +63,16 @@ public class PingAlarmService extends Service {
                     AutoScanner autoScanner = new AutoScanner(context);
                     autoScanner.startScan();
 
+                    found = false;
                     //wait for process to finish
-                    Log.d(TAG, "run: Autoscanner still running");
-                    SystemClock.sleep(60*1000);
+                    int counter = 0;
+                    while (!found && counter <= 6) {
+                        Log.d(TAG, "run: Autoscanner still running. Counter = " + String.valueOf(counter));
+                        counter += 1;
+                        SystemClock.sleep(10*1000);
+                    }
 
+                    Log.d(TAG, "run: Sleep cycles taken: " + String.valueOf(counter));
                     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
                     databaseAccess.open();
                     ArrayList<Integer> pings_AL = databaseAccess.getPings();
@@ -94,7 +101,7 @@ public class PingAlarmService extends Service {
                         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
                         Scan_Data temp = new Scan_Data("Ping Alarm Check", time, String.valueOf(pings_AL.size()));
-                        Attendance_Data dummydata = new Attendance_Data(current_subject.getSubject()+current_subject.getSection(), status, current_subject.getUuid(), "20150", "4617", date, time);
+                        Attendance_Data dummydata = new Attendance_Data(current_subject.getSubject()+current_subject.getSection(), status, current_subject.getUuid(), current_subject.getMajor(), current_subject.getMinor(), date, time);
                         databaseAccess.open();
                         databaseAccess.insertScanData(temp);
                         databaseAccess.insertAttendanceData(dummydata);

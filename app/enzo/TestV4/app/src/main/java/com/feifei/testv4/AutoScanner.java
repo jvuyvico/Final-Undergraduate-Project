@@ -39,7 +39,7 @@ public class AutoScanner {
 
     private static final String TAG = "AutoScanner";
 
-    private int scan_interval_ms = 45*1000;
+    private int scan_interval_ms = 60*1000;
     private boolean isScanning = false;
 
     public AutoScanner(Context context) {
@@ -66,19 +66,7 @@ public class AutoScanner {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void run() {
-                        isScanning = false;
-                        bluetoothLeScanner.stopScan(leScanCallback);
-
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:m a");
-                        String time = simpleDateFormat.format(Calendar.getInstance().getTime());
-
-                        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
-                        databaseAccess.open();
-                        ArrayList<Integer> pings_AL = databaseAccess.getPings();
-                        databaseAccess.insertPing(pings_AL.size(), beacon_found ? 1 : 0);
-                        databaseAccess.close();
-
-                        Log.d(TAG, "Went to stop scan : " + time);
+                        stopScan();
                     }
                 }, scan_interval_ms);
 
@@ -100,13 +88,30 @@ public class AutoScanner {
                         ". Scanning for beacon with UUID: " + userSubjects_AL.get(class_index).getUuid());
             } else {                                                                                // * else if app is in a scanning mode, stop current scan
                 isScanning = false;
-                bluetoothLeScanner.stopScan(leScanCallback);
+                stopScan();
                 Log.d(TAG, "Scan stopped");
             }
         } else {
             Log.d(TAG, "Scan failed: Bluetooth state");
         }
     }
+
+    private void stopScan () {
+        isScanning = false;
+        bluetoothLeScanner.stopScan(leScanCallback);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:m a");
+        String time = simpleDateFormat.format(Calendar.getInstance().getTime());
+
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
+        databaseAccess.open();
+        ArrayList<Integer> pings_AL = databaseAccess.getPings();
+        databaseAccess.insertPing(pings_AL.size(), beacon_found ? 1 : 0);
+        databaseAccess.close();
+
+        Log.d(TAG, "Went to stop scan : " + time);
+    }
+
 
     //insert new scan data to database
     private void addDevice(String device_name, String mac_address, String uuid, String major, String minor, String rssi) {
@@ -120,9 +125,14 @@ public class AutoScanner {
 
             Scan_Data newScanData = new Scan_Data(uuid, time , rssi);
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
+            databaseAccess.open();
             boolean test = databaseAccess.insertScanData(newScanData);
+            databaseAccess.close();
 
+            PingAlarmService.found = true;
             Log.d(TAG, "Beacon found");
+            scanTimer.cancel();
+            stopScan();
         }
     }
 
@@ -148,9 +158,8 @@ public class AutoScanner {
             // add scan data if detected UUID is crosschecked from database
             if( currentSubject.getUuid().contains(parsedUUID) ){
                 if ( currentSubject.getMajor().contains(parsedMajor) && currentSubject.getMinor().contains(parsedMinor) ) {
-
+                    addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
                 }
-                addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));
             } else {
                 Log.d(TAG, "Detected a random device");
             }
