@@ -1,0 +1,14 @@
+<h1>Test Results</h1>
+{% for key, value in dic.items %}
+	<h3>Test ID: {{ key }}</h3>
+	<ol>
+	{% for item in value.0 %}
+		<li>{{ item.0 }} | {{ item.1 }}</li>
+	{% endfor %}
+	</ol>
+	<ul>
+		<li>Average Scan Time: {{ value.1 }}</li>
+		<li>Standard Deviation: {{ value.2 }}</li>
+	</ul>
+	<br>
+{% endfor %}

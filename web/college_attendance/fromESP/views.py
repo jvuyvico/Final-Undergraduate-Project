@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from datetime import *
 from .models import *
+from math import sqrt
 
 # Create your views here.
 @api_view(['POST'])
@@ -136,5 +137,55 @@ def espTestView(request):
     return Response(serializer.data)
 
 def testResultView(request):
-    context = {};
+    context = {}
+
+    numIDlist = []
+
+    queryAll = testData.objects.all()
+
+    for obj1 in queryAll:
+        if obj1.numID not in numIDlist:
+            numIDlist.append(obj1.numID)
+
+    
+    dataDic = {}
+    for item1 in numIDlist:
+        queryID = queryAll.filter(numID=item1)
+        dataPair = {}
+        for obj2 in queryID:
+            if obj2.timeScan not in dataPair.keys():
+                dataPair[obj2.timeScan] = obj2.rssi
+        dataDic[item1] = dataPair
+
+    dataKeys = dataDic.keys()
+    for item2 in dataKeys:
+        pairs = dataDic[item2]
+        pairsKeys = pairs.keys()
+        prev = 0
+        nuList = []
+        for item3 in sorted (pairsKeys): 
+            truVal = item3 - prev
+            prev = item3
+            nuItem = (truVal, pairs[item3])
+            if nuItem not in nuList:
+                nuList.append(nuItem)
+        dataDic[item2] = nuList
+
+    for item4 in dataKeys:
+        nuPairs = dataDic[item4]
+        nuPairsKeys = []
+        for dat in nuPairs:
+            nuPairsKeys.append(dat[0])
+        summ = 0
+        for item5 in nuPairsKeys:
+            summ = summ + item5
+        ave = summ / (len(nuPairsKeys) * 1.0)
+        var = 0
+        for item6 in nuPairsKeys:
+            var = var + ((item6 + ave)**2.0)
+        SD = sqrt( var / len(nuPairsKeys))
+        dataDic[item4] = (nuPairs, ave, SD)
+
+    context = {"dic":dataDic}
+
     return render(request, 'testResults.html', context)
