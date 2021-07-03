@@ -130,7 +130,7 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                         }
                         if (i == 9) {
                             User_Subject dd = classesToday_AL.get(subject_index);
-                            Attendance_Data newData = new Attendance_Data(dd.getSubject()+dd.getSection(), "Absent", dd.getUuid(), "20150", "4617", date, time);
+                            Attendance_Data newData = new Attendance_Data(dd.getSubject()+dd.getSection(), "Absent", dd.getUuid(), dd.getMajor(), dd.getMinor(), date, time);
                             dummyBool = databaseAccess.insertAttendanceData(newData);
                         }
                         databaseAccess.close();

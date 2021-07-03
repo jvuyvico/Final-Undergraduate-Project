@@ -16,102 +16,119 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/but_BTonoff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:backgroundTint="#228B22"
-        android:onClick="BT_OnOff"
-        android:text="@string/bt_on_off"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <Button
-        android:id="@+id/but_BTMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="#228B22"
-        android:onClick="BT_ModeSwitch"
-        android:text="Current mode: Listener"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/but_BTonoff" />
-
-    <TextView
-        android:id="@+id/tv_CredUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:text="Username"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <TextView
-        android:id="@+id/tv_CredStudno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="Student Number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_CredUsername" />
-
-
-    <TextView
-        android:id="@+id/tv_DailyAlarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:text="Daily Alarm is on/off"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/but_BTMode" />
-
-    <Button
-        android:id="@+id/but_ResetDaily"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#228B22"
-        android:onClick="Alarm_Reset"
-        android:text="Manually Reset Daily Alarm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_DailyAlarm" />
-
-
-    <TextView
-        android:id="@+id/tv_ClassListLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="30dp"
-        android:text="List of classes for today:"
-        android:textColor="#800000"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/lv_ClassesToday"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_AlarmSet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Alarms set:"
-        app:layout_constraintBottom_toTopOf="@+id/lv_ClassesToday"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ListView
-        android:id="@+id/lv_ClassesToday"
+    <LinearLayout
+        android:id="@+id/options"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/include">
+
+        <TextView
+            android:id="@+id/tv_CredUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Username"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat" />
+
+        <TextView
+            android:id="@+id/tv_CredStudno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Student Number"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat"/>
+
+        <Button
+            android:id="@+id/but_BTonoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:padding="10dp"
+            android:onClick="BT_OnOff"
+            android:text="@string/bt_on_off"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat"
+            android:background="@drawable/roundbg"/>
+
+        <Button
+            android:id="@+id/but_BTMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:backgroundTint="@color/green"
+            android:background="@drawable/roundbg"
+            android:onClick="BT_ModeSwitch"
+            android:text="Current mode: Listener"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/but_BTonoff" />
+
+        <TextView
+            android:id="@+id/tv_DailyAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Daily Alarm is on/off"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/montserrat" />
+
+        <Button
+            android:id="@+id/but_ResetDaily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:backgroundTint="@color/green"
+            android:background="@drawable/roundbg"
+            android:onClick="Alarm_Reset"
+            android:text="Manually Reset Daily Alarm"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/options"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_ClassListLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List of classes for today:"
+            android:fontFamily="@font/montserrat"
+            android:textStyle="bold"
+            android:textColor="@color/maroon"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:id="@+id/tv_AlarmSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Alarms set:"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/gray"/>
+
+        <ListView
+            android:id="@+id/lv_ClassesToday"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

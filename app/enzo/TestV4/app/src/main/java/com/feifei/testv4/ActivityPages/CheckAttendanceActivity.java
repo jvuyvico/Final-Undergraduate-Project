@@ -120,6 +120,7 @@ public class CheckAttendanceActivity extends AppCompatActivity {
         databaseAccess.close();
         DB.deleteAll();
         importToLocal();
+        CheckinOnline(studentnumber);
 
     }
 
@@ -137,11 +138,8 @@ public class CheckAttendanceActivity extends AppCompatActivity {
 //logic here is kinukuha muna yung data na nasa server then store in a separate arraylist
         //tas get yung local attendance data to compare with sa online
         //it will then send yung mga stuff sa local na di pa nakikita sa online
-        DBCross.deleteAll();
-        CheckinOnline(studentnumber);
 
         Cursor res = DB.getdata();
-        Cursor res2 = DBCross.getdata();
         Boolean status;
         restpostcompare = new ArrayList<>();
         restpost = new ArrayList<>();
@@ -149,31 +147,40 @@ public class CheckAttendanceActivity extends AppCompatActivity {
         while(res.moveToNext()) {
             restpost.add(new REST_Post(res.getString(0), res.getString(1), res.getString(2), res.getString(3), Boolean.parseBoolean(res.getString(4))));
         }
+
+        Cursor res2 = DBCross.getdata();
         while(res2.moveToNext()) {
             restpostcompare.add(new REST_Post(res2.getString(0), res2.getString(1), res2.getString(2), res2.getString(3), Boolean.parseBoolean(res2.getString(4))));
-
+            Log.d("RESPOST2ADD", res2.getString(0) + res2.getString(2));
         }
         int count;
         for (REST_Post restpost1 : restpost){
+            Log.d("RESPOST1" , restpost1.getCourse() + restpost1.getDate());
             count =0;
             for(REST_Post restpost2: restpostcompare){
-                if(restpost1.getStudent().equals(restpost2.getStudent()) && restpost1.getDate().equals(restpost2.getDate()) &&
-                        restpost1.getStatus().equals(restpost2.getStatus()) && restpost1.getAttendanceclass().equals(restpost2.getAttendanceclass())
-                        && restpost1.getCourse().equals(restpost2.getCourse())){
-                    count++;
-
-                    Log.d("CHEC" , restpost1.getCourse() + " " + restpost1.getDate() + " " + restpost2.getCourse() + " " + restpost2.getDate());
+                Log.d("RESPOST 1 and RESPOST 2", "==" + restpost2.getDate()+"==" + restpost1.getDate()+"==");
+                if(Objects.equals(restpost1.getCourse(), restpost2.getCourse())){
+                    Log.d("EQUAL DATE", "YO");
+                    if(Objects.equals(restpost1.getDate(), restpost2.getDate())){
+                        Log.d("EQUAL COURSE", "YO");
+                        if(restpost1.getStatus().equals(restpost2.getStatus())){
+                            Log.d("EQUAL STATUS", "yo may duplicate");
+                            count++;
+                        }
+                    }
                 }
             }
             if (count == 0){
                 createPost(restpost1.getCourse(), restpost1.getStudent(), restpost1.getAttendanceclass(), restpost1.getDate(),restpost1.getStatus());
-                Toast.makeText(this, "Added New Entry", Toast.LENGTH_SHORT).show();
             }
 
 
         }
         Toast.makeText(this, "Update Complete", Toast.LENGTH_SHORT).show();
-
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
 
     }
 
@@ -186,14 +193,27 @@ public class CheckAttendanceActivity extends AppCompatActivity {
         databaseAccess.close();
         DB.deleteAll();
         String attendancestatus = "";
+        Log.e("Check", " AMGEARE");
         for (Attendance_Data datatoimport : toimport){
+            Log.e("Checkerd" , datatoimport.getSubject() + datatoimport.getDate());
             if(datatoimport.getStatus().equals("Present")){
                 attendancestatus = "true";
             }
             else {
                 attendancestatus = "false";
             }
-            Boolean checkinsertdata  = DB.insertuserdata(datatoimport.getSubject(), studentnumber, datatoimport.getMajor(), datatoimport.getDate(), attendancestatus);
+
+            String[] date;
+            date = datatoimport.getDate().split(" ");
+            String datefinal = "";
+            datefinal = date[0];
+            String[] datesep = datefinal.split("-");
+            String newday = datesep[1];
+            if(Integer.valueOf(newday) <10 ){
+                newday = "0" + newday;
+            }
+            datefinal = datesep[0] + "-" + newday + "-" + datesep[2];
+            Boolean checkinsertdata  = DB.insertuserdata(datatoimport.getSubject(), studentnumber, datatoimport.getMajor(), datefinal, attendancestatus);
 
             if(checkinsertdata == true) {
                 Log.d("ADDED", "Success");

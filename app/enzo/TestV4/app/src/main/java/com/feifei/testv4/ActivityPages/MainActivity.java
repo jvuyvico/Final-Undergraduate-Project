@@ -1,6 +1,8 @@
 package com.feifei.testv4.ActivityPages;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -17,16 +19,20 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.feifei.testv4.AlarmReceiver;
 import com.feifei.testv4.AlarmSetter;
 import com.feifei.testv4.ClassAlarmReceiver;
+import com.feifei.testv4.Classes.Scan_Data;
 import com.feifei.testv4.Classes_ListAdapter;
 import com.feifei.testv4.SQLite.DatabaseAccess;
 import com.feifei.testv4.R;
 import com.feifei.testv4.Classes.User_Subject;
 import com.feifei.testv4.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;

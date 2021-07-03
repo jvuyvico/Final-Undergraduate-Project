@@ -5,3 +5,4 @@ from fromESP.models import *
 admin.site.register(espData)
 admin.site.register(espAttendance)
 admin.site.register(timeSlot)
+admin.site.register(testData)

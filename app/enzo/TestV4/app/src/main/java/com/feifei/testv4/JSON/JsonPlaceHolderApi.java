@@ -29,20 +29,7 @@ public interface JsonPlaceHolderApi {
     })
     @POST("student/attendance/")
     Call<REST_Post> createPostAttendance(@Body REST_Post RESTPost);
-    /*
-        @FormUrlEncoded
-        @POST("article/")
-        Call<Post> createPost(
-                @Field("id") int id,
-                @Field("title") String title,
-                @Field("author") String author,
-                @Field("email") String email
-        );
 
-        @FormUrlEncoded
-        @POST("article/")
-        Call<Post> createPost(@FieldMap Map<String, String> fields);
-    */
     @PUT("student/attendance/{id}/")
     Call<REST_Post> putPostAttendance(@Path("id") int id, @Body REST_Post RESTPost);
 

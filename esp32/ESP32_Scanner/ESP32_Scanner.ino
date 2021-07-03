@@ -16,8 +16,8 @@ String payload = "";
 int bid = 1; //bldg ID
 int rid = 1; //room ID
 //BLEUUID prxUUID = "";
-uint16_t numIDs[10];
-int listRssi[10];
+//uint16_t numIDs[10];
+//int listRssi[10];
 BLEScan* pBLEScan;
 
 const char* ssid = "HyperDriveJeepney";
