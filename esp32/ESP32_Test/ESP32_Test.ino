@@ -17,8 +17,8 @@ uint16_t numIDs[10];
 int listRssi[10];
 BLEScan* pBLEScan;
 
-const char* ssid = "HyperDriveJeepney";
-const char* password = "$Bruno08Hotch13$";
+const char* ssid = "Krasus";
+const char* password = "myWifiNotUrs";
 
 //timing variables
 unsigned long timeStart;
@@ -30,14 +30,15 @@ unsigned long tSendDone;
 
 //test variables
 int sendOKcount = 0;
-int n = 10; //n times send
+int n = 1000; //n times send
 unsigned long sendTimes[1000];
 unsigned long tSendSum = 0;
 unsigned long tSendAve;
 unsigned long tSendSD;
+int loopCount = 1;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.4:8000/espTest/";
+const char* serverName = "http://192.168.43.176:8000/espTest/";
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -72,6 +73,8 @@ void setup() {
 }
 
 void loop() {
+  Serial.print("Test no. ");
+  Serial.println(loopCount);
   // put your main code here, to run repeatedly:
   payload = "[";
   timeStart = millis();
@@ -92,6 +95,7 @@ void loop() {
     HTTPClient http;
 
     //server send test
+    Serial.println("Sending...");
     for (int i = 0; i < n; i++) {
       
       delay(10);
@@ -106,8 +110,8 @@ void loop() {
         // Send HTTP POST request
         int httpResponseCode = http.POST(payload);
     
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
+        //Serial.print("HTTP Response code: ");
+        //Serial.println(httpResponseCode);
     
         // Free resources
         http.end();
@@ -127,7 +131,8 @@ void loop() {
    else {
     Serial.println("WiFi Disconnected");
     }
-
+  
+  Serial.println("Send done!");
   timeDone = timeStart - millis();
 
   //disconnect from wifi
@@ -162,13 +167,14 @@ void loop() {
     Serial.print("Total time (seconds): ");
     Serial.println(timeTotal);
   }
+  loopCount++;
   
-  delay(900000); //set interval between scans here //15min
+  delay(10000); //set interval between scans here //10s
 }
 
 void connect2Wifi() {
   WiFi.begin(ssid, password);
-  Serial.println("Connecting");
+  Serial.print("Connecting");
   while(WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
