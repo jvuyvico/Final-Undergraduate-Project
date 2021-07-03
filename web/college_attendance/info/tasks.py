@@ -18,11 +18,9 @@ date_time_obj = datetime.strptime(time, '%H:%M').replace(tzinfo=pytz.timezone('A
 from celery.schedules import crontab
 
 
-# Check this when deploying to Heroku - https://www.reddit.com/r/django/comments/kjx6ja/deploying_django_q_to_heroku/
-# https://mattsegal.dev/simple-scheduled-tasks.html
-#@shared_task
-#@periodic_task(run_every=crontab(minute=date_time_obj.minute, hour=date_time_obj.hour))
 
+
+# Part 1 of aggregating the ESP32Data objects into an Attendance object.
 def update_espData_daily():
 	#espAttendance = espData.objects.annotate(count=Count('numID') )
 	espAttendance = espData.objects.all().filter(dayStamp=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d")).exclude(course="None").order_by("numID", "course")
@@ -47,6 +45,9 @@ def update_espData_daily():
 			num += 1
 			if num == len(espAttendance) - 1:
 				break
+
+# Used to aggreagate the pings coming from the ESP32 beacon into an actual 
+# Attendance object.
 def update_attendance_daily():
 	#attendance = Attendance(student=Student.objects.get(USN='201506921'), course=Course.objects.get(id='CoE198MAB1'))
 	espAttendance = espDataDaily.objects.all().filter(dayStamp=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"))
@@ -85,6 +86,9 @@ def update_attendance_daily():
 #                			temp = Attendance(student=student, course=item.course, date=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"), status='False' )
 #                			temp.save()
 
+
+# Adds False attendances daily according to which students don't yet have
+# any Attendance Object for scheduled classes that day
 def daily_attendance_false():
 	students = Student.objects.all()
 	day = datetime.now(pytz.timezone("Asia/Manila")).strftime("%A")

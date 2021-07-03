@@ -86,6 +86,9 @@ class ESP32Serializer(serializers.ModelSerializer):
 # https://stackoverflow.com/questions/33945148/return-nested-serializer-in-serializer-method-field
 
 class EspDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = espData
-        fields = ('dayStamp', 'timeStamp', 'bid', 'rid', 'numID', 'rssi', 'course')
+	#dayStamp = models.DateField(required = False)
+	#dayStamp = serializers.DateTimeField(default=datetime.now())
+	#dayStamp = serializers.DateField(initial=datetime.today)
+	class Meta:
+		model = espData
+		fields = ('dayStamp', 'timeStamp', 'bid', 'rid', 'numID', 'rssi', 'course')

@@ -25,10 +25,14 @@ import pytz
 @api_view(['POST'])
 @csrf_exempt
 def fromESPview(request):
+    # This function filters out data from the ESP-32 beacon. It only accepts
+    # data that corresponds to the correct building and Room IDs, and occurs during the 
+    # correct day and time according to the Student's schedule
     serializers = request.data #request.data is seen as list
     #serializer = AttendanceSerializer(data = request.data)
     for obj in serializers:
         serializer = EspDataSerializer(data = obj)
+        #serializer.initial['dayStamp'] = datetime.now()
         timestamp_temp = serializer.initial_data['timeStamp']
         
         date_time_str = serializer.initial_data['dayStamp']
