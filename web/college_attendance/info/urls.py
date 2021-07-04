@@ -60,5 +60,5 @@ urlpatterns = [
     path('student/', include(router6.urls)),
 
     path('esp32', include(router1.urls)),
-    path('espTest', views.fromESPview)
+    path('espTest', views.fromESPview) # Receives info from ESP32 pings
     ]

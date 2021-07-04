@@ -21,6 +21,7 @@ from celery.schedules import crontab
 
 
 # Part 1 of aggregating the ESP32Data objects into an Attendance object.
+# This aggregates ESPData objects into ESPDataDaily Objects (check models.py)
 def update_espData_daily():
 	#espAttendance = espData.objects.annotate(count=Count('numID') )
 	espAttendance = espData.objects.all().filter(dayStamp=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d")).exclude(course="None").order_by("numID", "course")
@@ -47,7 +48,7 @@ def update_espData_daily():
 				break
 
 # Used to aggreagate the pings coming from the ESP32 beacon into an actual 
-# Attendance object.
+# Attendance object. Turns ESPDataDaily objects into actual Attendance.
 def update_attendance_daily():
 	#attendance = Attendance(student=Student.objects.get(USN='201506921'), course=Course.objects.get(id='CoE198MAB1'))
 	espAttendance = espDataDaily.objects.all().filter(dayStamp=datetime.now(pytz.timezone('Asia/Manila')).strftime("%Y-%m-%d"))
