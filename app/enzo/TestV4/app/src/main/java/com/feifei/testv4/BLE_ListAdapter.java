@@ -1,7 +1,7 @@
 package com.feifei.testv4;
 
 /*
-    List adapter for the ListView in MainActivity which accepts BLE_Device class as entries
+    List adapter for the ListView in ScanDevicesActivity which accepts BLE_Device class as entries
     Shouldn't be changed unless new elements are added to BLE_Device class
  */
 
@@ -41,8 +41,6 @@ public class BLE_ListAdapter extends ArrayAdapter<BLE_Device> {
         String major = getItem(position).getBLE_major();
         String minor = getItem(position).getBLE_minor();
         String rssi = getItem(position).getBLE_rssi();
-
-        BLE_Device device = new BLE_Device(name, address, uuid, major, minor, rssi);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);

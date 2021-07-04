@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    General function to start an alarm.
+ */
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;

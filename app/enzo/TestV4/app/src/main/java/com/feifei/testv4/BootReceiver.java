@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    Restarts Daily Alarm for bootup. The rest of the alarms will consequently be restarted.
+ */
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;

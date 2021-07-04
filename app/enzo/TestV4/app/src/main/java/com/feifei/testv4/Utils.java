@@ -26,9 +26,10 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class Utils {
+
+
+    // Ensures Bluetooth is available on the device and it is enabled. If not, display a dialog requesting user permission to enable Bluetooth.
     public static void checkBluetooth(BluetoothAdapter bluetoothAdapter, Activity activity) {
-        // Ensures Bluetooth is available on the device and it is enabled. If not,
-        // displays a dialog requesting user permission to enable Bluetooth.
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             requestUserBluetooth(activity);
         }
@@ -40,6 +41,7 @@ public class Utils {
         activity.startActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
     }
 
+    // used for parsing data received from beacons. converts bytes to hex.
     public static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
@@ -65,7 +67,9 @@ public class Utils {
         return bb.array();
     }
 
-    public static int getCurrentSubjectIndex (Context context) {                                    // index from list of classes for the day only
+    // Get what subject it is for current time.
+    // !!!Note: index number is from ArrayList of classes for the day only
+    public static int getCurrentSubjectIndex (Context context) {
         int subject_index = -1;
 
         Calendar calendar_now = Calendar.getInstance();
@@ -90,6 +94,7 @@ public class Utils {
         return subject_index;
     }
 
+    // Get ArrayList of classes for the day
     public static ArrayList<User_Subject> getClassesToday(Context context){
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
         databaseAccess.open();
@@ -100,7 +105,7 @@ public class Utils {
         int dayofweek = calendar.get(calendar.DAY_OF_WEEK);
         String stringdayofweek = "U"; // dummy default value
 
-        switch (dayofweek) {
+        switch (dayofweek) {            // filter by day. Set 1 character values for easier identification to be checked from data from database
             case 1:
                 stringdayofweek = "U";
                 break;
@@ -126,18 +131,19 @@ public class Utils {
 
         ArrayList<User_Subject> newUserSubject_AL = new ArrayList<>();
 
-        for(int i = 0; i < userSubjectArrayList.size(); i++) {  // loop through subjects to check if they are scheduled for today
+        for(int i = 0; i < userSubjectArrayList.size(); i++) {                                      // loop through subjects to check if they are scheduled for today
             User_Subject newUserSubject = userSubjectArrayList.get(i);
             boolean todayistheday = newUserSubject.getDays().contains(stringdayofweek);
             if (todayistheday){
-                //store subjects for today in an arraylist
-                newUserSubject_AL.add(newUserSubject);
+                newUserSubject_AL.add(newUserSubject);                                              //store subjects for today in an arraylist
             } else {
             }
         }
         return newUserSubject_AL;
     }
 
+    // used in Ping Checks to broadcast BLE advertisements
+    // currently set to continually broadcast for a period of time (i.e. no 'sleep cycle')
     public static void mode_Discoverable( Context context ) {
         BluetoothLeAdvertiser bleadvertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
@@ -154,7 +160,7 @@ public class Utils {
             AdvertiseSettings settings = new AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                     .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                    .setTimeout(60*1000)
+                    .setTimeout(60*1000)    /** set this for the duration of broadcast in ms **/
                     .build();
 
             ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(context.getString(R.string.ble_user_uuid)));

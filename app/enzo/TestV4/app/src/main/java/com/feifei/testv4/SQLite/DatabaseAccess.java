@@ -112,7 +112,7 @@ public class DatabaseAccess {
     public void deleteAllData(){
         database.execSQL("delete from UserSubjects");
     }
-    /*** Subjects ***/
+    /*** ***/
 
     /*** Credentials***/
     String temp="";
@@ -170,7 +170,7 @@ public class DatabaseAccess {
         contentValues.put("Field2", studentnumber);
         database.update("Credentials", contentValues, "Identifier = ?", new String[]{"Student"});
     }
-    /*** Credentials***/
+    /*** ***/
 
     /*** Scan Data ***/
     public ArrayList<Scan_Data> getScanData() {

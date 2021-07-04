@@ -1,10 +1,7 @@
 package com.feifei.testv4;
 
 /*
-    BLE scanner functionalities placed here from MainActivity. Just send MainActivity
-        as an Activity parameter.
-    Data bytes received from the broadcaster is parsed here.
-    Found devices are passed towards ListView in MainActivity for display.
+    Manual bluetooth scanner used for ScanDevices Activity.
  */
 
 import android.bluetooth.BluetoothAdapter;
@@ -33,7 +30,7 @@ public class Scanner {
 
     private static final String TAG = "Scanner";
 
-    private int scan_interval_ms = 60000;
+    private int scan_interval_ms = 60000;   // Set this for scan duration
     private boolean isScanning = false;
 
 
@@ -51,68 +48,47 @@ public class Scanner {
     public void startScan() {
         if(!isScanning) { // if app is not yet in a scanning mode, start scan
 
-            // delay function to stop scanning after a set time
-            /*
-            scanHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isScanning = false;
-                    bluetoothLeScanner.stopScan(leScanCallback);
-                    Log.d(TAG, "Went to stop scan");
-                    activity.button_scanDevices.setText("Scan BLE");
-                    Toast.makeText(activity.getApplicationContext(), "Scan Complete", Toast.LENGTH_SHORT).show();
-
-                }
-            }, scan_interval_ms);
-             */
-
+            /** !!! NOTE: THIS GETS KILLED IF APP IS CLOSED. MIGHT CAUSE ERRORS **/
             scanTimer.schedule(new TimerTask() {
                 @Override
-                public void run() {
+                public void run() {                                                               // delay function to stop scanning after a set time
                     isScanning = false;
                     stopScan();
                     Log.d(TAG, "Went to stop scan");
                 }
             }, scan_interval_ms);
 
-
+            // Update ListView in activity
             activity.ble_arrayList.clear();
             activity.ble_listAdapter.notifyDataSetChanged();
             current_scan_hashmap.clear();
             isScanning = true;
             bluetoothLeScanner.startScan(leScanCallback);
             Log.d(TAG, "Went to start scan");
-            //activity.button_scanDevices.setText("Stop Scan");
             Toast.makeText(activity.getApplicationContext(), "Scan Starting", Toast.LENGTH_SHORT).show();
 
         } else { // else if app is in a scanning mode, stop current scan
             isScanning = false;
             bluetoothLeScanner.stopScan(leScanCallback);
             Log.d(TAG, "Went to stop scan");
-            //activity.button_scanDevices.setText("Scan BLE");
             Toast.makeText(activity.getApplicationContext(), "Scan Stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void stopScan() {
         bluetoothLeScanner.stopScan(leScanCallback);
-        //leScanCallback = null;
-        //scanHandler = null;
     }
 
     // pass the parsed information in a BLE_Device class and send it to the ArrayList in MainActivity
     private void addDevice(String device_name, String mac_address, String uuid, String major, String minor, String rssi) {
         if(!current_scan_hashmap.containsValue(mac_address)){
 
-            // 602EB8EB20EC04872040B4A52740CE18 - add UUID filter to added devices
-
             current_scan_hashmap.put(uuid, mac_address);
             BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
             activity.ble_arrayList.add(ble_device);
             activity.ble_listAdapter.notifyDataSetChanged();
 
-            //Check Logs to double check if may nahanap ba talaga
-            Log.d(TAG, "Uy may nahanap ako");
+            // Check Logs to double check if may nahanap ba talaga
             Log.d(TAG, "Device Name: " + "\"" + device_name +"\"");
             Log.d(TAG, "Mac Address: " + mac_address);
             Log.d(TAG, "UUID: " + uuid);
@@ -121,8 +97,6 @@ public class Scanner {
             Log.d(TAG, "RSSI: " + rssi);
         }
     }
-
-    // function to convert data bytes from beacon to hex array
 
     // receiving and parsing of information from beacon
     private ScanCallback leScanCallback = new ScanCallback() {

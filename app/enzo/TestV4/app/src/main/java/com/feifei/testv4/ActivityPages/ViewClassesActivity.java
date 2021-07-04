@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 public class ViewClassesActivity extends AppCompatActivity {
 
-    private TextView textviewresult;
-
     ListView lv_classes;
     ArrayList<User_Subject> subjectArrayList;
     Classes_ListAdapter classesListAdapter;
@@ -55,9 +53,4 @@ public class ViewClassesActivity extends AppCompatActivity {
         classesListAdapter = new Classes_ListAdapter(this, R.layout.user_subject_list_item, subjectArrayList);
         lv_classes.setAdapter(classesListAdapter);
     }
-
-
-
-
-
 }

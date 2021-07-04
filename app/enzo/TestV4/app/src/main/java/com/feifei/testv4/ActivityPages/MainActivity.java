@@ -1,11 +1,8 @@
 package com.feifei.testv4.ActivityPages;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,23 +16,18 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.feifei.testv4.AlarmReceiver;
 import com.feifei.testv4.AlarmSetter;
 import com.feifei.testv4.ClassAlarmReceiver;
-import com.feifei.testv4.Classes.Scan_Data;
-import com.feifei.testv4.Classes_ListAdapter;
-import com.feifei.testv4.SQLite.DatabaseAccess;
-import com.feifei.testv4.R;
 import com.feifei.testv4.Classes.User_Subject;
+import com.feifei.testv4.Classes_ListAdapter;
+import com.feifei.testv4.R;
+import com.feifei.testv4.SQLite.DatabaseAccess;
 import com.feifei.testv4.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,15 +36,12 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_DISABLE_BT = 0;
 
-    BluetoothAdapter bluetoothAdapter;
-
     private static final String TAG = "MainActivity";
 
     // interface interactables
     Button OnOff_button;
     TextView DailyAlarm_tv;
     ImageView popupmenu;
-    Timer timer;
     /**/
 
     //for user credentials
@@ -68,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     Classes_ListAdapter classesListAdapter;
 
     //for BT Modes
-    public static boolean BT_Mode = true; // true: listener, false: broadcaster
+    BluetoothAdapter bluetoothAdapter;
+    public static boolean BT_Mode = true;   // true: listener, false: broadcaster     // might be problematic as a global variable. better store in local database
     Button BTMode_button;
 
     //global variables
@@ -101,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         if (user_Username.contains("none")) {
             Toast.makeText(this, "Please Set-up Credentials", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));         //** !!!DISABLE FOR EASIER DEBUGGING, ENABLE ASAP!!! **/
+
         } else {
             runMainUItasks();
         }
@@ -109,21 +100,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause: I am paused");
+        //Log.d(TAG, "onPause: I am paused");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: I am resumed");
+        //Log.d(TAG, "onResume: I am resumed");
         refreshUIdisplay();
         Utils.checkBluetooth(bluetoothAdapter, this);
-        Log.d(TAG, "onCreate: end of main");
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void runMainUItasks () {
+        /** Start Daily Alarm if not yet running**/
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -139,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        //Permission checks lang. Important though na i-approve mo yung permission request for location, so double check mo doon sa settings itself.
-        //for cleaning up
+        // Permission checks
         /*
         int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
         permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
@@ -154,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Check if bluetooth is turned on. If not, request.
         Utils.checkBluetooth(bluetoothAdapter, this);
-        Log.d(TAG, "onCreate: end of main");
     }
 
     // onClick method for menu button at main menu on top right at toolbar
@@ -163,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
+    // onClick method for Reset Alarm button.
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void Alarm_Reset(View view) {
         AlarmSetter alarmSetter = new AlarmSetter(MainActivity.this , 20);
@@ -174,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         }
         alarmSetter.setAlarmManager(Calendar.getInstance(), intenttopass);
         Log.d("Main Alarm: ", "Alarm set");
-
         refreshUIdisplay();
     }
 
@@ -189,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             DailyAlarm_tv.setText("Daily alarm is not active!");
         }
-        /**/
+
         int alarmcounter = 0;
         for (int i = 0; i < classesToday_AL.size(); i++) {
             boolean classAlarmUp = (PendingIntent.getBroadcast(MainActivity.this, i, new Intent(MainActivity.this, ClassAlarmReceiver.class), PendingIntent.FLAG_NO_CREATE) != null);
@@ -228,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // onClick method for Switch bluetooth mode button
     public void BT_ModeSwitch(View view) {
         BT_Mode = !BT_Mode;
         if ( BT_Mode ) {

@@ -56,6 +56,8 @@ public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {
         TextView tvTimeStart = (TextView) convertView.findViewById(R.id.tv_timestart);
         TextView tvTimeEnd = (TextView) convertView.findViewById(R.id.tv_timeend);
         TextView tvUUID = (TextView) convertView.findViewById(R.id.tv_uuid);
+        TextView tvMajor = (TextView) convertView.findViewById(R.id.tv_main_major);
+        TextView tvMinor = (TextView) convertView.findViewById(R.id.tv_main_minor);
 
         tvSubject.setText(subject);
         tvSection.setText(section);
@@ -63,6 +65,8 @@ public class Classes_ListAdapter extends ArrayAdapter<User_Subject> {
         tvTimeStart.setText(s_timestart);
         tvTimeEnd.setText(s_timeend);
         tvUUID.setText("Beacon UUID: " + uuid);
+        tvMajor.setText("Building Number: " + major);
+        tvMinor.setText("Room Number " + minor);
 
         return convertView;
     }

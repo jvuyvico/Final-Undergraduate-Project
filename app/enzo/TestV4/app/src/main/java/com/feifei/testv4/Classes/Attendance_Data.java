@@ -1,5 +1,10 @@
 package com.feifei.testv4.Classes;
 
+/*
+    Class for recording attendance data after every class (or after the 10th ping check of the class).
+    Edit if we want to add or remove specific data for recording the user's attendance
+ */
+
 public class Attendance_Data {
     private String subject;
     private String status;

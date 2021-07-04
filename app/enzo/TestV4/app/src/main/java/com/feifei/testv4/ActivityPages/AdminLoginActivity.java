@@ -58,6 +58,8 @@ public class AdminLoginActivity extends AppCompatActivity {
         }
     }
 
+    // modify 'back' or 'return' functions to softlock until user sets their credentials
+
     public void backButtonClicked(View view){
         DatabaseAccess dbAccessALA = DatabaseAccess.getInstance(this);
         dbAccessALA.open();
@@ -68,7 +70,6 @@ public class AdminLoginActivity extends AppCompatActivity {
         } else {
             finish();
         }
-
     }
 
     @Override

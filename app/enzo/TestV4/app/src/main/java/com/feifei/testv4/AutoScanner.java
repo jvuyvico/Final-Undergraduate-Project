@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    Scanner function for Ping Checks.
+ */
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -33,13 +37,12 @@ public class AutoScanner {
     private Context context;
     private int class_index;
     private ArrayList<User_Subject> userSubjects_AL;
-    private int ping_number;
     private boolean beacon_found;
     private DatabaseAccess databaseAccess;
 
     private static final String TAG = "AutoScanner";
 
-    private int scan_interval_ms = 60*1000;
+    private int scan_interval_ms = 60*1000;         /** Set this for scan duration **/
     private boolean isScanning = false;
 
     public AutoScanner(Context context) {
@@ -103,7 +106,7 @@ public class AutoScanner {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:m a");
         String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);                        // record ping after every scan
         databaseAccess.open();
         ArrayList<Integer> pings_AL = databaseAccess.getPings();
         databaseAccess.insertPing(pings_AL.size(), beacon_found ? 1 : 0);
@@ -115,15 +118,14 @@ public class AutoScanner {
 
     //insert new scan data to database
     private void addDevice(String device_name, String mac_address, String uuid, String major, String minor, String rssi) {
-        if(!autoScan_Hashmap.containsValue(mac_address)){
-            autoScan_Hashmap.put(uuid, mac_address);
-            //BLE_Device ble_device = new BLE_Device(device_name, mac_address, uuid, major, minor, rssi);
+        if(!autoScan_Hashmap.containsValue(mac_address)){                                           // use hashmap to avoid recording same device multiple times
+            autoScan_Hashmap.put(uuid, mac_address);                                                // mac address used as unique identifier
             beacon_found = true;
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
             String time = simpleDateFormat.format(Calendar.getInstance().getTime());
 
-            Scan_Data newScanData = new Scan_Data(uuid, time , rssi);
+            Scan_Data newScanData = new Scan_Data(uuid, time , rssi);                               // add new scan data for ViewScanDataActivity. Mostly for debugging.
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
             databaseAccess.open();
             boolean test = databaseAccess.insertScanData(newScanData);
@@ -156,6 +158,7 @@ public class AutoScanner {
 
             User_Subject currentSubject = userSubjects_AL.get(class_index);
             // add scan data if detected UUID is crosschecked from database
+            // filter by UUID, major, and minor values
             if( currentSubject.getUuid().contains(parsedUUID) ){
                 if ( currentSubject.getMajor().contains(parsedMajor) && currentSubject.getMinor().contains(parsedMinor) ) {
                     addDevice(result.getDevice().getName(), result.getDevice().getAddress(), parsedUUID, parsedMajor, parsedMinor, String.valueOf(result.getRssi()));

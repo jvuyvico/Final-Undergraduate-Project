@@ -269,6 +269,8 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
     }
 
+    // modify 'back' or 'return' functions to softlock until user sets their credentials
+
     public void backButtonClicked(View view){
         DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
         dbAccessSCA.open();
@@ -279,7 +281,6 @@ public class SetCredentialsActivity extends AppCompatActivity {
         } else {
             finish();
         }
-
     }
 
     @Override

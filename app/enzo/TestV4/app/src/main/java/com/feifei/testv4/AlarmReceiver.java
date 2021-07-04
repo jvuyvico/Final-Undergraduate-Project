@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    First stage alarm. Restart daily at 12am to get user's subjects for that day.
+*/
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -51,7 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Calendar calendar_now = Calendar.getInstance();
                 simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
                 time = simpleDateFormat.format(calendar_now.getTime());
-                scanData = new Scan_Data("Alarm reset check", time , "00");
+                scanData = new Scan_Data("Alarm reset check", time , "01");
                 databaseAccess.open();
                 dummyBool = databaseAccess.insertScanData(scanData);
                 databaseAccess.close();
@@ -59,7 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 String str_classesToday = "";
 
-                /* ---------------- Set individual alarms for each class today ------------------ */
+                /* ------- Set individual alarms for each class today (2nd Stage Alarms) -------- */
                 for(int i = 0; i < classesToday_AL.size(); i++) {
                     alarmSetter = new AlarmSetter(context, i);
                     intenttopass = new Intent(context, ClassAlarmReceiver.class);
@@ -134,8 +138,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 alarmSetter.setAlarmManager(calendar_now, intenttopass);
                 /* ------------------------------------------------------------------- */
-
-                // terminate any resources accessed
             }
         }).start();
     }

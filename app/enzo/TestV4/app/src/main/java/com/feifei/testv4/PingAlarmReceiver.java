@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    Third Stage Alarm. Calls a service since its work takes a long time
+       (i.e. not enough time before it gets killed in the background)
+ */
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,17 +22,6 @@ public class PingAlarmReceiver extends BroadcastReceiver {
                 Calendar calendar_now = Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E M/d/y h:m:s a");
                 String time = simpleDateFormat.format(calendar_now.getTime());
-
-                /*
-                DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
-                databaseAccess.open();
-                ArrayList<Integer> pings_AL = databaseAccess.getPings();
-                databaseAccess.close();
-
-                //for debugging purposes
-                Log.d("Ping Alarm", "Ping started at " + time + ". Prior number of pings is " + String.valueOf(pings_AL.size()) + " with values " + pings_AL.toString());
-                 */
-
             }
         }).start();
     }

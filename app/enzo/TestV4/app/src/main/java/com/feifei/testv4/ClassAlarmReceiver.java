@@ -1,5 +1,8 @@
 package com.feifei.testv4;
 
+/*
+    Second Stage Alarms. Alarm set for each class.
+ */
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -25,7 +28,6 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
 
         new Thread(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -58,7 +60,7 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                 Calendar calendar_now = Calendar.getInstance();
                 simpleDateFormat = new SimpleDateFormat("E M/d/y h:m a");
                 time = simpleDateFormat.format(calendar_now.getTime());
-                scanData = new Scan_Data("Class Alarm Check", time , "-45");
+                scanData = new Scan_Data("Class Alarm Check", time , "02");
                 databaseAccess.open();
                 dummyBool = databaseAccess.insertScanData(scanData);
                 databaseAccess.close();
@@ -79,7 +81,6 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
                 Log.d("Class Alarm", "This alarm is for " + classesToday_AL.get(subject_index).getSubject() +
                         ". Pinging at an interval of " + String.valueOf(ping_interval) + "s");
                 long is_pingsOver = calendar_now.getTimeInMillis() - endofclass.getTimeInMillis();
-                Log.d("TAG", "run: " + String.valueOf(is_pingsOver));
 
                 if ( is_pingsOver < 0 ) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -126,9 +127,9 @@ public class ClassAlarmReceiver extends BroadcastReceiver {
 
                         databaseAccess.open();
                         if (i == pings.size()){
-                            databaseAccess.insertPing(i, 0);
+                            databaseAccess.insertPing(i, 0);                                 // pad with 0's or absent pings if ping was missed
                         }
-                        if (i == 9) {
+                        if (i == 9) {                                                               // if all pings were missed, automatically add record as 'Absent'
                             User_Subject dd = classesToday_AL.get(subject_index);
                             Attendance_Data newData = new Attendance_Data(dd.getSubject()+dd.getSection(), "Absent", dd.getUuid(), dd.getMajor(), dd.getMinor(), date, time);
                             dummyBool = databaseAccess.insertAttendanceData(newData);

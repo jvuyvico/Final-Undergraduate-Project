@@ -1,5 +1,9 @@
 package com.feifei.testv4;
 
+/*
+    ListAdapter for Attendance_Data class used in CheckAttendanceActivity.
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
