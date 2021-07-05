@@ -20,8 +20,8 @@ int rid = 1; //room ID
 //int listRssi[10];
 BLEScan* pBLEScan;
 
-const char* ssid = "HyperDriveJeepney";
-const char* password = "$Bruno08Hotch13$";
+const char* ssid = "Krasus";
+const char* password = "myWifiNotUrs";
 
 //NTP config
 WiFiUDP ntpUDP;

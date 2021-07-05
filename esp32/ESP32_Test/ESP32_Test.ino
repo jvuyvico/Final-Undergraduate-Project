@@ -9,6 +9,7 @@
 #include <WiFiUdp.h>
 
 int scanTime = 5; //In seconds
+int scanCount = 0;
 String payload = "";
 int bid = 1; //bldg ID
 int rid = 1; //room ID
@@ -20,8 +21,12 @@ BLEScan* pBLEScan;
 const char* ssid = "Krasus";
 const char* password = "myWifiNotUrs";
 
+String dayStamp;
+String timeStamp;
+
 //timing variables
 unsigned long timeStart;
+unsigned long timePrev;
 unsigned long timeDone;
 unsigned long timeTotal;
 unsigned long timeResp;
@@ -30,7 +35,7 @@ unsigned long tSendDone;
 
 //test variables
 int sendOKcount = 0;
-int n = 1000; //n times send
+int n = 10; //n times send
 unsigned long sendTimes[1000];
 unsigned long tSendSum = 0;
 unsigned long tSendAve;
@@ -38,15 +43,16 @@ unsigned long tSendSD;
 int loopCount = 1;
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.43.176:8000/espTest/";
+const char* serverName = "https://smart-attendance-198.herokuapp.com/esp/";//https://smart-attendance-198.herokuapp.com/esp/ //http://192.168.43.163:8000/espTest/
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
       //Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
       BLEBeacon oBeacon = BLEBeacon();
       oBeacon.setData(advertisedDevice.getManufacturerData());
+      unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*10000) + __builtin_bswap16(oBeacon.getMinor()));
       int rssi = advertisedDevice.getRSSI();
-      unsigned long tScan = millis() - timeStart;
+      unsigned long tScan = millis() - timePrev;
       
       //Serial.printf("RSSI: %d\n", rssi);
       //numID = numID + String(SN) + ",";
@@ -55,8 +61,10 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       if (payload != "["){
         payload = payload + ",";
       }
-      payload = payload + "{\"timeScan\":\"" + String(tScan) + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(200000000 + timeStart) + ",\"rssi\":" + String(rssi) + "}";
+
+      payload = payload + "{\"dayStamp\":\"" + dayStamp + "\",\"timeStamp\":\"" + timeStamp + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
       //Serial.println(payload.c_str());
+      timePrev = tScan;
     }
 };
 
@@ -73,19 +81,32 @@ void setup() {
 }
 
 void loop() {
+  //get datetime
+  if(scanCount == 0){
+    timeStamp = " 14:30:23";
+    scanCount++;
+  } else if(scanCount == 1){
+    timeStamp = " 14:46:07";
+    scanCount++;
+  } else{
+    timeStamp = " 15:01:12";
+  }
+  
+  dayStamp = "2021-06-28";
   Serial.print("Test no. ");
   Serial.println(loopCount);
   // put your main code here, to run repeatedly:
   payload = "[";
   timeStart = millis();
+  timePrev = timeStart;
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
   Serial.println("Scan done!");
   Serial.print("Devices found: ");
   int devCount = foundDevices.getCount();
   Serial.println(devCount);
   payload = payload + "]";
-  //Serial.print("Payload = ");
-  //Serial.println(payload);
+  Serial.print("Payload = ");
+  Serial.println(payload);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
 
   //connect to wifi
@@ -95,6 +116,8 @@ void loop() {
     HTTPClient http;
 
     //server send test
+    Serial.print("Sending to ");
+    Serial.println(serverName);
     Serial.println("Sending...");
     for (int i = 0; i < n; i++) {
       
@@ -110,8 +133,8 @@ void loop() {
         // Send HTTP POST request
         int httpResponseCode = http.POST(payload);
     
-        //Serial.print("HTTP Response code: ");
-        //Serial.println(httpResponseCode);
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
     
         // Free resources
         http.end();
