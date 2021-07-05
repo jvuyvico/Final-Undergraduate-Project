@@ -117,8 +117,13 @@ public class PingAlarmService extends Service {
                         managerCompat.cancel(1);
                     }
                 } else {
-                    Utils.mode_Discoverable(context);
-                    Log.d(TAG, "run: Start of Discoverability");
+                    int counter = 1;
+                    while (!found && counter <= 12) {                                               // each loop counts as 1 sleep cycle.
+                        Utils.mode_Discoverable(context);
+                        Log.d(TAG, "run: Start of Discoverability. Current sleep cycle " + counter);
+                        counter += 1;
+                        SystemClock.sleep(10*1000);
+                    }
                 }
             }
         }).start();
