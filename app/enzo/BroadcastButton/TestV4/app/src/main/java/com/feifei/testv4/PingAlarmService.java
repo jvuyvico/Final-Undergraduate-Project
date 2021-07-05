@@ -1,9 +1,5 @@
 package com.feifei.testv4;
 
-/*
-    Service for PingAlarmReceiver or the third stage alarm. Scan for or broadcast as BLE device
-        depending on mode set.
- */
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -68,10 +64,10 @@ public class PingAlarmService extends Service {
                     autoScanner.startScan();
 
                     found = false;
-                    // wait for process to finish
+                    //wait for process to finish
                     int counter = 0;
-                    while (!found && counter <= 6) {                                                // each loop counts as 1 sleep cycle.
-                        Log.d(TAG, "run: Autoscanner still running. Counter = " + String.valueOf(counter));
+                    while (!found && counter <= 6) {
+                        Log.d(TAG, "run: Autoscanner still running.");  //-Counter = " + String.valueOf(counter)
                         counter += 1;
                         SystemClock.sleep(10*1000);
                     }
@@ -83,8 +79,8 @@ public class PingAlarmService extends Service {
                     ArrayList<Integer> pings_AL = databaseAccess.getPings();
                     databaseAccess.close();
 
-                    if(time_difference < 30*1000 && time_difference > -30*1000){                    // check if its the 10th ping
-                        while (pings_AL.size() < 10) {                                              // pad with 0's or absent pings if any pings were missed due to technical error
+                    if(time_difference < 30*1000 && time_difference > -30*1000){
+                        while (pings_AL.size() < 10) {
                             databaseAccess.open();
                             databaseAccess.insertPing(pings_AL.size(), 0);
                             pings_AL.clear();
@@ -93,7 +89,7 @@ public class PingAlarmService extends Service {
                             Log.d(TAG, "run: There was a ping that was not recorded. Adding extra entry.");
                         }
 
-                        /** record attendance **/
+                        //log attendance
                         String status = "";
                         if ( pings_AL.stream().mapToInt(Integer::intValue).sum() > 6 ) {
                             status = "Present";
@@ -118,12 +114,13 @@ public class PingAlarmService extends Service {
                     }
                 } else {
                     int counter = 1;
-                    while (counter <= 12) {                                               // each loop counts as 1 sleep cycle.
+                    while (!found && counter <= 12) {
                         Utils.mode_Discoverable(context);
-                        Log.d(TAG, "run: Start of Discoverability. Current sleep cycle " + counter);
+                        Log.d(TAG, "run: Start of Discoverability. Current sleep cycle: " + counter);
                         counter += 1;
                         SystemClock.sleep(10*1000);
                     }
+
                 }
             }
         }).start();
@@ -134,6 +131,6 @@ public class PingAlarmService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "run: Autoscanner finished. Killing thread");
+        Log.d(TAG, "run: Autoscanner finished. Killing tread");
     }
 }
