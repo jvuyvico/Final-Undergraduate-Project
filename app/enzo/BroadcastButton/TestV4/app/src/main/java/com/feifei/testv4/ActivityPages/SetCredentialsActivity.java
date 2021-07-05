@@ -107,7 +107,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
         //base of the REST API. Dito mo idedefine kung saang base site ka kukuha
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://smart-attendance-198.herokuapp.com/")
+                .baseUrl("http://192.168.1.3:8000/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -142,117 +142,142 @@ public class SetCredentialsActivity extends AppCompatActivity {
     // perform error checking to see if input from text is valid format of desired credentials information
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void submitButtonClicked(View view){
-        if(inputUsername.getText().toString().isEmpty() || inputStudentnumber.getText().length() != 9) {    //check if username is empty or invalid studentnumber
-            Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
-            inputUsername.getText().clear();
-            inputStudentnumber.getText().clear();
-        } else {
-            DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
-            dbAccessSCA.open();
-            String username = dbAccessSCA.getStudentUsername();
-            if(username.contains("none")) {
-                dbAccessSCA.insertStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
+
+        int studentinlog = 0;
+        if(studentArrayList.isEmpty()){
+            Toast.makeText(this, "Server is Offline", Toast.LENGTH_SHORT).show();
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+
+        }
+        else {
+            for (REST_Student studentuserlog : studentArrayList) {
+                if (studentuserlog.getUSN().equals(inputStudentnumber.getText().toString())) {
+                    studentinlog = 1;
+                }
+            }
+
+            if (inputUsername.getText().toString().isEmpty() || inputStudentnumber.getText().length() != 9) {    //check if username is empty or invalid studentnumber
+                Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+                inputUsername.getText().clear();
+                inputStudentnumber.getText().clear();
+            }
+            if (studentinlog != 1) {
+                Toast.makeText(this, "Student Number Not Registered", Toast.LENGTH_SHORT).show();
+                inputUsername.getText().clear();
+                inputStudentnumber.getText().clear();
             } else {
-                Log.d("TAG", "submitButtonClicked: updating");
-                dbAccessSCA.updateStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
-            }
-            String studentnumber = dbAccessSCA.getStudentNumber();
-            dbAccessSCA.close();
-
-
-            //=========== Algorithm to get classes and parse within local database. Medyo complicated siya
-            //=========== pero ang gist is kumukuha sa database based on(1) get student profile in student table
-            // (2) get assign id from student profile then get time from assigntime table and courses table from there
-            // (3) get list of courses then get course mapping
-            //(4) parse in local database
-            for(REST_Student studentusr: studentArrayList){
-                if(studentusr.getUSN().equals(studentnumber)){
-                    Log.d("CHECK", studentusr.getName() + studentusr.getUSN() + studentusr.getDOB());
-                    studentArrayListfinal.add(studentusr);
+                DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
+                dbAccessSCA.open();
+                String username = dbAccessSCA.getStudentUsername();
+                if (username.contains("none")) {
+                    dbAccessSCA.insertStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
+                } else {
+                    Log.d("TAG", "submitButtonClicked: updating");
+                    dbAccessSCA.updateStudentData(inputUsername.getText().toString(), inputStudentnumber.getText().toString());
                 }
-            }
+                String studentnumber = dbAccessSCA.getStudentNumber();
+                dbAccessSCA.close();
 
-            String classidcompare = studentArrayListfinal.get(0).getClass_id();
-            for (REST_Assign assignee : assignArrayList){
-                if(assignee.getClass_id().equals(classidcompare)) {
-                    assignArrayListfinal.add(assignee);
-                    Log.d("CHECK", assignee.getCourse() + " " + assignee.getTeacher());
 
-                }
-            }
-            for(REST_Assign assign : assignArrayListfinal){
-                for (REST_AssignTime assignTime : assignTimeArrayList) {
-                    if(assign.getId().equals(assignTime.getAssign_id())){
-                        assignTimeArrayListfinal.add(assignTime);
+                //=========== Algorithm to get classes and parse within local database. Medyo complicated siya
+                //=========== pero ang gist is kumukuha sa database based on(1) get student profile in student table
+                // (2) get assign id from student profile then get time from assigntime table and courses table from there
+                // (3) get list of courses then get course mapping
+                //(4) parse in local database
+                for (REST_Student studentusr : studentArrayList) {
+                    if (studentusr.getUSN().equals(studentnumber)) {
+                        Log.d("CHECK", studentusr.getName() + studentusr.getUSN() + studentusr.getDOB());
+                        studentArrayListfinal.add(studentusr);
                     }
                 }
-            }
 
-            for(REST_AssignTime assigntime1 : assignTimeArrayListfinal) {
-                String finalday = "";
-                Object[] startendtime = new Object[0];
-                for(REST_AssignTime assigntime2 : assignTimeArrayListfinal){
-                    if(assigntime1.getAssign_id().equals(assigntime2.getAssign_id())){
-                        String dummy = "";
-                        startendtime = SplitPeriods(assigntime1.getPeriod());
-                        dummy = abbrevDay(assigntime2.getDay());
-                        finalday = finalday + dummy;
+                String classidcompare = studentArrayListfinal.get(0).getClass_id();
+                for (REST_Assign assignee : assignArrayList) {
+                    if (assignee.getClass_id().equals(classidcompare)) {
+                        assignArrayListfinal.add(assignee);
+                        Log.d("CHECK", assignee.getCourse() + " " + assignee.getTeacher());
+
                     }
                 }
-                if (!finalday.isEmpty()) {
-                    coursetimeArrayListdummy.add(new CourseTime(finalday, startendtime[0].toString(), startendtime[1].toString(), assigntime1.getAssign_id()));
-                }
-            }
-
-            for(CourseTime coursetimedummy: coursetimeArrayListdummy){
-                int count = 0;
-                for(CourseTime coursetimefinal : coursetimeArrayListfinal){
-                    if (coursetimedummy.getAssign_id().equals(coursetimefinal.getAssign_id())){
-                        count++;
+                for (REST_Assign assign : assignArrayListfinal) {
+                    for (REST_AssignTime assignTime : assignTimeArrayList) {
+                        if (assign.getId().equals(assignTime.getAssign_id())) {
+                            assignTimeArrayListfinal.add(assignTime);
+                        }
                     }
                 }
-                if(count ==0){
-                    coursetimeArrayListfinal.add(coursetimedummy);
+
+                for (REST_AssignTime assigntime1 : assignTimeArrayListfinal) {
+                    String finalday = "";
+                    Object[] startendtime = new Object[0];
+                    for (REST_AssignTime assigntime2 : assignTimeArrayListfinal) {
+                        if (assigntime1.getAssign_id().equals(assigntime2.getAssign_id())) {
+                            String dummy = "";
+                            startendtime = SplitPeriods(assigntime1.getPeriod());
+                            dummy = abbrevDay(assigntime2.getDay());
+                            finalday = finalday + dummy;
+                        }
+                    }
+                    if (!finalday.isEmpty()) {
+                        coursetimeArrayListdummy.add(new CourseTime(finalday, startendtime[0].toString(), startendtime[1].toString(), assigntime1.getAssign_id()));
+                    }
                 }
-            }
 
-            for(REST_Assign assign : assignArrayListfinal){
-                Object[] coursesectionfinal = null;
-                coursesectionfinal = SplitSection(assign.getCourse());
-                Log.d("CHECKING", coursesectionfinal[0].toString() + " " + coursesectionfinal[1].toString());
-                courseSectionArrayListfinal.add(new CourseSection(coursesectionfinal[0].toString(), coursesectionfinal[1].toString(), assign.getId()));
+                for (CourseTime coursetimedummy : coursetimeArrayListdummy) {
+                    int count = 0;
+                    for (CourseTime coursetimefinal : coursetimeArrayListfinal) {
+                        if (coursetimedummy.getAssign_id().equals(coursetimefinal.getAssign_id())) {
+                            count++;
+                        }
+                    }
+                    if (count == 0) {
+                        coursetimeArrayListfinal.add(coursetimedummy);
+                    }
+                }
 
-            }
+                for (REST_Assign assign : assignArrayListfinal) {
+                    Object[] coursesectionfinal = null;
+                    coursesectionfinal = SplitSection(assign.getCourse());
+                    Log.d("CHECKING", coursesectionfinal[0].toString() + " " + coursesectionfinal[1].toString());
+                    courseSectionArrayListfinal.add(new CourseSection(coursesectionfinal[0].toString(), coursesectionfinal[1].toString(), assign.getId()));
 
-            for(REST_Assign assign : assignArrayListfinal) {
-                for (CourseTime assignTime : coursetimeArrayListfinal){
-                    for(CourseSection coursesection : courseSectionArrayListfinal) {
-                        for(REST_CourseMapping courseMapping : courseMappingArrayList) {
-                            if(assign.getId().equals(assignTime.getAssign_id()) && assign.getId().equals(coursesection.getId()) && assign.getCourse().equals(courseMapping.getCourse())){
-                                String content = "";
-                                subjectArrayList.add(new User_SubjectExtended(coursesection.getCourse(), coursesection.getSection(), assignTime.getDay(), Integer.parseInt(assignTime.getStarttime()),
-                                        Integer.parseInt(assignTime.getEndtime()), "602EB8EB20EC04872040B4A52740CE18", courseMapping.getBuilding_id(), courseMapping.getRoom_id()));
-                                content = "Subject: " + coursesection.getCourse() + " Section " + coursesection.getSection() + " Days " + assignTime.getDay() +
-                                        " Start time: " + assignTime.getStarttime() + " End time: "  + assignTime.getEndtime() + "\n";
+                }
 
+                for (REST_Assign assign : assignArrayListfinal) {
+                    for (CourseTime assignTime : coursetimeArrayListfinal) {
+                        for (CourseSection coursesection : courseSectionArrayListfinal) {
+                            for (REST_CourseMapping courseMapping : courseMappingArrayList) {
+                                if (assign.getId().equals(assignTime.getAssign_id()) && assign.getId().equals(coursesection.getId()) && assign.getCourse().equals(courseMapping.getCourse())) {
+                                    String content = "";
+                                    subjectArrayList.add(new User_SubjectExtended(coursesection.getCourse(), coursesection.getSection(), assignTime.getDay(), Integer.parseInt(assignTime.getStarttime()),
+                                            Integer.parseInt(assignTime.getEndtime()), "18CE4027A5B440208704EC20EBB82E60", courseMapping.getBuilding_id(), courseMapping.getRoom_id()));
+                                    content = "Subject: " + coursesection.getCourse() + " Section " + coursesection.getSection() + " Days " + assignTime.getDay() +
+                                            " Start time: " + assignTime.getStarttime() + " End time: " + assignTime.getEndtime() + "\n";
+
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            dbAccessSCA.open();
-            dbAccessSCA.deleteAllData();
-            for(User_SubjectExtended finalusersub : subjectArrayList) {
-                dbAccessSCA.insertExtendedData(finalusersub);
-            }
-            dbAccessSCA.close();
+                dbAccessSCA.open();
+                dbAccessSCA.deleteAllData();
+                for (User_SubjectExtended finalusersub : subjectArrayList) {
+                    dbAccessSCA.insertExtendedData(finalusersub);
+                }
+                dbAccessSCA.close();
 
-            Toast.makeText(this, "Credentials successfully set", Toast.LENGTH_SHORT).show();
-            finish();
+                Toast.makeText(this, "Credentials successfully set", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
-
     }
+
+
+    // modify 'back' or 'return' functions to softlock until user sets their credentials
 
     public void backButtonClicked(View view){
         DatabaseAccess dbAccessSCA = DatabaseAccess.getInstance(this);
@@ -280,7 +305,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
         }
     }
 
-//=============================================================functions for peripherals
+    //=============================================================functions for peripherals
     public static Object[] SplitSection (String section){ //Splits ECE198MAB1 to ECE198 MAB1
 
         String[] Splitted = section.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
