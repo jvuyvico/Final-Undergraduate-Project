@@ -14,11 +14,13 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelUuid;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.feifei.testv4.ActivityPages.MainActivity;
 import com.feifei.testv4.Classes.User_Subject;
 import com.feifei.testv4.SQLite.DatabaseAccess;
+import com.feifei.testv4.SQLite.DatabaseOpenHelper;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -163,7 +165,6 @@ public class Utils {
                     .setTimeout(100)    /** set this for the duration of broadcast in ms **/
                     .build();
 
-            ParcelUuid self_uuid = new ParcelUuid(UUID.fromString(context.getString(R.string.ble_user_uuid)));
             UUID selfbleuuid = UUID.fromString("2e952a2b-eef3-4a80-a309-6a3f5aacb1e8");
             //UUID set for advertising is 2e952a2b-eef3-4a80-a309-6a3f5aacb1e8
 
@@ -173,7 +174,12 @@ public class Utils {
             byte[] payload_3 = {
                     (byte)0x20, (byte)0x15,  // Set Major
                     (byte)0x18, (byte)0x27}; // Set Minor
-
+            /*
+            DatabaseOpenHelper dbaccess = DatabaseAccess.getInstance(this);
+            ((DatabaseAccess) dbaccess).open();
+            String studentnumber = ((DatabaseAccess) dbaccess).getStudentNumber();
+            byte[] payload_3 = studentnumber.getBytes();
+*/
             byte[] payload = new byte[payload_1.length + selfuuidbytes.length + payload_3.length];
             System.arraycopy(payload_1, 0, payload, 0, payload_1.length);
             System.arraycopy(selfuuidbytes, 0, payload, payload_1.length, selfuuidbytes.length);
@@ -183,14 +189,7 @@ public class Utils {
                     .setIncludeDeviceName(false)
                     .addManufacturerData(0x004C, payload)
                     .build();
-/*
-            AdvertiseData advScanResponse = new AdvertiseData.Builder()
-                    .setIncludeDeviceName(true)
-                    .build();
-*/
-            String user_uuid = context.getString(R.string.ble_user_uuid);
-
-
+            
             AdvertiseCallback adCallback = new AdvertiseCallback() {
                 @Override
                 public void onStartSuccess(AdvertiseSettings settingsInEffect) {

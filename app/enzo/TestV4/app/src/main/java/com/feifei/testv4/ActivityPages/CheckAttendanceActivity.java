@@ -160,11 +160,11 @@ public class CheckAttendanceActivity extends AppCompatActivity {
             for(REST_Post restpost2: restpostcompare){
                 Log.d("RESPOST 1 and RESPOST 2", "==" + restpost2.getDate()+"==" + restpost1.getDate()+"==");
                 if(Objects.equals(restpost1.getCourse(), restpost2.getCourse())){
-                    Log.d("EQUAL DATE", "YO");
+                    Log.d("EQUAL DATE", "CONFIRMED");
                     if(Objects.equals(restpost1.getDate(), restpost2.getDate())){
-                        Log.d("EQUAL COURSE", "YO");
+                        Log.d("EQUAL COURSE", "CONFIRMED");
                         if(restpost1.getStatus().equals(restpost2.getStatus())){
-                            Log.d("EQUAL STATUS", "yo may duplicate");
+                            Log.d("EQUAL STATUS", "Duplicate");
                             count++;
                         }
                     }
@@ -177,7 +177,7 @@ public class CheckAttendanceActivity extends AppCompatActivity {
 
         }
         Toast.makeText(this, "Update Complete", Toast.LENGTH_SHORT).show();
-        finish();
+        finish(); //it is important that you restart the activity so it can update the information automatically on onCreate
         overridePendingTransition(0, 0);
         startActivity(getIntent());
         overridePendingTransition(0, 0);

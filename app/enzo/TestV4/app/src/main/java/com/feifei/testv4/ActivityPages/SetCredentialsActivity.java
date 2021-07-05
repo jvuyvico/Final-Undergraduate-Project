@@ -144,7 +144,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
     public void submitButtonClicked(View view){
 
         int studentinlog = 0;
-        if(studentArrayList.isEmpty()){
+        if(studentArrayList.isEmpty()){ //check if it is able to get the list of students
             Toast.makeText(this, "Server is Offline", Toast.LENGTH_SHORT).show();
             finish();
             overridePendingTransition(0, 0);
@@ -153,7 +153,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
 
         }
         else {
-            for (REST_Student studentuserlog : studentArrayList) {
+            for (REST_Student studentuserlog : studentArrayList) { // check if student number exists in server
                 if (studentuserlog.getUSN().equals(inputStudentnumber.getText().toString())) {
                     studentinlog = 1;
                 }
@@ -164,7 +164,7 @@ public class SetCredentialsActivity extends AppCompatActivity {
                 inputUsername.getText().clear();
                 inputStudentnumber.getText().clear();
             }
-            if (studentinlog != 1) {
+            if (studentinlog != 1) { // error handling if student number is not registered
                 Toast.makeText(this, "Student Number Not Registered", Toast.LENGTH_SHORT).show();
                 inputUsername.getText().clear();
                 inputStudentnumber.getText().clear();
@@ -362,7 +362,6 @@ public class SetCredentialsActivity extends AppCompatActivity {
                 if(!response.isSuccessful()){
                     Log.e("Error", "Get Posts: Code: " + response.code() + "\n");
                     try{
-
                         Log.e("Error", "Get Posts: Error: " + response.errorBody().string());
                     } catch (IOException e) {
                         Log.e("Error", "Unkown error: " + response.errorBody());

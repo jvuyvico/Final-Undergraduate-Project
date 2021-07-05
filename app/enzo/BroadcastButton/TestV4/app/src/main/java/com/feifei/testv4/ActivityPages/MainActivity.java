@@ -6,9 +6,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     //for BT Modes
     public static boolean BT_Mode = true; // true: listener, false: broadcaster
     Button BTMode_button;
-
+    Context context;
     //global variables
 
 
@@ -84,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+        context=this;
+
         Username_tv = findViewById(R.id.tv_CredUsername);
         Studentnumber_tv = findViewById(R.id.tv_CredStudno);
         alarm_tv = findViewById(R.id.tv_AlarmSet);
@@ -251,15 +255,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             isBroadcasting = true;
             Toast.makeText(this, "Broadcasting", Toast.LENGTH_SHORT).show();
-            int counter = 1;
-            while (counter <= 12) {
-                Utils.mode_Discoverable(this);
-                Log.d(TAG, "run: Start of Discoverability. Current sleep cycle: " + counter);
-                counter += 1;
-                SystemClock.sleep(10*1000);
-            }
+            Utils.mode_Discoverable(this);
+            //Log.d(TAG, "run: Start of Discoverability. Current sleep cycle: " + counter);
+
             isBroadcasting = false;
         }
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Toast.makeText(context, "Done Broadcasting", Toast.LENGTH_SHORT).show();
+                // yourMethod();
+            }
+        }, 60000);   //5 seconds
+
 
     }
 }

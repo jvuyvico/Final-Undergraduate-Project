@@ -115,7 +115,7 @@ public class PingAlarmService extends Service {
                 } else {
                     int counter = 1;
                     while (!found && counter <= 12) {
-                        Utils.mode_Discoverable(context);
+                        //Utils.mode_Discoverable(context);
                         Log.d(TAG, "run: Start of Discoverability. Current sleep cycle: " + counter);
                         counter += 1;
                         SystemClock.sleep(10*1000);
