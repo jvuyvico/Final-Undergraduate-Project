@@ -24,7 +24,7 @@ urlpatterns = [
     path('info/', include('info.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='info/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='info/logout.html'), name='logout'),
-    path('esp/', fromESPview, name='esp'),
-    path('espTest/', espTestView, name='espTest'),
+    path('esp/', fromESPview, name='esp'), # esp URL was mostly used for testing
+    path('espTest/', espTestView, name='espTest'), # This URL has actual logic attached to it from ESP32
     path('testResults/', testResultView, name='testResults'),
 ]

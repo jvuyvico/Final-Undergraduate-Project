@@ -283,28 +283,7 @@ class ESP32ViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# @csrf_exempt
-# class ESP32APIView(APIView):
-#     #Try this: https://stackoverflow.com/questions/60635118/drf-how-to-change-the-value-of-the-model-fields-before-saving-to-the-database
-#     def get(self, request):
-#         attendance = Attendance.objects.all()
-#         serializer = ESP32Serializer(attendance, many=True)
-#         return Response(serializer.data)
 
-#     def put(self, request):
-#         #attendance = self.get_object(id)
-#         data = request.data
-#         if data['course'] == Course.objects.get(id='CoE198MAB1'):
-#             data['course'] = Course.objects.get(id='EEE100HYZ')
-#         serializer = ESP32Serializer(data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-        # space
 
 @csrf_exempt
 def attendance_list(request):
@@ -324,28 +303,12 @@ def attendance_list(request):
 
         return JsonResponse(serializer.errors, status=400)
 
-# @api_view(['GET', 'POST'])
-# @csrf_exempt
-# def attendance_list(request):
 
-#     if request.method == 'GET':
-#         attendances = Attendance.objects.all()
-#         serializer = AttendanceSerializer(attendances, many=True)
-#         return Response(serializer.data)
-
-#     elif request.method == 'POST':
-#         #data = JSONParser().parse(request)
-#         serializer = AttendanceSerializer(data = request.data)
-
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED) 
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @login_required
 def index(request):
+    # no need to create admin login in regular homepage
     #superusers = User.objects.filter(is_superuser=True)
     if request.user.is_teacher:
         return render(request, 'info/t_homepage.html')
@@ -616,29 +579,3 @@ def superuser_attendance(request):
     # att_list = ass.attendanceclass_set.filter(date__lte=now).order_by('-date')
     # return render(request, 'info/t_class_date.html', {'att_list': att_list})
     return render(request, "info/superuser_attendance.html", context)
-
-
-# def
-#     stud = Student.objects.get(USN=stud_id)
-#     ass_list = Assign.objects.filter(class_id_id=stud.class_id)
-#     att_list = []
-#     for ass in ass_list:
-#         try:
-#             a = AttendanceTotal.objects.get(student=stud, course=ass.course)
-#         except AttendanceTotal.DoesNotExist:
-#             a = AttendanceTotal(student=stud, course=ass.course)
-#             a.save()
-#         att_list.append(a)
-#     return render(request, 'info/attendance.html', {'att_list': att_list})
-
-
-# def t_attendance(request, ass_c_id):
-#     assc = get_object_or_404(AttendanceClass, id=ass_c_id)
-#     ass = assc.assign
-#     c = ass.class_id
-#     context = {
-#         'ass': ass,
-#         'c': c,
-#         'assc': assc,
-#     }
-#     return render(request, 'info/t_attendance.html', context)

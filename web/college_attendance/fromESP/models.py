@@ -2,6 +2,7 @@ from django.db import models
 from datetime import *
 
 # Create your models here.
+# Mostly used for testing
 class espData(models.Model):
     dayStamp = models.DateField(auto_now=False, auto_now_add=False)
     timeStamp = models.TimeField(auto_now=False, auto_now_add=False)

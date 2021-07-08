@@ -9,7 +9,8 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.utils.timezone import now
 import datetime
 
-
+# Left as default for now, easy enough to change. Note that string formatting of time is relevant
+# to how data is processed in views.py when checking schedule stored in database
 time_slots = (
     ('7:30 - 8:30', '7:30 - 8:30'),
     ('8:30 - 9:30', '8:30 - 9:30'),
@@ -45,7 +46,7 @@ class User(AbstractUser):
 
         
 
-
+# EEEI
 class Dept(models.Model):
     id = models.CharField(primary_key='True', max_length=100)
     name = models.CharField(max_length=200)
@@ -53,7 +54,7 @@ class Dept(models.Model):
     def __str__(self):
         return self.name
 
-
+# ex. CoE 198 MAB1
 class Course(models.Model):
     dept = models.ForeignKey(Dept, on_delete=models.CASCADE)
     id = models.CharField(primary_key='True', max_length=50)
@@ -62,7 +63,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
-
+# Map a Course to a building id and room id for the ESP32 beacon purposes
 class Course_Mapping(models.Model):
     course = models.OneToOneField(Course, on_delete=models.CASCADE)
     room_id = models.PositiveSmallIntegerField()
@@ -86,8 +87,10 @@ class Class(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE, default=1)
+    # 9 number student number = USN
     USN = models.CharField(primary_key='True', max_length=9, validators=[MinLengthValidator(9), MaxLengthValidator(9)])
     name = models.CharField(max_length=200)
+    # DOB not really necessary
     DOB = models.DateField(default='1998-01-01')
     #student_id = models.CharField(max_length = 9, unique=True,validators=[MinLengthValidator(9), MaxLengthValidator(9)] )
 
@@ -105,7 +108,8 @@ class Teacher(models.Model):
     def __str__(self):
         return self.name
 
-
+# Maps a course and teacher to a Class
+# Assign is treated like a "Block"
 class Assign(models.Model):
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -126,7 +130,8 @@ class AssignTime(models.Model):
     period = models.CharField(max_length=50, choices=time_slots, default='11:00 - 11:50')
     day = models.CharField(max_length=15, choices=DAYS_OF_WEEK)
 
-
+# Not really necessary for our purposes due to how the phone sends information
+# Each can hold multiple Attendance objects.
 class AttendanceClass(models.Model):
     assign = models.ForeignKey(Assign, on_delete=models.CASCADE)
     date = models.DateField()
@@ -208,13 +213,7 @@ class StudentCourse(models.Model):
         cname = Course.objects.get(name=self.course)
         return '%s : %s' % (sname.name, cname.shortname)
 
-    # def get_cie(self):
-    #     marks_list = self.marks_set.all()
-    #     m = []
-    #     for mk in marks_list:
-    #         m.append(mk.marks1)
-    #     cie = math.ceil(sum(m[:5]) / 2)
-    #     return cie
+
 
     def get_attendance(self):
         a = AttendanceTotal.objects.get(student=self.student, course=self.course)
