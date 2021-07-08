@@ -552,6 +552,7 @@ def free_teachers(request, asst_id):
 
     return render(request, 'info/free_teachers.html', {'ft_list': ft_list})
 
+# Couldn't get this to work, might delete
 @login_required()
 def superuser_attendance(request):
     #stud = Student.objects.get(USN=stud_id)

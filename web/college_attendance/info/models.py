@@ -199,7 +199,7 @@ class AttendanceTotal(models.Model):
             return 0
         return cta
 
-
+# Also needed for proper viewing on Teacher profiles
 class StudentCourse(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

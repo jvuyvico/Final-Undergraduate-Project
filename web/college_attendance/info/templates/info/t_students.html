@@ -16,7 +16,6 @@
                         <th>Attended classes</th>
                         <th>Total classes</th>
                         <th>Attendance %</th>
-                        <th>Classes to attend</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -31,7 +30,6 @@
                         {% else %}
                             <td class="p-3 mb-2 bg-success text-white">{{ a.attendance }}</td>
                         {% endif %}
-                        <td>{{ a.classes_to_attend }}</td>
                     </tr>
                     {% empty %}
                             <p>No students</p>

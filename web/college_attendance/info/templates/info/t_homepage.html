@@ -65,8 +65,7 @@
               </a>
               <div class="card-body">
               <h4 class="card-title">Attendance</h4>
-              <p class="card-text">Enter the attendance of the students based on the class they are in. There is also
-                  the provision to edit the attendance of a whole class or student individually.</p>
+              <p class="card-text">View Attendance related information. Also have the ability to manually edit some features.</p>
             </div>
             <div class="card-footer">
                 <a class="btn btn-primary" role="button" href="{% url 't_clas' request.user.teacher.id 1 %}"> Enter Attendance</a>
@@ -82,8 +81,7 @@
               </a>
               <div class="card-body">
               <h4 class="card-title">TimeTable</h4>
-              <p class="card-text">View the timetable in a tabular form. For a particular class, it specifies a
-                  list of teachers who handle the same class that are free for that time slot.</p>
+              <p class="card-text">View your weekly schedule.</p>
             </div>
             <div class="card-footer">
                 <a class="btn btn-primary" role="button" href="{% url 't_timetable' request.user.teacher.id %}">View TimeTable</a>
@@ -98,8 +96,7 @@
             </a>
             <div class="card-body">
               <h4 class="card-title">Reports</h4>
-              <p class="card-text">Generate reports for each class. These reports include generating a table consisting
-                    of the students belonging to that class and their respective CIE and Attendance.</p>
+              <p class="card-text">Generate Attendance reports for each class. </p>
             </div>
             <div class="card-footer">
               <a href="{% url 't_clas' request.user.teacher.id 3 %}" class="btn btn-primary">Generate Reports</a>
