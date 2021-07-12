@@ -10,3 +10,11 @@ How to add in Git using Github Desktop
 6. Kapag napush na siya successfully, lalabas na yung branch mo sa online github natin. 
 7. If final na yung branch niyo and gusto niyo imerge na siya with main branch, click create pull request. Note: Important na updated yung other files niyo na hindi niyo ginalaw before you create a pull request so make sure you fetch origin lagi. You can accept your own pull request if ever.
 8. TADA. You done homies
+
+References:
+- https://django-q.readthedocs.io/en/latest/index.html
+- https://www.youtube.com/watch?v=y3llbdTtam4&t=3s
+- https://www.youtube.com/watch?v=4w--n3KebJI
+- https://itsourcecode.com/free-projects/python-projects/attendance-management-system-django-with-source-code/
+- https://www.youtube.com/watch?v=B38aDwUpcFc
+- https://www.django-rest-framework.org/api-guide/serializers/
