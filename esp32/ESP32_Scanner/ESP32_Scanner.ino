@@ -38,7 +38,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       oBeacon.setData(advertisedDevice.getManufacturerData());
       //Serial.print("UUID: ");
       //Serial.println(oBeacon.getProximityUUID().toString().c_str());
-      unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*100000) + __builtin_bswap16(oBeacon.getMinor()))/10;
+      unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*10000) + __builtin_bswap16(oBeacon.getMinor()));
       int rssi = advertisedDevice.getRSSI();
       if (payload != "["){
         payload = payload + ",";
