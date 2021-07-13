@@ -2,19 +2,6 @@
    Based on Neil Kolban example for IDF: https://github.com/nkolban/esp32-snippets/blob/master/cpp_utils/tests/BLE%20Tests/SampleScan.cpp
    Ported to Arduino ESP32 by pcbreflux
 */
-
- 
-/*
-   Create a BLE server that will send periodic iBeacon frames.
-   The design of creating the BLE server is:
-   1. Create a BLE Server
-   2. Create advertising data
-   3. Start advertising.
-   4. wait
-   5. Stop advertising.
-   6. deep sleep
-   
-*/
 #include "sys/time.h"
 
 #include "BLEDevice.h"
