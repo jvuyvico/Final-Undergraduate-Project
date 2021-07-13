@@ -1,5 +1,7 @@
 # EEE-198
 
+Alll final files are under the main branch. Check for latest versions. 
+
 How to add in Git using Github Desktop
 
 1. Get initial repository from main. Go to main site https://github.com/alcantaraenzoeee/EEE-198 then click code and open with Github Desktop. Once mo lang ito gagawin.
