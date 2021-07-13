@@ -1,6 +1,6 @@
 # EEE-198
 
-Alll final files are under the main branch. Check for latest versions. 
+Alll final files are under the main branch. Check for latest versions. Final app version is TestV4
 
 How to add in Git using Github Desktop
 
