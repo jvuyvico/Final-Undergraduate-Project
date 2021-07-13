@@ -10,14 +10,9 @@
 #include <WiFiUdp.h>
 
 int scanTime = 5; //In seconds
-//String numID = "";
-//String rssiVal = "";
 String payload = "";
 int bid = 1; //bldg ID
 int rid = 1; //room ID
-//BLEUUID prxUUID = "";
-//uint16_t numIDs[10];
-//int listRssi[10];
 BLEScan* pBLEScan;
 
 const char* ssid = "HyperDriveJeepney";
@@ -41,22 +36,15 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       //Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
       BLEBeacon oBeacon = BLEBeacon();
       oBeacon.setData(advertisedDevice.getManufacturerData());
-      //Serial.println(advertisedDevice.getManufacturerData().c_str());
       //Serial.print("UUID: ");
       //Serial.println(oBeacon.getProximityUUID().toString().c_str());
       unsigned int SN = ((__builtin_bswap16(oBeacon.getMajor())*100000) + __builtin_bswap16(oBeacon.getMinor()))/10;
-      //Serial.printf("ID: %d\n", SN);
       int rssi = advertisedDevice.getRSSI();
-      //Serial.printf("RSSI: %d\n", rssi);
-      //numID = numID + String(SN) + ",";
-      //rssiVal = rssiVal + String(rssi) + "," ;
       if (payload != "["){
         payload = payload + ",";
       }
       payload = payload + "{\"dayStamp\":\"" + dayStamp + "\",\"timeStamp\":\"" + timeStamp + "\",\"bid\":" + String(bid)+ ",\"rid\":" + String(rid) + ",\"numID\":" + String(SN) + ",\"rssi\":" + String(rssi) + "}";
-      
       //Serial.println(payload.c_str());
-      
     }
 };
 
@@ -85,8 +73,6 @@ void loop() {
   int splitT = formattedDate.indexOf("T");
   timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
   dayStamp = formattedDate.substring(0, splitT);
-  //Serial.print("Datatime: ");
-  //Serial.println(timeDateString);
   WiFi.disconnect();
   
   payload = "[";
@@ -98,10 +84,6 @@ void loop() {
   //insert timestamp to payload
   Serial.print("Payload = ");
   Serial.println(payload);
-  //Serial.print("numID = ");
-  //Serial.println(numID);
-  //Serial.print("rssiVal = ");
-  //Serial.println(rssiVal);
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
 
   //connect to wifi
