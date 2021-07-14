@@ -18,6 +18,8 @@ BLEScan* pBLEScan;
 const char* ssid = "<wifi router name>";
 const char* password = "<wifi password>";
 
+int scanInterval = 30000; //In milliseconds
+
 //NTP config
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
@@ -115,7 +117,7 @@ void loop() {
   //disconnect from wifi
   WiFi.disconnect();
   
-  delay(900000); //set interval between scans here //5min
+  delay(scanInterval); //set interval between scans here //30s
 }
 
 void connect2Wifi() {
