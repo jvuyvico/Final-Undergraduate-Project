@@ -15,8 +15,8 @@ int bid = 1; //bldg ID
 int rid = 1; //room ID
 BLEScan* pBLEScan;
 
-const char* ssid = "HyperDriveJeepney";
-const char* password = "$Bruno08Hotch13$";
+const char* ssid = "<wifi router name>";
+const char* password = "<wifi password>";
 
 //NTP config
 WiFiUDP ntpUDP;
